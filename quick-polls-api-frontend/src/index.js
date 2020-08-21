@@ -60,7 +60,7 @@ function createLoginForm() {
     return inputSubmit;
   }
 
-  // handles fetch request for login action 
+// handles fetch request for login action 
 function logIn() {
     let submit = createLoginForm();
     submit.addEventListener("click", (e) => {
@@ -85,20 +85,67 @@ function logIn() {
     .then(
         function(json) {
           if (json.logged_in === false) {
-            let p = document.createElement("p");
-            p.innerHTML = json["message"];
-            p.style.color = "red";
-            document.querySelector("h2").after(p);
+                let p = document.createElement("p");
+                p.innerHTML = json["message"];
+                p.style.color = "red";
+                document.querySelector("h2").after(p);
           } else if (json.logged_in === true) {
-            let p = document.createElement("p");
-            p.innerHTML = json.username;
-            p.style.color = "green";
-            document.querySelector("h2").after(p);
-            console.log(json)
+                let p = document.createElement("p");
+                p.innerHTML = json.username;
+                p.style.color = "green";
+                document.querySelector("h2").after(p);
+                console.log(json)
           }
           
         }
     )
     })
     
+  }
+
+  // creates container for menu point
+  function createContainerForMenu(name, icon, color, userNum = null) {
+    const quarterDiv = document.createElement("div");
+    quarterDiv.classList = "quarter";
+
+    const containerDiv = document.createElement("div");
+    containerDiv.classList = `container ${color} padding-16`;
+    containerDiv.id = name;
+
+    const leftDiv = document.createElement("div");
+    const i = document.createElement("i");
+    i.classList = `fa fa-${icon} xxxlarge`;
+    leftDiv.appendChild(i);
+
+    const rightDiv = document.createElement("div");
+    rightDiv.classList = "right";
+    
+    if (userNum != null) {
+        const number = document.createElement("h3");
+        h3.innerHTML = `${userNum}`;
+        rightDiv.appendChild(number);
+    }
+
+    const title = document.createElement("h4");
+    title.innerHTML = name;
+    
+    containerDiv.appendChild(leftDiv);
+    containerDiv.appendChild(rightDiv);
+    containerDiv.appendChild(title);
+    quarterDiv.appendChild(containerDiv);
+
+
+  }
+
+
+
+  // renders dashboard after successful login
+  function renderDashBoard(json) {
+    const mainDiv = document.querySelector(".main");
+
+    // creates welcoming header
+    const h4 = document.createElement("h4");
+    const b = document.createElement("b");
+    b.innerHTML = `Welcome, ${json.username}`
+
   }
