@@ -102,7 +102,7 @@ function logIn() {
   }
 
   // creates container for dashboard item
-  function createContainerForMenu(name, icon, color, userNum = null) {
+  function createContainerForMenu(name, icon, color, userNum) {
     const quarterDiv = document.createElement("div");
     quarterDiv.classList = "quarter";
 
@@ -111,6 +111,7 @@ function logIn() {
     containerDiv.id = name;
 
     const leftDiv = document.createElement("div");
+    leftDiv.classList ="left";
     const i = document.createElement("i");
     i.classList = `fa fa-${icon} xxxlarge`;
     leftDiv.appendChild(i);
@@ -118,17 +119,21 @@ function logIn() {
     const rightDiv = document.createElement("div");
     rightDiv.classList = "right";
     
-    if (userNum) {
-        const number = document.createElement("h3");
-        number.innerHTML = `${userNum}`;
-        rightDiv.appendChild(number);
+    if (userNum != null) {
+    const number = document.createElement("h3");
+    number.innerText = `${userNum}`;
+    rightDiv.appendChild(number);
     }
+
+    const clearDiv = document.createElement("div");
+    clearDiv.classList ="clear";
 
     const title = document.createElement("h4");
     title.innerHTML = name;
     
     containerDiv.appendChild(leftDiv);
     containerDiv.appendChild(rightDiv);
+    containerDiv.appendChild(clearDiv);
     containerDiv.appendChild(title);
     quarterDiv.appendChild(containerDiv);
 
@@ -148,6 +153,7 @@ function logIn() {
     const h4 = document.createElement("h4");
     const b = document.createElement("b");
     b.innerHTML = `Welcome, ${json.username}`
+    h4.id = "welcome"
     h4.appendChild(b);
 
     // array contaiing the individual attirubtes of all dashboard item container
@@ -182,10 +188,10 @@ function logIn() {
 
     ]
 
-    document.querySelector(".main").appendChild(h4);
+    mainDiv.insertBefore(h4, mainDiv.querySelector(".panel"));
 
     for (let i = 0; i < containers.length; i++) {
         const container = createContainerForMenu(containers[i]["name"], containers[i]["icon"], containers[i]["color"], containers[i]["userNum"])
-        document.querySelector(".main").appendChild(container);
+        mainDiv.insertBefore(container, mainDiv.querySelector(".panel"));
     }
   }
