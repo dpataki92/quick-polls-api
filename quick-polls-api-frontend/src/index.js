@@ -90,11 +90,9 @@ function logIn() {
                 p.style.color = "red";
                 document.querySelector("h2").after(p);
           } else if (json.logged_in === true) {
-                let p = document.createElement("p");
-                p.innerHTML = json.username;
-                p.style.color = "green";
-                document.querySelector("h2").after(p);
-                console.log(json)
+            let jsonHash = JSON.parse(json.data);
+              console.log(jsonHash)
+                renderDashBoard(jsonHash)
           }
           
         }
@@ -103,7 +101,7 @@ function logIn() {
     
   }
 
-  // creates container for menu point
+  // creates container for dashboard item
   function createContainerForMenu(name, icon, color, userNum = null) {
     const quarterDiv = document.createElement("div");
     quarterDiv.classList = "quarter";
@@ -120,9 +118,9 @@ function logIn() {
     const rightDiv = document.createElement("div");
     rightDiv.classList = "right";
     
-    if (userNum != null) {
+    if (userNum) {
         const number = document.createElement("h3");
-        h3.innerHTML = `${userNum}`;
+        number.innerHTML = `${userNum}`;
         rightDiv.appendChild(number);
     }
 
@@ -134,18 +132,60 @@ function logIn() {
     containerDiv.appendChild(title);
     quarterDiv.appendChild(containerDiv);
 
-
+    return quarterDiv;
   }
 
 
 
   // renders dashboard after successful login
   function renderDashBoard(json) {
+    
+    document.querySelector("#loginForm").remove();
     const mainDiv = document.querySelector(".main");
+    mainDiv.style.display = "block";
 
     // creates welcoming header
     const h4 = document.createElement("h4");
     const b = document.createElement("b");
     b.innerHTML = `Welcome, ${json.username}`
+    h4.appendChild(b);
 
+    // array contaiing the individual attirubtes of all dashboard item container
+    const containers = [
+        {
+            name: "Create a Poll",
+            icon: "share-alt",
+            color: "teal",
+            userNum: null
+        },
+
+        {
+            name: "Pending Polls",
+            icon: "comment",
+            color: "red",
+            userNum: json.polls.filter(p => p.status === "pending").length
+        },
+
+        {
+            name: "Closed Polls",
+            icon: "eye",
+            color: "blue",
+            userNum: json.polls.filter(p => p.status === "closed").length
+        },
+
+        {
+            name: "Friends",
+            icon: "users",
+            color: "orange",
+            userNum: json.friends.length
+        }
+
+    ]
+
+    document.querySelector(".main").appendChild(h4);
+
+    for (let i = 0; i < containers.length; i++) {
+        const container = createContainerForMenu(containers[i]["name"], containers[i]["icon"], containers[i]["color"], containers[i]["userNum"])
+        document.querySelector(".main").appendChild(container);
+    }
   }

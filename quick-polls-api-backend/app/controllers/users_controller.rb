@@ -6,8 +6,7 @@ class UsersController < ApplicationController
             
             if user.authenticate(params[:password])
             render json: {
-                id: user.id,
-                username: user.username,
+                data: UserSerializer.new(user).to_serialized_json,
                 logged_in: true
             }
             else
@@ -17,8 +16,7 @@ class UsersController < ApplicationController
             user = User.create(username: params[:username], password: params[:password])
             if user
                 render json: {
-                    id: user.id,
-                    username: user.username,
+                    data: UserSerializer.new(user).to_serialized_json,
                     logged_in: true
                 }
             else
