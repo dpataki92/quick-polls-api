@@ -7,20 +7,22 @@ class UsersController < ApplicationController
             if user.authenticate(params[:password])
             render json: {
                 id: user.id,
-                username: user.username
+                username: user.username,
+                logged_in: true
             }
             else
-                render json: { message: "Sorry, this username is taken or you used a wrong password :(" }
+                render json: { message: "Sorry, this username is taken or you used a wrong password :(", logged_in: false }
             end
         else
             user = User.create(username: params[:username], password: params[:password])
             if user
                 render json: {
                     id: user.id,
-                    username: user.username
+                    username: user.username,
+                    logged_in: true
                 }
             else
-                render json: { message: "Sorry, data validation failed :(" }
+                render json: { message: "Sorry, data validation failed :(", logged_in: false }
             end
         end
     end
