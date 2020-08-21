@@ -1,3 +1,7 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  resources :users
+  resources :users, only: [:create]
+  resources :polls, only: [:index, :new, :create, :edit, :update]
+  get "/polls/closed", to: "polls#closed"
+  get "/polls/check", to: "polls#check"
 end
