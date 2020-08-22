@@ -202,15 +202,16 @@ function logIn() {
 
       if (i === 0 || i === 1 || i === 2) {
           icon.classList = "fa fa-share-alt text-green large";
-          if (i === 0) {contentTd.innerHTML = `You have been added to ${json.added_polls} polls.`}
+          if (i === 0) {contentTd.innerHTML = `You have been added to ${json.added_polls} polls.`; tr.style.backgroundColor = "#F0F0F0";}
           else if (i === 1) {contentTd.innerHTML = `You have created ${json.created_polls} polls.`}
-          else if (i === 2) {contentTd.innerHTML = `You have ${json.pending_polls} pending polls and ${json.closed_polls} closed polls.`}
+          else if (i === 2) {contentTd.innerHTML = `You have ${json.pending_polls} pending polls and ${json.closed_polls} closed polls.`; tr.style.backgroundColor = "#F0F0F0";}
       } else if (i === 3) {
           icon.classList = "fa fa-bookmark text-blue large";
           contentTd.innerHTML = `You have voted on ${dataHash.votes.length} polls.`
       } else if (i === 4) {
           icon.classList = "fa fa-users text-yellow large";
-          contentTd.innerHTML = `You have ${dataHash.friends.length} friends to share polls with.`
+          contentTd.innerHTML = `You have ${dataHash.friends.length} friends to share polls with.`;
+          tr.style.backgroundColor = "#F0F0F0";
       }
 
       iconTd.appendChild(icon);
@@ -220,6 +221,7 @@ function logIn() {
       table.appendChild(tr);
     }
     twoThirdDiv.appendChild(header);
+    header.after(document.createElement("br"))
     twoThirdDiv.appendChild(table);
     document.querySelector(".row-padding").appendChild(twoThirdDiv);
 
