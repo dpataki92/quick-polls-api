@@ -34,32 +34,45 @@ class UsersController < ApplicationController
     private
 
     def winner_polls(user)
-        win_count = 0
+        if user.polls.size == 0
+            0
+        else
 
-        user.polls.each do |p|
-            win_option = 0
-            win_option_id = 0
+            win_count = 0
 
-            p.options.each do |o|
-                if o.votes.size > win_option
-                    win_option = o.votes.size
-                    win_option_id = o.id
+            user.polls.each do |p|
+                win_option = 0
+                win_option_id = 0
+
+                p.options.each do |o|
+                    if o.votes.size > win_option
+                        win_option = o.votes.size
+                        win_option_id = o.id
+                    end
+                end
+
+                if user.votes.find_by(option_id: win_option_id)
+                    win_count += 1
                 end
             end
 
-            if user.votes.find_by(option_id: win_option_id)
-                win_count += 1
-            end
+            (win_count.to_f / user.polls.size.to_f * 100).round
         end
-
-        (win_count.to_f / user.polls.size.to_f * 100).round
     end
 
     def loser_polls(user)
-        100 - winner_polls(user)
+        if user.polls.size == 0
+            0
+        else
+            100 - winner_polls(user)
+        end
     end
 
     def polls_voted_on(user)
-        ((user.votes.size.to_f / user.polls.size.to_f) * 100).round
+        if user.polls.size == 0
+            0
+        else
+            ((user.votes.size.to_f / user.polls.size.to_f) * 100).round
+        end
     end
 end

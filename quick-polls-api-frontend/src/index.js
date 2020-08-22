@@ -140,13 +140,14 @@ function logIn() {
     return quarterDiv;
   }
 
-  // renders diagram on aggregated poll data
+  // renders diagram on aggregated data of user's polls
   function renderAggregatedPollDiagram (json) {
     const thirdDiv = document.createElement("div");
     thirdDiv.classList = "third";
 
     const header = document.createElement("h5");
     header.style.fontWeight = "bold";
+    header.innerHTML = "General Stats";
 
     thirdDiv.appendChild(header);
 
@@ -178,6 +179,49 @@ function logIn() {
       thirdDiv.appendChild(containerDiv);
     }
     document.querySelector(".row-padding").appendChild(thirdDiv)
+
+  }
+
+  // renders aggregated user data in list form
+  function renderAggregatedUserData(json, dataHash) {
+    const twoThirdDiv = document.createElement("div");
+    twoThirdDiv.classList = "twothird";
+
+    const header = document.createElement("h5");
+    header.innerHTML = "Data Summary";
+    header.style.fontWeight = "bold";
+
+    const table = document.createElement("table");
+    table.classList = "table striped white";
+
+    for (let i = 0; i < 5; i++) {
+      let tr = document.createElement("tr");
+      let icon = document.createElement("i");
+      let iconTd = document.createElement("td");
+      let contentTd = document.createElement("td");
+
+      if (i === 0 || i === 1 || i === 2) {
+          icon.classList = "fa fa-share-alt text-green large";
+          if (i === 0) {contentTd.innerHTML = `You have been added to ${json.added_polls} polls.`}
+          else if (i === 1) {contentTd.innerHTML = `You have created ${json.created_polls} polls.`}
+          else if (i === 2) {contentTd.innerHTML = `You have ${json.pending_polls} polls and ${json.closed_polls}.`}
+      } else if (i === 3) {
+          icon.classList = "fa fa-bookmark text-blue large";
+          contentTd.innerHTML = `You have voted on ${dataHash.votes.length} polls.`
+      } else if (i === 4) {
+          icon.classList = "fa fa-users text-yellow large";
+          contentTd.innerHTML = `You have ${dataHash.friends.length} friends to share polls with.`
+      }
+
+      iconTd.appendChild(icon);
+      tr.appendChild(iconTd);
+      tr.appendChild(contentTd);
+
+      table.appendChild(tr);
+    }
+    twoThirdDiv.appendChild(header);
+    twoThirdDiv.appendChild(table);
+    document.querySelector(".row-padding").appendChild(twoThirdDiv);
 
   }
 
@@ -227,12 +271,18 @@ function logIn() {
 
     ]
 
+    // inserting welcome header containing user's name
     mainDiv.insertBefore(h4, mainDiv.querySelector(".panel"));
 
+    // displaying the 4 container for menu items
     for (let i = 0; i < containers.length; i++) {
         const container = createContainerForMenu(containers[i]["name"], containers[i]["icon"], containers[i]["color"], containers[i]["userNum"])
         mainDiv.insertBefore(container, mainDiv.querySelector(".panel"));
     }
 
+    // renders diagram of aggregated user data
     renderAggregatedPollDiagram(json);
+
+    // renders list of additional aggregated user data
+    renderAggregatedUserData(json, dataHash);
   }
