@@ -158,7 +158,7 @@ function logIn() {
       containerDiv.classList ="grey";
 
       if (i === 0) {
-        title.innerHTML = "Polls that I participated in";
+        title.innerHTML = "Polls that you participated in";
         percentageDiv.classList = "container center padding blue";
         percentageDiv.style.width = `${json.polls_voted_on}%`;
         percentageDiv.innerHTML = `${json.polls_voted_on}%`
@@ -204,7 +204,7 @@ function logIn() {
           icon.classList = "fa fa-share-alt text-green large";
           if (i === 0) {contentTd.innerHTML = `You have been added to ${json.added_polls} polls.`}
           else if (i === 1) {contentTd.innerHTML = `You have created ${json.created_polls} polls.`}
-          else if (i === 2) {contentTd.innerHTML = `You have ${json.pending_polls} polls and ${json.closed_polls}.`}
+          else if (i === 2) {contentTd.innerHTML = `You have ${json.pending_polls} pending polls and ${json.closed_polls} closed polls.`}
       } else if (i === 3) {
           icon.classList = "fa fa-bookmark text-blue large";
           contentTd.innerHTML = `You have voted on ${dataHash.votes.length} polls.`

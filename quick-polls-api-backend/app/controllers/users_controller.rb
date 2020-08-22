@@ -10,6 +10,10 @@ class UsersController < ApplicationController
                 winner_polls: winner_polls(user),
                 loser_polls: loser_polls(user),
                 polls_voted_on: polls_voted_on(user),
+                added_polls: added_polls(user),
+                created_polls: created_polls(user),
+                pending_polls: pending_polls(user),
+                closed_polls: closed_polls(user),
                 logged_in: true
             }
             else
@@ -23,6 +27,10 @@ class UsersController < ApplicationController
                     winner_polls: winner_polls(user),
                     loser_polls: loser_polls(user),
                     polls_voted_on: polls_voted_on(user),
+                    added_polls: added_polls(user),
+                    created_polls: created_polls(user),
+                    pending_polls: pending_polls(user),
+                    closed_polls: closed_polls(user),
                     logged_in: true
                 }
             else
@@ -74,5 +82,21 @@ class UsersController < ApplicationController
         else
             ((user.votes.size.to_f / user.polls.size.to_f) * 100).round
         end
+    end
+
+    def added_polls(user)
+        user.polls.select {|p| p.creator != user.username}.size
+    end
+
+    def created_polls(user)
+        user.polls.size - added_polls(user)
+    end
+
+    def pending_polls(user)
+        user.polls.select {|p| p.status === "pending"}.size
+    end
+
+    def closed_polls(user)
+        user.polls.select {|p| p.status === "closed"}.size
     end
 end
