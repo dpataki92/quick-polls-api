@@ -90,9 +90,9 @@ function logIn() {
                 p.style.color = "red";
                 document.querySelector("h2").after(p);
           } else if (json.logged_in === true) {
-            let jsonHash = JSON.parse(json.data);
+            let dataHash = JSON.parse(json.data);
               console.log(json)
-                renderDashBoard(jsonHash)
+                renderDashBoard(json, dataHash)
           }
           
         }
@@ -141,12 +141,48 @@ function logIn() {
   }
 
   // renders diagram on aggregated poll data
-  function renderAggregatedPollDiagram () {
-    
+  function renderAggregatedPollDiagram (json) {
+    const thirdDiv = document.createElement("div");
+    thirdDiv.classList = "third";
+
+    const header = document.createElement("h5");
+    header.style.fontWeight = "bold";
+
+    thirdDiv.appendChild(header);
+
+    for (let i = 0; i < 3; i++) {
+      let title = document.createElement("p");
+      let containerDiv = document.createElement("div");
+      let percentageDiv = document.createElement("div");
+      containerDiv.classList ="grey";
+
+      if (i === 0) {
+        title.innerHTML = "Polls that I participated in";
+        percentageDiv.classList = "container center padding blue";
+        percentageDiv.style.width = `${json.polls_voted_on}%`;
+        percentageDiv.innerHTML = `${json.polls_voted_on}%`
+      } else if (i === 1) {
+        title.innerHTML = "Winner polls";
+        percentageDiv.classList = "container center padding green";
+        percentageDiv.style.width = `${json.winner_polls}%`;
+        percentageDiv.innerHTML = `${json.winner_polls}%`;
+      } else if (i === 2) {
+        title.innerHTML = "Loser polls";
+        percentageDiv.classList = "container center padding red";
+        percentageDiv.style.width = `${json.loser_polls}%`;
+        percentageDiv.innerHTML = `${json.loser_polls}%`;
+      }
+
+      containerDiv.appendChild(percentageDiv);
+      thirdDiv.appendChild(title);
+      thirdDiv.appendChild(containerDiv);
+    }
+    document.querySelector(".row-padding").appendChild(thirdDiv)
+
   }
 
   // renders dashboard after successful login
-  function renderDashBoard(json) {
+  function renderDashBoard(json, dataHash) {
     
     document.querySelector("#loginForm").remove();
     const mainDiv = document.querySelector(".main");
@@ -155,7 +191,7 @@ function logIn() {
     // creates welcoming header
     const h4 = document.createElement("h4");
     const b = document.createElement("b");
-    b.innerHTML = `Welcome, ${json.username}`
+    b.innerHTML = `Welcome, ${dataHash.username}`
     h4.id = "welcome"
     h4.appendChild(b);
 
@@ -172,21 +208,21 @@ function logIn() {
             name: "Pending Polls",
             icon: "comment",
             color: "red",
-            userNum: json.polls.filter(p => p.status === "pending").length
+            userNum: dataHash.polls.filter(p => p.status === "pending").length
         },
 
         {
             name: "Closed Polls",
             icon: "eye",
             color: "blue",
-            userNum: json.polls.filter(p => p.status === "closed").length
+            userNum: dataHash.polls.filter(p => p.status === "closed").length
         },
 
         {
             name: "Friends",
             icon: "users",
             color: "orange",
-            userNum: json.friends.length
+            userNum: dataHash.friends.length
         }
 
     ]
@@ -197,4 +233,6 @@ function logIn() {
         const container = createContainerForMenu(containers[i]["name"], containers[i]["icon"], containers[i]["color"], containers[i]["userNum"])
         mainDiv.insertBefore(container, mainDiv.querySelector(".panel"));
     }
+
+    renderAggregatedPollDiagram(json);
   }
