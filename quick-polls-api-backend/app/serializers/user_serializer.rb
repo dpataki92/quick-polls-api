@@ -8,7 +8,7 @@ class UserSerializer
         @user.to_json(:include => {
         :polls => {:only => [:id, :creator, :status]},
         :votes => {:only => [:poll_id, :option_id]},
-        :friends => {:only => [:id]}
+        :friends => {:only => [:id, :username]}
         })
     end
    

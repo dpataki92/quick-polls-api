@@ -227,10 +227,103 @@ function logIn() {
 
   }
 
+  // displays create a poll form
+  function createAPoll(dataHash) {
+    let div = document.createElement("div");
+    div.id = "createAPollForm";
+    div.style.textAlign ="center";
+    div.style.marginTop = "100px"
+  
+    let title = document.createElement("h3");
+    title.innerText = "Set Your Poll's Data Here";
+    title.style.display = "inline-block";
+    title.style.marginLeft = "5px";
+  
+    div.appendChild(title);
+  
+    let form = document.createElement("form");
+    form.action = "/polls";
+    form.method = "GET";
+    let inputQuestion = document.createElement("input");
+    inputQuestion.type = "text";
+    inputQuestion.name = "question";
+    inputQuestion.id = "question";
+    inputQuestion.placeholder = "Question.."
+    let inputOption1 = document.createElement("input");
+    inputOption1.type = "text";
+    inputOption1.name = "options[]";
+    inputOption1.placeholder = "Option.."
+    let inputOption2 = document.createElement("input");
+    inputOption2.type = "text";
+    inputOption2.name = "options[]";
+    inputOption2.placeholder = "Another option.."
+
+    let optionButton = document.createElement("button");
+    optionButton.style.width ="100%";
+    optionButton.style.color ="#009688";
+    optionButton.style.backgroundColor = "white";
+    optionButton.innerHTML = "+ add another option";
+
+    form.appendChild(inputQuestion);
+    form.appendChild(inputOption1);
+    form.appendChild(inputOption2);
+    form.appendChild(optionButton);
+
+    optionButton.addEventListener("click", ()=> {
+      form.insertBefore(inputOption2, form.querySelector("button"));
+    })
+
+    let inputVoteRequirement = document.createElement("input");
+    inputVoteRequirement.type = "number";
+    inputVoteRequirement.name = "vote_requirement";
+    inputVoteRequirement.id = "vote_requirement";
+    inputVoteRequirement.classList = "padding-16";
+    inputVoteRequirement.style.width ="100%";
+    inputVoteRequirement.style.backgroundColor ="white";
+    inputVoteRequirement.placeholder = "Number of votes to close the poll..";
+
+    let inputEndDate = document.createElement("input");
+    inputEndDate.type = "number";
+    inputEndDate.name = "end_date";
+    inputEndDate.id = "end_date";
+    inputEndDate.classList = "padding-16";
+    inputEndDate.style.width ="100%";
+    inputEndDate.style.backgroundColor ="white";
+    inputEndDate.placeholder = "Voting period in days.."
+
+    let friendSelectDiv = document.createElement("div");
+    friendSelectDiv.classList = "form-group col-md-6 col-lg-6 col-sm-6";
+    let friendSelectList = document.createElement("select");
+    friendSelectList.class = "selectpicker form-control";
+    friendSelectList.name = "friends[]";
+    friendSelectList.placeholder = "Add friends...";
+    for (let i = 0; i < dataHash.friends.length; i++) {
+      let option = document.createElement("option");
+      option.value = dataHash.friends[i].username;
+      option.innerText = dataHash.friends[i].username;
+      friendSelectList.appendChild(option);
+    }
+    friendSelectDiv.appendChild(friendSelectList);
+    form.appendChild(friendSelectDiv);
+  
+    let inputSubmit = document.createElement("input");
+    inputSubmit.type = "submit";
+    inputSubmit.value = "Submit";
+    inputSubmit.style.width ="100%";
+    inputSubmit.style.backgroundColor ="#009688";
+    form.appendChild(inputSubmit);
+
+    div.appendChild(form);
+
+    return div;
+  }
+
   // renders dashboard after successful login
   function renderDashBoard(json, dataHash) {
+    if (document.querySelector("#loginForm")) {
+      document.querySelector("#loginForm").remove();
+    } 
     
-    document.querySelector("#loginForm").remove();
     const mainDiv = document.querySelector(".main");
     mainDiv.style.display = "block";
 
@@ -247,7 +340,8 @@ function logIn() {
             name: "Create a Poll",
             icon: "share-alt",
             color: "teal",
-            userNum: null
+            userNum: null,
+            listener: createAPoll
         },
 
         {
@@ -275,11 +369,25 @@ function logIn() {
 
     // inserting welcome header containing user's name
     mainDiv.insertBefore(h4, mainDiv.querySelector(".panel"));
-
+    
     // displaying the 4 container for menu items
     for (let i = 0; i < containers.length; i++) {
         const container = createContainerForMenu(containers[i]["name"], containers[i]["icon"], containers[i]["color"], containers[i]["userNum"])
         mainDiv.insertBefore(container, mainDiv.querySelector(".panel"));
+        container.addEventListener("click", ()=> {
+          if (document.querySelector(".panel").display = "block") {
+
+            document.querySelector(".panel").display = "none";
+            document.getElementById(containers[i]["name"]).innerText = "Back to Dashboard";
+            let el = containers[i].listener(dataHash);
+            mainDiv.insertBefore(el, document.querySelector(".panel"))
+            
+          } else {
+            document.getElementById(containers[i]["name"]).remove();
+            document.getElementById(containers[i]["name"]).innerText = containers[i]["name"];
+            document.querySelector(".panel").display = "block";
+          }
+        })
     }
 
     // renders diagram of aggregated user data
