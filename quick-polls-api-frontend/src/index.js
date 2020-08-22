@@ -140,7 +140,11 @@ function logIn() {
     return quarterDiv;
   }
 
+  // renders diagram on aggregated poll data
 
+  function renderAggregatedPollDiagram () {
+    
+  }
 
   // renders dashboard after successful login
   function renderDashBoard(json) {
