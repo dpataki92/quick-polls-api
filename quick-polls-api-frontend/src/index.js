@@ -91,7 +91,7 @@ function logIn() {
                 document.querySelector("h2").after(p);
           } else if (json.logged_in === true) {
             let jsonHash = JSON.parse(json.data);
-              console.log(jsonHash)
+              console.log(json)
                 renderDashBoard(jsonHash)
           }
           
@@ -118,12 +118,12 @@ function logIn() {
 
     const rightDiv = document.createElement("div");
     rightDiv.classList = "right";
-    
-    if (userNum != null) {
     const number = document.createElement("h3");
-    number.innerText = `${userNum}`;
-    rightDiv.appendChild(number);
+    if (userNum != null) {
+      number.innerText = `${userNum}`;
     }
+    rightDiv.appendChild(number);
+
 
     const clearDiv = document.createElement("div");
     clearDiv.classList ="clear";
@@ -141,7 +141,6 @@ function logIn() {
   }
 
   // renders diagram on aggregated poll data
-
   function renderAggregatedPollDiagram () {
     
   }

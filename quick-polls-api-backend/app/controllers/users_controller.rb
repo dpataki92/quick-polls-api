@@ -9,6 +9,7 @@ class UsersController < ApplicationController
                 data: UserSerializer.new(user).to_serialized_json,
                 winner_polls: winner_polls(user),
                 loser_polls: loser_polls(user),
+                polls_voted_on: polls_voted_on(user),
                 logged_in: true
             }
             else
@@ -21,6 +22,7 @@ class UsersController < ApplicationController
                     data: UserSerializer.new(user).to_serialized_json,
                     winner_polls: winner_polls(user),
                     loser_polls: loser_polls(user),
+                    polls_voted_on: polls_voted_on(user),
                     logged_in: true
                 }
             else
@@ -49,7 +51,8 @@ class UsersController < ApplicationController
                 win_count += 1
             end
         end
-        (win_count / user.polls.size) * 100
+
+        (win_count.to_f / user.polls.size.to_f * 100).round
     end
 
     def loser_polls(user)
@@ -57,6 +60,6 @@ class UsersController < ApplicationController
     end
 
     def polls_voted_on(user)
-        (user.votes.size - user.polls.size) * 100
+        ((user.votes.size.to_f / user.polls.size.to_f) * 100).round
     end
 end
