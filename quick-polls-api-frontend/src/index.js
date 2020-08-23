@@ -291,6 +291,7 @@ function logIn() {
     inputVoteRequirement.style.width ="100%";
     inputVoteRequirement.style.backgroundColor ="white";
     inputVoteRequirement.placeholder = "Number of votes to close the poll..";
+    form.appendChild(inputVoteRequirement);
 
     let inputEndDate = document.createElement("input");
     inputEndDate.type = "number";
@@ -300,19 +301,19 @@ function logIn() {
     inputEndDate.style.display ="block";
     inputEndDate.style.width ="100%";
     inputEndDate.style.backgroundColor ="white";
-    inputEndDate.placeholder = "Voting period in days.."
+    inputEndDate.placeholder = "Voting period in days..";
+    form.appendChild(inputEndDate);
 
     let friendSelectList = document.createElement("select");
+    friendSelectList.multiple = true;
     friendSelectList.style.width = "100%";
-    friendSelectList.classList = "selectpicker form-control";
-    friendSelectList.id = "DDLActivites";
-    friendSelectList.setAttribute("data-style", "btn-default");
     friendSelectList.name = "friends[]";
     friendSelectList.placeholder = "Add friends...";
     for (let i = 0; i < dataHash.friends.length; i++) {
       let option = document.createElement("option");
       option.value = dataHash.friends[i].username;
       option.innerText = dataHash.friends[i].username;
+      option.style.width = "100%";
       friendSelectList.appendChild(option);
     }
     form.appendChild(friendSelectList);
