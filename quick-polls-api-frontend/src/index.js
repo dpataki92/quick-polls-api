@@ -232,7 +232,8 @@ function logIn() {
     let div = document.createElement("div");
     div.id = "createAPollForm";
     div.style.textAlign ="center";
-    div.style.marginTop = "100px"
+    div.style.margin = "auto";
+    div.style.width = "50%";
   
     let title = document.createElement("h3");
     title.innerText = "Set Your Poll's Data Here";
@@ -243,20 +244,26 @@ function logIn() {
   
     let form = document.createElement("form");
     form.action = "/polls";
-    form.method = "GET";
+    form.method = "POST";
     let inputQuestion = document.createElement("input");
     inputQuestion.type = "text";
     inputQuestion.name = "question";
     inputQuestion.id = "question";
-    inputQuestion.placeholder = "Question.."
-    let inputOption1 = document.createElement("input");
-    inputOption1.type = "text";
-    inputOption1.name = "options[]";
-    inputOption1.placeholder = "Option.."
-    let inputOption2 = document.createElement("input");
-    inputOption2.type = "text";
-    inputOption2.name = "options[]";
-    inputOption2.placeholder = "Another option.."
+    inputQuestion.placeholder = "Question..";
+    inputQuestion.style.display = "block";
+    inputQuestion.style.width = "100%";
+
+    function optionCreator(placeholder) {
+      let option = document.createElement("input");
+      option.type = "text";
+      option.name = "options[]";
+      option.placeholder = placeholder;
+      option.style.display = "block";
+      option.style.width = "100%";
+      return option;
+    }
+    let inputOption1 = optionCreator("Option...");
+    let inputOption2 = optionCreator("Another Option...");
 
     let optionButton = document.createElement("button");
     optionButton.style.width ="100%";
@@ -269,8 +276,10 @@ function logIn() {
     form.appendChild(inputOption2);
     form.appendChild(optionButton);
 
-    optionButton.addEventListener("click", ()=> {
-      form.insertBefore(inputOption2, form.querySelector("button"));
+    optionButton.addEventListener("click", (e)=> {
+      e.preventDefault();
+      let copyOption = optionCreator("Another option");
+      form.insertBefore(copyOption, form.querySelector("button"));
     })
 
     let inputVoteRequirement = document.createElement("input");
@@ -278,6 +287,7 @@ function logIn() {
     inputVoteRequirement.name = "vote_requirement";
     inputVoteRequirement.id = "vote_requirement";
     inputVoteRequirement.classList = "padding-16";
+    inputVoteRequirement.style.display ="block";
     inputVoteRequirement.style.width ="100%";
     inputVoteRequirement.style.backgroundColor ="white";
     inputVoteRequirement.placeholder = "Number of votes to close the poll..";
@@ -287,14 +297,16 @@ function logIn() {
     inputEndDate.name = "end_date";
     inputEndDate.id = "end_date";
     inputEndDate.classList = "padding-16";
+    inputEndDate.style.display ="block";
     inputEndDate.style.width ="100%";
     inputEndDate.style.backgroundColor ="white";
     inputEndDate.placeholder = "Voting period in days.."
 
-    let friendSelectDiv = document.createElement("div");
-    friendSelectDiv.classList = "form-group col-md-6 col-lg-6 col-sm-6";
     let friendSelectList = document.createElement("select");
-    friendSelectList.class = "selectpicker form-control";
+    friendSelectList.style.width = "100%";
+    friendSelectList.classList = "selectpicker form-control";
+    friendSelectList.id = "DDLActivites";
+    friendSelectList.setAttribute("data-style", "btn-default");
     friendSelectList.name = "friends[]";
     friendSelectList.placeholder = "Add friends...";
     for (let i = 0; i < dataHash.friends.length; i++) {
@@ -303,8 +315,7 @@ function logIn() {
       option.innerText = dataHash.friends[i].username;
       friendSelectList.appendChild(option);
     }
-    friendSelectDiv.appendChild(friendSelectList);
-    form.appendChild(friendSelectDiv);
+    form.appendChild(friendSelectList);
   
     let inputSubmit = document.createElement("input");
     inputSubmit.type = "submit";
@@ -326,6 +337,7 @@ function logIn() {
     
     const mainDiv = document.querySelector(".main");
     mainDiv.style.display = "block";
+    document.querySelector(".panel").display = "block";
 
     // creates welcoming header
     const h4 = document.createElement("h4");
@@ -369,30 +381,30 @@ function logIn() {
 
     // inserting welcome header containing user's name
     mainDiv.insertBefore(h4, mainDiv.querySelector(".panel"));
-    
-    // displaying the 4 container for menu items
-    for (let i = 0; i < containers.length; i++) {
-        const container = createContainerForMenu(containers[i]["name"], containers[i]["icon"], containers[i]["color"], containers[i]["userNum"])
-        mainDiv.insertBefore(container, mainDiv.querySelector(".panel"));
-        container.addEventListener("click", ()=> {
-          if (document.querySelector(".panel").display = "block") {
-
-            document.querySelector(".panel").display = "none";
-            document.getElementById(containers[i]["name"]).innerText = "Back to Dashboard";
-            let el = containers[i].listener(dataHash);
-            mainDiv.insertBefore(el, document.querySelector(".panel"))
-            
-          } else {
-            document.getElementById(containers[i]["name"]).remove();
-            document.getElementById(containers[i]["name"]).innerText = containers[i]["name"];
-            document.querySelector(".panel").display = "block";
-          }
-        })
-    }
 
     // renders diagram of aggregated user data
     renderAggregatedPollDiagram(json);
 
     // renders list of additional aggregated user data
     renderAggregatedUserData(json, dataHash);
+
+    // displaying the 4 container for menu items
+    for (let i = 0; i < containers.length; i++) {
+      const container = createContainerForMenu(containers[i]["name"], containers[i]["icon"], containers[i]["color"], containers[i]["userNum"])
+      mainDiv.insertBefore(container, mainDiv.querySelector(".panel"));
+      container.addEventListener("click", ()=> {
+        if (document.querySelector(".panel").display === "block") {
+
+          document.getElementById(containers[i]["name"]).querySelector("h4").innerHTML = "Back to Dashboard";
+          let el = containers[i].listener(dataHash);
+          mainDiv.insertBefore(el, document.querySelector(".panel"));
+          document.querySelector(".panel").display = "none";
+          
+        } else {
+          document.getElementById("createAPollForm").remove();
+          document.getElementById(containers[i]["name"]).querySelector("h4").innerHTML = containers[i]["name"];
+          document.querySelector(".panel").display = "block";
+        }
+      })
+  }
   }
