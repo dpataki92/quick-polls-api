@@ -227,8 +227,41 @@ function logIn() {
 
   }
 
-  function createAPoll() {
-
+  function createAPoll(e) {
+    let question = e.target.parentNode.querySelector("#question").value;
+    let options = []
+    Array.prototype.slice.call(e.target.parentNode.querySelectorAll('input[name="options[]"]')).forEach(n => {
+      options.push(n.value)
+    });
+    let endDate = e.target.parentNode.querySelector("#end_date").value;
+    let voteRequirement = e.target.parentNode.querySelector("#vote_requirement").value;
+    let friends = []
+    Array.prototype.slice.call(e.target.parentNode.querySelectorAll('input[name="friends[]"]')).forEach(n => {
+      friends.push(n.value)
+    });
+    let username = e.target.parentNode.querySelector("#username").value;
+  
+    let configObj = {
+      method: "POST",
+      headers: {
+          "Content-Type": 'application/json',
+          "Accept": "application/json",
+      },
+      body: JSON.stringify({
+          question: question,
+          options: options,
+          end_date: endDate,
+          vote_requirement: voteRequirement,
+          friends: friends,
+          username: username
+      })
+    }
+    fetch(PENDING_POLLS_URL, configObj)
+    .then(resp => resp.json())
+    .then(
+        function(json) {
+          console.log(json)
+    })
   }
 
   // displays create a poll form
@@ -325,6 +358,10 @@ function logIn() {
     let username = document.createElement("input");
     username.setAttribute("type", "hidden");
     username.setAttribute("name", document.querySelector("#welcome").innerText.slice(9));
+    username.setAttribute("value", document.querySelector("#welcome").innerText.slice(9));
+    username.id = "username"
+
+
     form.appendChild(username)
   
     let inputSubmit = document.createElement("input");
@@ -332,6 +369,10 @@ function logIn() {
     inputSubmit.value = "Submit";
     inputSubmit.style.width ="100%";
     inputSubmit.style.backgroundColor ="#009688";
+    inputSubmit.addEventListener("click", (e)=> {
+      e.preventDefault();
+      createAPoll(e);
+    })
     form.appendChild(inputSubmit);
 
     div.appendChild(form);

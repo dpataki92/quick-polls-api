@@ -7,7 +7,8 @@ class PollsController < ApplicationController
     end
 
     def create
-        poll = Poll.new(question: params[:question], )
+        binding.pry
+        poll = Poll.new(question: params[:question])
     end
 
     private
