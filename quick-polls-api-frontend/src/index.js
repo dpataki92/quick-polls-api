@@ -227,8 +227,12 @@ function logIn() {
 
   }
 
+  function createAPoll() {
+
+  }
+
   // displays create a poll form
-  function createAPoll(dataHash) {
+  function pollForm(dataHash) {
     let div = document.createElement("div");
     div.id = "createAPollForm";
     div.style.textAlign ="center";
@@ -317,6 +321,11 @@ function logIn() {
       friendSelectList.appendChild(option);
     }
     form.appendChild(friendSelectList);
+
+    let username = document.createElement("input");
+    username.setAttribute("type", "hidden");
+    username.setAttribute("name", document.querySelector("#welcome").innerText.slice(9));
+    form.appendChild(username)
   
     let inputSubmit = document.createElement("input");
     inputSubmit.type = "submit";
@@ -359,7 +368,7 @@ function logIn() {
             icon: "share-alt",
             color: "teal",
             userNum: null,
-            listener: createAPoll
+            listener: pollForm
         },
 
         {
