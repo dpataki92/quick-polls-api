@@ -338,14 +338,19 @@ function logIn() {
     
     const mainDiv = document.querySelector(".main");
     mainDiv.style.display = "block";
-    document.querySelector(".panel").display = "block";
 
     // creates welcoming header
-    const h4 = document.createElement("h4");
-    const b = document.createElement("b");
-    b.innerHTML = `Welcome, ${dataHash.username}`
-    h4.id = "welcome"
-    h4.appendChild(b);
+    if (!document.querySelector("#welcome")) {
+      const h4 = document.createElement("h4");
+      const b = document.createElement("b");
+      b.innerHTML = `Welcome, ${dataHash.username}`
+      h4.id = "welcome"
+      h4.appendChild(b);
+
+      // inserting welcome header containing user's name
+      mainDiv.insertBefore(h4, mainDiv.querySelector(".panel"));
+    }
+    
 
     // array contaiing the individual attirubtes of all dashboard item container
     const containers = [
@@ -380,9 +385,6 @@ function logIn() {
 
     ]
 
-    // inserting welcome header containing user's name
-    mainDiv.insertBefore(h4, mainDiv.querySelector(".panel"));
-
     // renders diagram of aggregated user data
     renderAggregatedPollDiagram(json);
 
@@ -390,22 +392,23 @@ function logIn() {
     renderAggregatedUserData(json, dataHash);
 
     // displaying the 4 container for menu items
+    if (!document.querySelector(".quarter")) {
     for (let i = 0; i < containers.length; i++) {
       const container = createContainerForMenu(containers[i]["name"], containers[i]["icon"], containers[i]["color"], containers[i]["userNum"])
       mainDiv.insertBefore(container, mainDiv.querySelector(".panel"));
       container.addEventListener("click", ()=> {
-        if (document.querySelector(".panel").display === "block") {
+        if (document.querySelector(".row-padding").innerHTML != "") {
 
           document.getElementById(containers[i]["name"]).querySelector("h4").innerHTML = "Back to Dashboard";
           let el = containers[i].listener(dataHash);
           mainDiv.insertBefore(el, document.querySelector(".panel"));
-          document.querySelector(".panel").display = "none";
-          
+          document.querySelector(".row-padding").innerHTML = "";          
         } else {
           document.getElementById("createAPollForm").remove();
           document.getElementById(containers[i]["name"]).querySelector("h4").innerHTML = containers[i]["name"];
-          document.querySelector(".panel").display = "block";
+          renderDashBoard(json, dataHash);
         }
       })
   }
   }
+}
