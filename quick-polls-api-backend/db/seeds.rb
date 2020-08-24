@@ -1,5 +1,5 @@
 # creating users
-user1 = User.create(username: "user one", password_digest: BCrypt::Password.create("pkfnjbhrpewrt"))
+user1 = User.create(username: "user one", password_digest: BCrypt::Password.create("Iamuser1"))
 user2 = User.create(username: "user two", password_digest: BCrypt::Password.create("grt4bbzb"))
 user3 = User.create(username: "user three", password_digest: BCrypt::Password.create("evt4btbrz"))
 user4 = User.create(username: "user four", password_digest: BCrypt::Password.create("ebrtbrteb"))
@@ -13,7 +13,7 @@ user11 = User.create(username: "user eleven", password_digest: BCrypt::Password.
 user12 = User.create(username: "user twelve", password_digest: BCrypt::Password.create("Iamuser12"))
 
 # creating polls
-poll1 = Poll.create(question: "Who should be the president of the United States?", creator: user1.username, end_date: DateTime.now.end_of_month, status: "pending")
+poll1 = Poll.create(question: "Who should be the president of the United States?", creator: user1.username, end_date: 12, status: "pending")
 poll2 = Poll.create(question: "Where should we hold the next team building event?", creator: user1.username, vote_requirement: 10, status: "pending")
 poll3 = Poll.create(question: "Where to go to for our dinner on Saturday?", creator: user2.username, vote_requirement: 3, status: "pending")
 poll4 = Poll.create(question: "Were you satisfied with your year-end bonus?", creator: user3.username, vote_requirement: 12, status: "pending")
