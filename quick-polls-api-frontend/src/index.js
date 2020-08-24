@@ -227,6 +227,23 @@ function logIn() {
 
   }
 
+    // returns the values of the selected options of a multiple selection list
+    function getSelectValues(select) {
+      var result = [];
+      var options = select && select.options;
+      var opt;
+    
+      for (var i=0, iLen=options.length; i<iLen; i++) {
+        opt = options[i];
+    
+        if (opt.selected) {
+          result.push(opt.value || opt.text);
+        }
+      }
+      return result;
+    }
+
+  // grabs and sends poll data to create poll action
   function createAPoll(e) {
     let question = e.target.parentNode.querySelector("#question").value;
     let options = []
@@ -235,11 +252,14 @@ function logIn() {
     });
     let endDate = e.target.parentNode.querySelector("#end_date").value;
     let voteRequirement = e.target.parentNode.querySelector("#vote_requirement").value;
-    let friends = []
+    let friendsAll = []
     Array.prototype.slice.call(e.target.parentNode.querySelectorAll('input[name="friends[]"]')).forEach(n => {
-      friends.push(n.value)
+      friendsAll.push(n.value)
     });
     let username = e.target.parentNode.querySelector("#username").value;
+
+    let select = document.querySelector("select");
+    let friends = getSelectValues(select);
   
     let configObj = {
       method: "POST",
@@ -359,7 +379,7 @@ function logIn() {
     username.setAttribute("type", "hidden");
     username.setAttribute("name", document.querySelector("#welcome").innerText.slice(9));
     username.setAttribute("value", document.querySelector("#welcome").innerText.slice(9));
-    username.id = "username"
+    username.id = "username";
 
 
     form.appendChild(username)
