@@ -50,11 +50,17 @@ class PollsController < ApplicationController
             calc_new_percentage(poll).each do |o_data|
                 jsonHash[o_data[0]] = o_data[1]
             end
+
+            if poll.vote_requirement
+                jsonHash["message"] = "You have successfully voted on this poll! #{poll.vote_requirement - poll.votes.size} more vote(s) to close the poll."
+            else
+                jsonHash["message"] = "You have successfully voted on this poll!"
+            end
         else 
             jsonHash["message"] = "You have already voted on this poll."
         end
 
-        binding.pry
+        
         render json: jsonHash
     end
 
