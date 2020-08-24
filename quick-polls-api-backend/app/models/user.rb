@@ -17,12 +17,9 @@ class User < ApplicationRecord
     validates :username, presence: true
 
     def pending_polls
-        day = 86400
-
         self.polls.each do |p|
             if p.end_date
-                expiration_date = p.created_at + day * p.end_date
-                if expiration_date >= p.created_at
+                if p.expiration_date <= DateTime.now
                     p.status = "closed"
                 end
             elsif p.vote_requirement
@@ -32,7 +29,7 @@ class User < ApplicationRecord
             end
 
         end
-        
+        binding.pry
         self.polls.pending
     end
 end

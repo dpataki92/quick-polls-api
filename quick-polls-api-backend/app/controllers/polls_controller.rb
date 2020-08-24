@@ -4,12 +4,16 @@ class PollsController < ApplicationController
     def index
         username = "user one"
         polls = User.find_by(username: username).pending_polls
-        render json: PollSerializer.new(polls).to_serialized_json
+        render json: PollSerializer.new(polls).to_serialized_json 
     end
 
     def create
         user = User.find_by(username: params[:username])
-        poll = Poll.create_or_find_by(question: params[:question], end_date: params[:end_date], vote_requirement: params[:vote_requirement], creator: params[:username], status: "pending");
+        poll = Poll.create_or_find_by(question: params[:question], period: params[:period], vote_requirement: params[:vote_requirement], creator: params[:username], status: "pending");
+        if poll.period
+            poll.expiration_date = poll.calc_expiration_date
+            poll.save
+        end
 
         if poll.valid?
             poll.users << user

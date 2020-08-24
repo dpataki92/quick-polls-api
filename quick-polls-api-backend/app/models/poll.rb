@@ -7,11 +7,15 @@ class Poll < ApplicationRecord
     
     validates :question, presence: true, allow_blank: false
     validates :status, inclusion: { in: %w(pending closed)}
-    validates :end_date, numericality: { only_integer: true, allow_blank: true }
+    validates :period, numericality: { only_integer: true, allow_blank: true }
     validates :vote_requirement, numericality: { only_integer: true, allow_blank: true}
 
     scope :recent, -> {order(created_at: :desc)}
     scope :pending, -> {where(status: "pending") }
     scope :closed, -> {where(status: "closed") }
 
+    def calc_expiration_date
+        day = 86400
+        self.created_at + day * self.period
+    end
 end

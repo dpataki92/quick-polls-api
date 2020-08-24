@@ -250,7 +250,7 @@ function logIn() {
     Array.prototype.slice.call(e.target.parentNode.querySelectorAll('input[name="options[]"]')).forEach(n => {
       options.push(n.value)
     });
-    let endDate = e.target.parentNode.querySelector("#end_date").value;
+    let endDate = e.target.parentNode.querySelector("#period").value;
     let voteRequirement = e.target.parentNode.querySelector("#vote_requirement").value;
     let friends;
     if (document.querySelector("button[name='allFriends']").innerHTML === "All friends are added to poll!") {
@@ -271,7 +271,7 @@ function logIn() {
       body: JSON.stringify({
           question: question,
           options: options,
-          end_date: endDate,
+          period: period,
           vote_requirement: voteRequirement,
           friends: friends,
           username: username
@@ -363,8 +363,8 @@ function logIn() {
 
     let inputEndDate = document.createElement("input");
     inputEndDate.type = "number";
-    inputEndDate.name = "end_date";
-    inputEndDate.id = "end_date";
+    inputEndDate.name = "period";
+    inputEndDate.id = "period";
     inputEndDate.classList = "padding-16";
     inputEndDate.style.display ="block";
     inputEndDate.style.width ="100%";
@@ -426,11 +426,12 @@ function logIn() {
   }
 
   class Poll {
-    constructor(question, options, votes, end_date, vote_requirement) {
+    constructor(question, options, votes, period, expiration_date, vote_requirement) {
       this.question = question;
       this.options = options;
       this.votes = votes;
-      this.end_date = end_date;
+      this.period = period;
+      this.expiration_date = expiration_date;
       this.vote_requirement = vote_requirement;
     }
   
@@ -505,6 +506,7 @@ function logIn() {
     })
   }
   
+  // creates a voting form for a particular pending poll
   function createNewVotingFormFromPoll(poll) {
     let div = document.createElement("div");
     div.classList ="twothird extra";
@@ -532,36 +534,37 @@ function logIn() {
       let tr = document.createElement("tr");
       let td = document.createElement("td");
       td.innerHTML = "Voting requirement:" + poll.vote_requirement;
+      td.style.fontStyle = "italic";
       tr.appendChild(td)
       tbody.appendChild(tr)
     }
   
-    if (poll.end_date != null) {
+    if (poll.expiration_date != null) {
       let tr = document.createElement("tr");
       let td = document.createElement("td");
-      td.innerHTML = "End date: " + poll.end_date;
+      td.innerHTML = "Closing date for poll: " + poll.expiration_date;
+      td.style.fontStyle = "italic";
       tr.appendChild(td)
       tbody.appendChild(tr)
     }
     return div;
   }
 
+  // displays diagram and voting form for all pending polls of user
   function listPendingForms() {
     let container = document.createElement("div");
     container.classList = "panel extra";
-
-
 
       fetch(PENDING_POLLS_URL)
       .then(resp => resp.json())
       .then(function (json) {
         
-
+        console.log(json)
         for (let i = 0; i < json.length; i++) {
           let parent = document.createElement("div");
           parent.classList = "row-padding extra";
           parent.style.margin = "0 -16px";
-          let poll = new Poll(json[i].question, json[i].options, json[i].votes, json[i].end_date, json[i].vote_requirement);
+          let poll = new Poll(json[i].question, json[i].options, json[i].votes, json[i].period, json[i].expiration_date, json[i].vote_requirement);
           let diagramDiv = createNewDiagramFromPoll(poll);
           parent.appendChild(diagramDiv);
           let votingFormDiv = createNewVotingFormFromPoll(poll);

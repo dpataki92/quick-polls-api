@@ -13,11 +13,16 @@ user11 = User.create(username: "user eleven", password_digest: BCrypt::Password.
 user12 = User.create(username: "user twelve", password_digest: BCrypt::Password.create("Iamuser12"))
 
 # creating polls
-poll1 = Poll.create(question: "Who should be the president of the United States?", creator: user1.username, end_date: 12, status: "pending")
+poll1 = Poll.create(question: "Who should be the president of the United States?", creator: user1.username, period: 12, status: "pending")
 poll2 = Poll.create(question: "Where should we hold the next team building event?", creator: user1.username, vote_requirement: 10, status: "pending")
-poll3 = Poll.create(question: "Where to go to for our dinner on Saturday?", creator: user2.username, vote_requirement: 3, status: "pending")
+poll3 = Poll.create(question: "Where to go to for our dinner on Saturday?", creator: user2.username, vote_requirement: 3, period: 7, status: "pending")
 poll4 = Poll.create(question: "Were you satisfied with your year-end bonus?", creator: user3.username, vote_requirement: 12, status: "pending")
 poll5 = Poll.create(question: "Who was the best manager this year?", creator: user4.username, status: "pending")
+
+poll1.expiration_date = poll1.calc_expiration_date
+poll3.expiration_date = poll3.calc_expiration_date
+poll1.save
+poll3.save
 
 # options for poll1
 poll1_option1 = Option.create(description: "Donald Trump", poll: poll1)
