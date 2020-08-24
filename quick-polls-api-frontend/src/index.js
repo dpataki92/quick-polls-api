@@ -425,6 +425,127 @@ function logIn() {
     return div;
   }
 
+  class Poll {
+    constructor(question, options, votes, end_date, vote_requirement) {
+      this.question = question;
+      this.options = options;
+      this.votes = votes;
+      this.end_date = end_date;
+      this.vote_requirement = vote_requirement;
+    }
+  
+    calculatePercentage() {
+      const total = this.votes.length;
+      const result = [];
+      for (let i = 0; i < this.options.length; i++) {
+        let optionData = [];
+        let voteCount = 0;
+        this.votes.forEach(v => {
+          if (v.option_id === this.options[i].id) {
+            voteCount += 1;
+          }
+        })
+        optionData.push(this.options[i].description)
+        optionData.push(Math.floor(voteCount / total * 100))
+        result.push(optionData)
+      }
+      return result;
+    }
+  
+  }
+  
+  function createNewDiagramFromPoll(poll) {
+    let div = document.createElement("div");
+    div.classList = "third extra";
+  
+    let title = document.createElement("h5");
+    title.innerText = "Current results";
+    title.style.fontWeight = "bold";
+  
+    for (let opt of poll.options) {
+  
+      let description = document.createElement("p");
+      description.innerHTML = opt.description;
+  
+      let pollDiv = document.createElement("div");
+      pollDiv.classList = "grey";
+  
+      let percentageDiv = document.createElement("div");
+      let randomColor = ["red", "green", "orange", "blue", "yellow", "purple"][Math.floor((Math.random() * ["red", "green", "orange", "blue", "yellow", "purple"].length))]
+      percentageDiv.classList = "container center padding " + randomColor;
+      let percentageValue = poll.calculatePercentage().find(option => option[0] === opt.description)[1];
+      percentageDiv.style.width = `${percentageValue}%`;
+      percentageDiv.innerHTML = `${percentageValue}%`;
+      
+      pollDiv.appendChild(percentageDiv);
+      div.appendChild(description);
+      div.appendChild(pollDiv)
+      
+    }
+    div.insertBefore(title, div.querySelector("p"));
+    return div;
+  }
+  
+  function createClickableOption(opt) {
+    opt.addEventListener("click", (e) => {
+      if (e.target.style.color === "green" || e.target.style.color === "grey") {
+      e.target.style.color = "black";
+      e.target.parentNode.parentNode.querySelectorAll("td").forEach(td => {
+        td.style.color = "black"
+      })
+      
+    } else {
+      e.target.style.color = "green";
+      e.target.parentNode.parentNode.querySelectorAll("td").forEach(td => {
+        if (td.style.color != "green") {
+        td.style.color = "grey"
+        }
+      })
+    }
+    })
+  }
+  
+  function createNewVotingFormFromPoll(poll) {
+    let div = document.createElement("div");
+    div.classList ="twothird extra";
+    let table = document.createElement("table");
+    table.classList = "table striped white";
+    let tbody = document.createElement("tbody");
+    table.appendChild(tbody);
+    div.appendChild(table);
+  
+    let question = document.createElement("h5");
+    question.innerHTML = poll.question;
+    question.style.fontWeight = 'bold';
+    div.insertBefore(question, div.querySelector("table"));
+    question.after(document.createElement("br"))
+  
+    for (let i = 0; i < poll.options.length; i++) {
+      let tr = document.createElement("tr");
+      let td = document.createElement("td");
+      td.innerHTML = poll.options[i].description;
+      createClickableOption(td)
+      tr.appendChild(td)
+      tbody.appendChild(tr)
+    }
+    if (poll.vote_requirement != null) {
+      let tr = document.createElement("tr");
+      let td = document.createElement("td");
+      td.innerHTML = "Voting requirement:" + poll.vote_requirement;
+      tr.appendChild(td)
+      tbody.appendChild(tr)
+    }
+  
+    if (poll.end_date != null) {
+      let tr = document.createElement("tr");
+      let td = document.createElement("td");
+      td.innerHTML = "End date: " + poll.end_date;
+      tr.appendChild(td)
+      tbody.appendChild(tr)
+    }
+    return div;
+  }
+
   // renders dashboard after successful login
   function renderDashBoard(json, dataHash) {
     if (document.querySelector("#loginForm")) {
