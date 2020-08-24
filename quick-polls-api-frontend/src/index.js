@@ -229,11 +229,11 @@ function logIn() {
 
     // returns the values of the selected options of a multiple selection list
     function getSelectValues(select) {
-      var result = [];
-      var options = select && select.options;
-      var opt;
+      let result = [];
+      let options = select && select.options;
+      let opt;
     
-      for (var i=0, iLen=options.length; i<iLen; i++) {
+      for (let i=0, iLen=options.length; i<iLen; i++) {
         opt = options[i];
     
         if (opt.selected) {
@@ -252,15 +252,16 @@ function logIn() {
     });
     let endDate = e.target.parentNode.querySelector("#end_date").value;
     let voteRequirement = e.target.parentNode.querySelector("#vote_requirement").value;
-    let friendsAll = []
-    Array.prototype.slice.call(e.target.parentNode.querySelectorAll('input[name="friends[]"]')).forEach(n => {
-      friendsAll.push(n.value)
-    });
+    let friends;
+    if (document.querySelector("button[name='allFriends']").innerHTML === "All friends are added to poll!") {
+      friends = "all"
+    } else {
+      let select = document.querySelector("select");
+      friends = getSelectValues(select);
+    }
+    
     let username = e.target.parentNode.querySelector("#username").value;
 
-    let select = document.querySelector("select");
-    let friends = getSelectValues(select);
-  
     let configObj = {
       method: "POST",
       headers: {
@@ -361,11 +362,23 @@ function logIn() {
     inputEndDate.placeholder = "Voting period in days..";
     form.appendChild(inputEndDate);
 
+    let labelForFriendsList = document.createElement("label");
+    labelForFriendsList.setAttribute("for", "allFriends");
+    labelForFriendsList.innerHTML = "Add all friends or share the poll with only a few friends:"
+    let addAllFriendsButton = document.createElement("button");
+    addAllFriendsButton.name = "allFriends"
+    addAllFriendsButton.style.width ="100%";
+    addAllFriendsButton.style.color ="#009688";
+    addAllFriendsButton.style.backgroundColor = "white";
+    addAllFriendsButton.innerHTML = "Add all friends";
+    addAllFriendsButton.addEventListener("click", (e)=> {
+      e.preventDefault();
+      addAllFriendsButton.innerHTML = "All friends are added to poll!"
+    })
     let friendSelectList = document.createElement("select");
     friendSelectList.multiple = true;
     friendSelectList.style.width = "100%";
     friendSelectList.name = "friends[]";
-    friendSelectList.placeholder = "Add friends...";
     for (let i = 0; i < dataHash.friends.length; i++) {
       let option = document.createElement("option");
       option.value = dataHash.friends[i].username;
@@ -373,6 +386,8 @@ function logIn() {
       option.style.width = "100%";
       friendSelectList.appendChild(option);
     }
+    form.appendChild(labelForFriendsList);
+    form.appendChild(addAllFriendsButton);
     form.appendChild(friendSelectList);
 
     let username = document.createElement("input");
