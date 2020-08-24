@@ -5,7 +5,7 @@ class Poll < ApplicationRecord
     has_many :options
     has_many :votes
     
-    validates :question, presence: true
+    validates :question, presence: true, allow_blank: false
     validates :status, inclusion: { in: %w(pending closed)}
 
     scope :recent, -> {order(created_at: :desc)}

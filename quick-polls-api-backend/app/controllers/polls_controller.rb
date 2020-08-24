@@ -7,8 +7,29 @@ class PollsController < ApplicationController
     end
 
     def create
-        binding.pry
-        poll = Poll.new(question: params[:question])
+        user = User.find_by(username: params[:username])
+        poll = Poll.create_or_find_by(question: params[:question], end_date: params[:end_date], vote_requirement: params[:vote_requirement], creator: params[:username], status: "pending");
+
+        if poll.valid?
+            poll.users << user
+            if params[:friends] = "all"
+                user.friends.each do |f|
+                    poll.users << f
+                end
+            else
+                params[:friends].each do |f|
+                    poll.users << User.find_by(username: f)
+                end
+            end
+
+            params[:options].each do |o|
+                Option.create(description: o, poll_id: poll.id)
+            end
+            binding.pry
+            render json: {message: "You have successfully created a poll with question: #{poll.question}. Click on Pending Polls to check out its data.", created: true}
+        else
+            render json: {message: "Sorry, invalid data. Error: #{poll.errors.messages}", created: false}
+        end
     end
 
     private

@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 2020_08_21_163647) do
   create_table "polls", force: :cascade do |t|
     t.string "question"
     t.string "creator"
-    t.datetime "end_date"
+    t.integer "end_date"
     t.integer "vote_requirement"
     t.string "status"
     t.datetime "created_at", precision: 6, null: false

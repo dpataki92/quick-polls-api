@@ -282,6 +282,14 @@ function logIn() {
     .then(
         function(json) {
           console.log(json)
+          let p = document.createElement("p");
+          p.innerHTML = json.message;
+          if (json.created === true) {
+            p.style.color = "green";
+          } else {
+            p.style.color = "red";
+          }
+          document.getElementById("pollFormTitle").after(p);
     })
   }
 
@@ -295,6 +303,7 @@ function logIn() {
   
     let title = document.createElement("h3");
     title.innerText = "Set Your Poll's Data Here";
+    title.id = "pollFormTitle"
     title.style.display = "inline-block";
     title.style.marginLeft = "5px";
   
@@ -318,6 +327,7 @@ function logIn() {
       option.placeholder = placeholder;
       option.style.display = "block";
       option.style.width = "100%";
+      option.required = true;
       return option;
     }
     let inputOption1 = optionCreator("Option...");
