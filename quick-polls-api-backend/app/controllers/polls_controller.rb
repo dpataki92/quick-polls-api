@@ -38,7 +38,6 @@ class PollsController < ApplicationController
     end
 
     def vote
-        binding.pry
         poll = Poll.find_by(question: params[:question])
         user = User.find_by(id: params[:user_id])
         option = Option.find_by(description: params[:option])
@@ -73,7 +72,7 @@ class PollsController < ApplicationController
             if o.votes.size === 0
                 poll_data[1] = "0%"
             else
-                poll_data[1] = "#{o.votes / poll.votes.size * 100}%"
+                poll_data[1] = "#{(o.votes.size.to_f / poll.votes.size.to_f * 100).floor}%"
             end
             options_with_new_percentage <<  poll_data
         end
