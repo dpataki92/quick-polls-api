@@ -20,12 +20,17 @@ class User < ApplicationRecord
         day = 86400
 
         self.polls.each do |p|
-        expiration_date = p.created_at + day * p.end_date
+            if p.end_date
+                expiration_date = p.created_at + day * p.end_date
+                if expiration_date >= p.created_at
+                    p.status = "closed"
+                end
+            elsif p.vote_requirement
+                if p.votes.size >= p.vote_requirement
+                    p.status = "closed"
+                end
+            end
 
-        if p.votes.size >= p.vote_requirement
-            p.status = "closed"
-        elsif expiration_date >= p.created_at
-            p.status = "closed"
         end
         
         self.polls.pending

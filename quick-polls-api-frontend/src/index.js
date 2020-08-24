@@ -456,7 +456,7 @@ function logIn() {
   
   function createNewDiagramFromPoll(poll) {
     let div = document.createElement("div");
-    div.classList = "third extra";
+    div.classList = "third";
   
     let title = document.createElement("h5");
     title.innerText = "Current results";
@@ -546,6 +546,34 @@ function logIn() {
     return div;
   }
 
+  function listPendingForms() {
+    let container = document.createElement("div");
+    container.classList = "panel extra";
+
+
+
+      fetch(PENDING_POLLS_URL)
+      .then(resp => resp.json())
+      .then(function (json) {
+        
+
+        for (let i = 0; i < json.length; i++) {
+          let parent = document.createElement("div");
+          parent.classList = "row-padding extra";
+          parent.style.margin = "0 -16px";
+          let poll = new Poll(json[i].question, json[i].options, json[i].votes, json[i].end_date, json[i].vote_requirement);
+          let diagramDiv = createNewDiagramFromPoll(poll);
+          parent.appendChild(diagramDiv);
+          let votingFormDiv = createNewVotingFormFromPoll(poll);
+          parent.appendChild(votingFormDiv);
+          parent.style.marginBottom = "50px";
+          container.appendChild(parent);
+        }
+      })
+    
+    return container;
+  }
+
   // renders dashboard after successful login
   function renderDashBoard(json, dataHash) {
     if (document.querySelector("#loginForm")) {
@@ -582,7 +610,8 @@ function logIn() {
             name: "Pending Polls",
             icon: "comment",
             color: "red",
-            userNum: dataHash.polls.filter(p => p.status === "pending").length
+            userNum: dataHash.polls.filter(p => p.status === "pending").length,
+            listener: listPendingForms
         },
 
         {
@@ -613,12 +642,12 @@ function logIn() {
       const container = createContainerForMenu(containers[i]["name"], containers[i]["icon"], containers[i]["color"], containers[i]["userNum"])
       mainDiv.insertBefore(container, mainDiv.querySelector(".panel"));
       container.addEventListener("click", ()=> {
-        if (document.querySelector(".row-padding").innerHTML != "") {
+        if (document.querySelector(".row-padding.normal").innerHTML != "") {
 
           document.getElementById(containers[i]["name"]).querySelector("h4").innerHTML = "Back to Dashboard";
           let el = containers[i].listener(dataHash);
+          document.querySelector(".row-padding.normal").innerHTML = "";          
           mainDiv.insertBefore(el, document.querySelector(".panel"));
-          document.querySelector(".row-padding").innerHTML = "";          
         } else {
           document.querySelector(".extra").remove();
           document.getElementById(containers[i]["name"]).querySelector("h4").innerHTML = containers[i]["name"];
