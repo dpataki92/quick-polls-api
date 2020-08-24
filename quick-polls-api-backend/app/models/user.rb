@@ -15,4 +15,19 @@ class User < ApplicationRecord
     has_many :votes
 
     validates :username, presence: true
+
+    def pending_polls
+        day = 86400
+
+        self.polls.each do |p|
+        expiration_date = p.created_at + day * p.end_date
+
+        if p.votes.size >= p.vote_requirement
+            p.status = "closed"
+        elsif expiration_date >= p.created_at
+            p.status = "closed"
+        end
+        
+        self.polls.pending
+    end
 end
