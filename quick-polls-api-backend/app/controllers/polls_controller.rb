@@ -3,7 +3,7 @@ class PollsController < ApplicationController
 
     def index
         username = "user one"
-        polls = User.find_by(username: username).pending_polls
+        polls = User.find_by(username: username).pending_polls.recent
         render json: PollSerializer.new(polls).to_serialized_json 
     end
 
@@ -30,6 +30,7 @@ class PollsController < ApplicationController
             params[:options].each do |o|
                 Option.create(description: o, poll_id: poll.id)
             end
+            
             render json: {message: "You have successfully created a poll with question: #{poll.question}. Click on Pending Polls to check out its data.", created: true}
         else
             render json: {message: "Sorry, invalid data. Error: #{poll.errors.messages}", created: false}

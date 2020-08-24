@@ -250,7 +250,7 @@ function logIn() {
     Array.prototype.slice.call(e.target.parentNode.querySelectorAll('input[name="options[]"]')).forEach(n => {
       options.push(n.value)
     });
-    let endDate = e.target.parentNode.querySelector("#period").value;
+    let period = e.target.parentNode.querySelector("#period").value;
     let voteRequirement = e.target.parentNode.querySelector("#vote_requirement").value;
     let friends;
     if (document.querySelector("button[name='allFriends']").innerHTML === "All friends are added to poll!") {
@@ -361,16 +361,16 @@ function logIn() {
     inputVoteRequirement.placeholder = "Number of votes to close the poll..";
     form.appendChild(inputVoteRequirement);
 
-    let inputEndDate = document.createElement("input");
-    inputEndDate.type = "number";
-    inputEndDate.name = "period";
-    inputEndDate.id = "period";
-    inputEndDate.classList = "padding-16";
-    inputEndDate.style.display ="block";
-    inputEndDate.style.width ="100%";
-    inputEndDate.style.backgroundColor ="white";
-    inputEndDate.placeholder = "Voting period in days..";
-    form.appendChild(inputEndDate);
+    let inputPeriod = document.createElement("input");
+    inputPeriod.type = "number";
+    inputPeriod.name = "period";
+    inputPeriod.id = "period";
+    inputPeriod.classList = "padding-16";
+    inputPeriod.style.display ="block";
+    inputPeriod.style.width ="100%";
+    inputPeriod.style.backgroundColor ="white";
+    inputPeriod.placeholder = "Voting period in days..";
+    form.appendChild(inputPeriod);
 
     let labelForFriendsList = document.createElement("label");
     labelForFriendsList.setAttribute("for", "allFriends");
@@ -438,21 +438,30 @@ function logIn() {
     calculatePercentage() {
       const total = this.votes.length;
       const result = [];
-      for (let i = 0; i < this.options.length; i++) {
-        let optionData = [];
-        let voteCount = 0;
-        this.votes.forEach(v => {
-          if (v.option_id === this.options[i].id) {
-            voteCount += 1;
+
+      if (total === 0) {
+        for (let i = 0; i < this.options.length; i++) {
+          let optionData = [];
+          optionData.push(this.options[i].description);
+          optionData.push(0);
+          result.push(optionData);
+        }
+      } else {
+          for (let i = 0; i < this.options.length; i++) {
+            let optionData = [];
+            let voteCount = 0;
+            this.votes.forEach(v => {
+              if (v.option_id === this.options[i].id) {
+                voteCount += 1;
+              }
+            })
+            optionData.push(this.options[i].description)
+            optionData.push(Math.floor(voteCount / total * 100))
+            result.push(optionData)
           }
-        })
-        optionData.push(this.options[i].description)
-        optionData.push(Math.floor(voteCount / total * 100))
-        result.push(optionData)
       }
       return result;
     }
-  
   }
   
   function createNewDiagramFromPoll(poll) {
@@ -526,17 +535,17 @@ function logIn() {
       let tr = document.createElement("tr");
       let td = document.createElement("td");
       td.innerHTML = poll.options[i].description;
-      createClickableOption(td)
-      tr.appendChild(td)
-      tbody.appendChild(tr)
+      createClickableOption(td);
+      tr.appendChild(td);
+      tbody.appendChild(tr);
     }
     if (poll.vote_requirement != null) {
       let tr = document.createElement("tr");
       let td = document.createElement("td");
       td.innerHTML = "Voting requirement:" + poll.vote_requirement;
       td.style.fontStyle = "italic";
-      tr.appendChild(td)
-      tbody.appendChild(tr)
+      tr.appendChild(td);
+      tbody.appendChild(tr);
     }
   
     if (poll.expiration_date != null) {

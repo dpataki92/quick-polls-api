@@ -18,7 +18,7 @@ class User < ApplicationRecord
 
     def pending_polls
         self.polls.each do |p|
-            if p.end_date
+            if p.period
                 if p.expiration_date <= DateTime.now
                     p.status = "closed"
                 end
@@ -29,7 +29,6 @@ class User < ApplicationRecord
             end
 
         end
-        binding.pry
         self.polls.pending
     end
 end
