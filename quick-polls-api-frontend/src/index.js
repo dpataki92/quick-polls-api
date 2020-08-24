@@ -1,6 +1,4 @@
 const BASE_URL = "http://localhost:3000"
-const PENDING_POLLS_URL = `${BASE_URL}/polls`
-const CLOSED_POLLS_URL = `${BASE_URL}/polls/closed`
 const USER_URL = `${BASE_URL}/users`
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -245,6 +243,8 @@ function logIn() {
 
   // grabs and sends poll data to create poll action
   function createAPoll(e) {
+    const PENDING_POLLS_URL = `${BASE_URL}/users/${document.getElementById("welcome").querySelector("b").id}/polls`;
+
     let question = e.target.parentNode.querySelector("#question").value;
     let options = []
     Array.prototype.slice.call(e.target.parentNode.querySelectorAll('input[name="options[]"]')).forEach(n => {
@@ -561,6 +561,7 @@ function logIn() {
 
   // displays diagram and voting form for all pending polls of user
   function listPendingForms() {
+    const PENDING_POLLS_URL = `${BASE_URL}/users/${document.getElementById("welcome").querySelector("b").id}/polls`;
     let container = document.createElement("div");
     container.classList = "panel extra";
 
@@ -599,6 +600,7 @@ function logIn() {
     if (!document.querySelector("#welcome")) {
       const h4 = document.createElement("h4");
       const b = document.createElement("b");
+      b.id = dataHash.id;
       b.innerHTML = `Welcome, ${dataHash.username}`
       h4.id = "welcome"
       h4.appendChild(b);
