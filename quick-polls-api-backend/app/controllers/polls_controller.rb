@@ -25,7 +25,6 @@ class PollsController < ApplicationController
             params[:options].each do |o|
                 Option.create(description: o, poll_id: poll.id)
             end
-            binding.pry
             render json: {message: "You have successfully created a poll with question: #{poll.question}. Click on Pending Polls to check out its data.", created: true}
         else
             render json: {message: "Sorry, invalid data. Error: #{poll.errors.messages}", created: false}

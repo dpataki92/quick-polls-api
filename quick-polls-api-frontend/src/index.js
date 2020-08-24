@@ -281,7 +281,6 @@ function logIn() {
     .then(resp => resp.json())
     .then(
         function(json) {
-          console.log(json)
           let p = document.createElement("p");
           p.innerHTML = json.message;
           if (json.created === true) {
@@ -297,6 +296,7 @@ function logIn() {
   function pollForm(dataHash) {
     let div = document.createElement("div");
     div.id = "createAPollForm";
+    div.classList = "extra";
     div.style.textAlign ="center";
     div.style.margin = "auto";
     div.style.width = "50%";
@@ -499,7 +499,7 @@ function logIn() {
           mainDiv.insertBefore(el, document.querySelector(".panel"));
           document.querySelector(".row-padding").innerHTML = "";          
         } else {
-          document.getElementById("createAPollForm").remove();
+          document.querySelector(".extra").remove();
           document.getElementById(containers[i]["name"]).querySelector("h4").innerHTML = containers[i]["name"];
           renderDashBoard(json, dataHash);
         }
