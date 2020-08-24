@@ -37,9 +37,46 @@ class PollsController < ApplicationController
         end
     end
 
+    def vote
+        binding.pry
+        poll = Poll.find_by(question: params[:question])
+        user = User.find_by(id: params[:user_id])
+        option = Option.find_by(description: params[:option])
+        vote = Vote.new(poll_id: poll.id, user_id: user.id, option_id: option.id)
+        
+        jsonHash = {}
+
+        if !user.votes.find {|v| v.poll_id === poll.id}
+            vote.save
+            calc_new_percentage(poll).each do |o_data|
+                jsonHash[o_data[0]] = o_data[1]
+            end
+        else 
+            jsonHash["message"] = "You have already voted on this poll."
+        end
+
+        binding.pry
+        render json: jsonHash
+    end
+
     private
 
     def accept_all_params
         params.permit!
+    end
+
+    def calc_new_percentage(poll)
+        options_with_new_percentage = []
+        poll.options.each do |o|
+            poll_data = []
+            poll_data[0] = o.description
+            if o.votes.size === 0
+                poll_data[1] = "0%"
+            else
+                poll_data[1] = "#{o.votes / poll.votes.size * 100}%"
+            end
+            options_with_new_percentage <<  poll_data
+        end
+        options_with_new_percentage
     end
 end

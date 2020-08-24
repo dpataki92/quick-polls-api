@@ -497,7 +497,7 @@ function logIn() {
   }
 
   // adds a vote to an option
-  function vote(option) {
+  function vote(option, question, user_id) {
     let configObj = {
       method: "POST",
       headers: {
@@ -505,13 +505,17 @@ function logIn() {
           "Accept": "application/json",
       },
       body: JSON.stringify({
-          option: option
+          option: option,
+          question: question,
+          user_id: user_id
       })
     }
-    fetch(`${USER_URL}/${document.querySelector("b").id}/vote`, configObj)
+    fetch(`${USER_URL}/${user_id}/polls/vote`, configObj)
     .then(resp => resp.json())
     .then(
-      console.log(json)
+      function(json) {
+        console.log(json)
+      }
     )
   }
   
@@ -531,6 +535,8 @@ function logIn() {
         td.style.color = "grey"
         }
       })
+      
+      vote(e.target.innerText, e.target.parentNode.parentNode.parentNode.parentNode.querySelector("h5").innerText, document.querySelector("b").id)
     }
     })
   }
