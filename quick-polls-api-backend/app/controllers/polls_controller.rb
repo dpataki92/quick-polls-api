@@ -3,7 +3,7 @@ class PollsController < ApplicationController
 
     def index
         username = "user one"
-        polls = User.find_by(user_id: params[:user_id]).pending_polls.recent
+        polls = User.find_by(id: params[:user_id]).pending_polls.recent
         render json: PollSerializer.new(polls).to_serialized_json 
     end
 

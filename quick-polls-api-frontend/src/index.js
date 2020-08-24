@@ -495,13 +495,33 @@ function logIn() {
     div.insertBefore(title, div.querySelector("p"));
     return div;
   }
+
+  // adds a vote to an option
+  function vote(option) {
+    let configObj = {
+      method: "POST",
+      headers: {
+          "Content-Type": 'application/json',
+          "Accept": "application/json",
+      },
+      body: JSON.stringify({
+          option: option
+      })
+    }
+    fetch(`${USER_URL}/${document.querySelector("b").id}/vote`, configObj)
+    .then(resp => resp.json())
+    .then(
+      console.log(json)
+    )
+  }
   
+  // makes poll options clickable and change styles based on user interaction
   function createClickableOption(opt) {
     opt.addEventListener("click", (e) => {
       if (e.target.style.color === "green" || e.target.style.color === "grey") {
       e.target.style.color = "black";
       e.target.parentNode.parentNode.querySelectorAll("td").forEach(td => {
-        td.style.color = "black"
+        td.style.color = "black";
       })
       
     } else {
