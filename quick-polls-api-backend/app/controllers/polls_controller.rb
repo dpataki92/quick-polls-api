@@ -69,7 +69,6 @@ class PollsController < ApplicationController
         user = User.find_by(id: params[:id])
         poll = Poll.find_by(question: params[:question])
         vote = user.votes.find {|v| v.poll_id === poll.id}
-        
         jsonHash = {}
 
         if vote
@@ -84,7 +83,6 @@ class PollsController < ApplicationController
             jsonHash["message"] = "You have not voted on this poll yet"
             jsonHash["unvoted"] = false
         end
-
         render json: jsonHash
     end
 

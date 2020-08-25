@@ -595,6 +595,39 @@ function logIn() {
     }
     })
   }
+
+  // deletes poll if user is creator
+  function deletePoll(question) {
+    let id = document.querySelector("b").id;
+    let configObj = {
+      method: "POST",
+      headers: {
+          "Content-Type": 'application/json',
+          "Accept": "application/json",
+      },
+      body: JSON.stringify({
+          id: id,
+          question: question
+      })
+    }
+    fetch(`${USER_URL}/${id}/polls/${question}`, configObj)
+    .then(resp => resp.json())
+    .then(
+      function(json) {
+        let poll = document.getElementById(`${question.split(" ").join("-")}`);
+        poll.innerHTML = ""
+        let p = document.createElement("p");
+        p.innerHTML = json["message"]
+        poll.style.textAlign = "center";
+        poll.style.color = "red";
+    })
+  }
+
+  // closes poll if user is creator
+
+  // renders edit poll form is user is creator
+
+  // renders links to functions for deleting, closing, and editing poll if user is creator
   
   // creates a voting form for a particular pending poll
   function createNewVotingFormFromPoll(poll) {
