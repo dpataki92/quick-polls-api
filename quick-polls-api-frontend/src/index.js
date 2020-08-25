@@ -615,9 +615,13 @@ function logIn() {
     .then(resp => resp.json())
     .then(
       function(json) {
-        let poll = document.getElementById(`${question.split(" ").join("-")}`);
-        poll.innerHTML ="";
-        alert(`${json["message"]}`)
+        if (json.deleted === true) {
+          let poll = document.getElementById(`${question.split(" ").join("-")}`);
+          poll.innerHTML ="";
+          alert(`${json["message"]}`)
+        } else {
+          alert(`${json["message"]}`)
+        }
     })
   }
 

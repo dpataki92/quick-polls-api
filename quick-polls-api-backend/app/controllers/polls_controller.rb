@@ -92,9 +92,9 @@ class PollsController < ApplicationController
 
         if poll && poll.creator === user.username
             poll.destroy
-            render json: {message: "You have successfully deleted this poll."}
+            render json: {message: "You have successfully deleted this poll.", deleted: true}
         else
-            render json: {message: "You are not authorized to delete this poll."}
+            render json: {message: "You are not authorized to delete this poll.", deleted: false}
         end
     end
 
