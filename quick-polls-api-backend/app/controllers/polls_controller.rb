@@ -88,7 +88,7 @@ class PollsController < ApplicationController
 
     def destroy
         user = User.find_by(id: params[:id])
-        poll = user.polls.find {|p| p.question === params[:name]}
+        poll = user.polls.find {|p| p.question === params[:question]}
 
         if poll && poll.creator === user.username
             poll.destroy
@@ -96,6 +96,20 @@ class PollsController < ApplicationController
         else
             render json: {message: "You are not authorized to delete this poll."}
         end
+    end
+
+    def close
+        user = User.find_by(id: params[:id])
+        poll = user.polls.find {|p| p.question === params[:question]}
+
+        if poll && poll.creator === user.username
+            poll.status = "closed"
+            poll.save
+            render json: {message: "You have successfully closed this poll.", closed: true}
+        else
+            render json: {message: "You are not authorized to close this poll.", closed: false}
+        end
+
     end
 
     private

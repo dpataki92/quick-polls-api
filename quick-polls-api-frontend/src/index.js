@@ -622,9 +622,33 @@ function logIn() {
   }
 
   // closes poll if user is creator
-  function closePoll() {
+  function closePoll(question) {
+      let id = document.querySelector("b").id;
+      let configObj = {
+        method: "POST",
+        headers: {
+            "Content-Type": 'application/json',
+            "Accept": "application/json",
+        },
+        body: JSON.stringify({
+            id: id,
+            question: question
+        })
+      }
+      fetch(`${USER_URL}/${id}/polls/${question}/close`, configObj)
+      .then(resp => resp.json())
+      .then(function(json) {
+        if (json.closed === true) {
+          let poll = document.getElementById(`${question.split(" ").join("-")}`);
+          poll.innerHTML ="";
+          alert(`${json["message"]}`)
+        } else {
+          alert(`${json["message"]}`)
+        }
+        
+      }
 
-  }
+    )}
 
   // renders edit poll form is user is creator
   function editPoll() {
@@ -639,10 +663,16 @@ function logIn() {
       let link = document.createElement("a");
       if (i === 0) {
         link.innerHTML = "Edit poll  ";
-        link.setAttribute('onclick','return function() {editPoll(question);}');
+        link.addEventListener("click", ()=> {
+          alert("Are your sure?");
+          closePoll(question)
+        })
       } else if (i === 1) {
         link.innerHTML = "Close poll  ";
-        link.setAttribute('onclick',"return function() {alert('Are you sure?'); closePoll(question);}");
+        link.addEventListener("click", ()=> {
+          alert("Are your sure?");
+          closePoll(question)
+        })
       } else if (i === 2) {
         link.innerHTML = "Delete poll  ";
         link.addEventListener("click", ()=> {
