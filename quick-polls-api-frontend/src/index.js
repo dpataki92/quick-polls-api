@@ -321,18 +321,18 @@ function logIn() {
     inputQuestion.style.display = "block";
     inputQuestion.style.width = "100%";
 
-    function optionCreator(placeholder) {
+    function optionCreator() {
       let option = document.createElement("input");
       option.type = "text";
       option.name = "options[]";
-      option.placeholder = placeholder;
+      option.placeholder = "Option...";
       option.style.display = "block";
       option.style.width = "100%";
       option.required = true;
       return option;
     }
-    let inputOption1 = optionCreator("Option...");
-    let inputOption2 = optionCreator("Another Option...");
+    let inputOption1 = optionCreator();
+    let inputOption2 = optionCreator();
 
     let optionButton = document.createElement("button");
     optionButton.style.width ="100%";
@@ -347,7 +347,7 @@ function logIn() {
 
     optionButton.addEventListener("click", (e)=> {
       e.preventDefault();
-      let copyOption = optionCreator("Another option");
+      let copyOption = optionCreator();
       form.insertBefore(copyOption, form.querySelector("button"));
     })
 
@@ -657,6 +657,58 @@ function logIn() {
 
   // creates form for editing poll data
   function createEditFormForPoll(dataHash) {
+    let form = pollForm(dataHash);
+    form.querySelector("h3").innerText = "Edit Your Poll's Data Here";
+    form.querySelector("form").getElementById("question").placeholder = dataHash.question;
+    for (let i = 0; i < dataHash.options.length; i++) {
+      if (i+1 >= document.querySelectorAll("input[name='options[]']").length) {
+        let option = document.createElement("input");
+        option.type = "text";
+        option.name = "options[]";
+        option.placeholder = dataHash.options[i].description;
+        option.style.display = "block";
+        option.style.width = "100%";
+        form.insertBefore(option, form.querySelector("button"))
+      } else {
+        let option = form.querySelector("input[placeholder='Option...']");
+        option.placeholder = dataHash.options[i].description;
+      }
+    }
+    let label = form.querySelectorAll("label");
+    label.innerText = "Remove or add new friends:"
+    form.querySelector("button[name='allFriends']").innerText = "Add all missing friends";
+    let addFriendsList = form.querySelector("select[name='friends[]']");
+    addFriendsList.querySelectorAll("option").forEach(o=>{o.remove()})
+    for (let i = 0; i < dataHash.missing_friends.length; i++) {
+      let option = document.createElement("option");
+      option.value = dataHash.missing_friends[i].username;
+      option.innerText = dataHash.missing_friends[i].username;
+      option.style.width = "100%";
+      addFriendsList.appendChild(option);
+    }
+    
+    let removeAllExistingFriendsButton = document.createElement("button");
+    removeAllExistingFriendsButton.name = "removeAllExistingFriends"
+    removeAllExistingFriendsButton.style.width ="100%";
+    removeAllExistingFriendsButton.style.color ="#009688";
+    removeAllExistingFriendsButton.style.backgroundColor = "white";
+    removeAllExistingFriendsButton.innerHTML = "Remove all existing friends";
+    removeAllExistingFriendsButton.addEventListener("click", (e)=> {
+      e.preventDefault();
+      removeAllExistingFriendsButton.innerHTML = "All previously added friends are removed"
+    })
+    let existingFriends = document.createElement("select");
+    existingFriends.multiple = true;
+    existingFriends.style.width = "100%";
+    existingFriends.name = "removed_friends[]";
+    for (let i = 0; i < dataHash.existing_friends.length; i++) {
+      let option = document.createElement("option");
+      option.value = dataHash.existing_friends[i].username;
+      option.innerText = dataHash.existing_friends[i].username;
+      option.style.width = "100%";
+      existingFriends.appendChild(option);
+    }
+    form.insertBefore(existingFriends, form.querySelector("input[type='submit']"))
     
   }
 
