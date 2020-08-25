@@ -659,7 +659,7 @@ function logIn() {
   function createEditFormForPoll(dataHash) {
     let form = pollForm(dataHash);
     form.querySelector("h3").innerText = "Edit Your Poll's Data Here";
-    form.querySelector("form").getElementById("question").placeholder = dataHash.question;
+    form.querySelector("form").querySelector("#question").placeholder = dataHash.question;
     for (let i = 0; i < dataHash.options.length; i++) {
       if (i+1 >= document.querySelectorAll("input[name='options[]']").length) {
         let option = document.createElement("input");
@@ -668,7 +668,7 @@ function logIn() {
         option.placeholder = dataHash.options[i].description;
         option.style.display = "block";
         option.style.width = "100%";
-        form.insertBefore(option, form.querySelector("button"))
+        form.querySelector("input[name='options[]']").after(option);
       } else {
         let option = form.querySelector("input[placeholder='Option...']");
         option.placeholder = dataHash.options[i].description;
@@ -697,24 +697,46 @@ function logIn() {
       e.preventDefault();
       removeAllExistingFriendsButton.innerHTML = "All previously added friends are removed"
     })
+    form.querySelector("select").after(removeAllExistingFriendsButton);
     let existingFriends = document.createElement("select");
     existingFriends.multiple = true;
     existingFriends.style.width = "100%";
     existingFriends.name = "removed_friends[]";
-    for (let i = 0; i < dataHash.existing_friends.length; i++) {
+    for (let i = 0; i < dataHash.friends.length; i++) {
       let option = document.createElement("option");
-      option.value = dataHash.existing_friends[i].username;
-      option.innerText = dataHash.existing_friends[i].username;
+      option.value = dataHash.friends[i].username;
+      option.innerText = dataHash.friends[i].username;
       option.style.width = "100%";
       existingFriends.appendChild(option);
     }
-    form.insertBefore(existingFriends, form.querySelector("input[type='submit']"))
+    form.querySelector("button[name='removeAllExistingFriends']").after(existingFriends);
     
+    return form;
   }
 
   // renders edit poll form is user is creator
-  function editPoll(dataHash) {
-    
+  function editPoll(question) {
+    let id = document.querySelector("b").id;
+      let configObj = {
+        method: "POST",
+        headers: {
+            "Content-Type": 'application/json',
+            "Accept": "application/json",
+        },
+        body: JSON.stringify({
+            id: id,
+            question: question
+        })
+      }
+      fetch(`${USER_URL}/${id}/polls/${question}/edit`, configObj)
+      .then(resp => resp.json())
+      .then(function(json) {
+        console.log(json)
+        document.querySelector(".extra").remove();
+        let div = createEditFormForPoll(json);
+        console.log(json);
+        document.querySelector(".main").insertBefore(div, document.querySelector(".panel"));
+      })
   }
 
   // renders links to functions for deleting, closing, and editing poll if user is creator
@@ -726,8 +748,7 @@ function logIn() {
       if (i === 0) {
         link.innerHTML = "Edit poll  ";
         link.addEventListener("click", ()=> {
-          alert("Are your sure?");
-          closePoll(question)
+          editPoll(question)
         })
       } else if (i === 1) {
         link.innerHTML = "Close poll  ";

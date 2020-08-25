@@ -31,4 +31,20 @@ class User < ApplicationRecord
         end
         self.polls.pending
     end
+
+    def existing_friends(poll)
+        existing_friends = []
+        self.friends.each do |f|
+            existing_friends << f if f.polls.include?(poll)
+        end
+        existing_friends
+    end
+
+    def missing_friends(poll)
+        missing_friends = []
+        self.friends.each do |f|
+            missing_friends << f if !f.polls.include?(poll)
+        end
+        missing_friends
+    end
 end

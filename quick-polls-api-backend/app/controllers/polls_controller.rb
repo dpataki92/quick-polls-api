@@ -116,7 +116,7 @@ class PollsController < ApplicationController
         poll = user.polls.find {|p| p.question === params[:question]}
 
         if poll && poll.creator === user.username
-            render json: {question: poll.question, options: poll.options, missing_friends: ..., period: poll.period, vote_requirement: poll.vote_requirement, edited: true}
+            render json: {question: poll.question, options: poll.options, friends: user.existing_friends(poll), missing_friends: user.missing_friends(poll), period: poll.period, vote_requirement: poll.vote_requirement, edited: true}
         else
             render json: {message: "You are not authorized to edit this poll.", edited: false}
         end
