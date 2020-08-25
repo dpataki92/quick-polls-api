@@ -86,6 +86,18 @@ class PollsController < ApplicationController
         render json: jsonHash
     end
 
+    def destroy
+        user = User.find_by(id: params[:id])
+        poll = user.polls.find {|p| p.question === params[:question]}
+
+        if poll && poll.create === user.username
+            poll.destroy
+            render json: {message: "You have successfully deleted this poll."}
+        else
+            render json: {message: "You are not authorized to delete this poll."}
+        end
+    end
+
     private
 
     def accept_all_params
