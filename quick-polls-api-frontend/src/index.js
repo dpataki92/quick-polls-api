@@ -90,6 +90,7 @@ function logIn() {
           } else if (json.logged_in === true) {
             let dataHash = JSON.parse(json.data);
               console.log(json)
+              console.log(dataHash)
                 renderDashBoard(json, dataHash)
           }
           
@@ -654,9 +655,14 @@ function logIn() {
 
     )}
 
-  // renders edit poll form is user is creator
-  function editPoll() {
+  // creates form for editing poll data
+  function createEditFormForPoll(dataHash) {
+    
+  }
 
+  // renders edit poll form is user is creator
+  function editPoll(dataHash) {
+    
   }
 
   // renders links to functions for deleting, closing, and editing poll if user is creator

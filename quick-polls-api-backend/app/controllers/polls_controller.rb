@@ -109,7 +109,17 @@ class PollsController < ApplicationController
         else
             render json: {message: "You are not authorized to close this poll.", closed: false}
         end
+    end
 
+    def edit
+        user = User.find_by(id: params[:id])
+        poll = user.polls.find {|p| p.question === params[:question]}
+
+        if poll && poll.creator === user.username
+            render json: {question: poll.question, options: poll.options, friends: user.friends, period: poll.period, vote_requirement: poll.vote_requirement, edited: true}
+        else
+            render json: {message: "You are not authorized to edit this poll.", edited: false}
+        end
     end
 
     private
