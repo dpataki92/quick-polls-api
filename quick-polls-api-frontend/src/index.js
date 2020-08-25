@@ -515,6 +515,30 @@ function logIn() {
     .then(
       function(json) {
         console.log(json)
+        if (json.voted === true) {
+          let parent = document.getElementById(`${question.split(" ").join("-")}`)
+          const p = document.createElement("p");
+          p.innerHTML = json.message;
+          p.style.color = "green";
+          parent.querySelector("table").after(p);
+
+          parent.querySelector(".third").querySelectorAll(".container").forEach(n => {
+            for (let prop in json) {
+              if (n.parentNode.previousSibling.innerText === prop) {
+                n.style.width = json[prop];
+                n.innerText = json[prop];
+              }
+            } 
+          }) 
+        } else {
+          let parent = document.getElementById(`${question.split(" ").join("-")}`)
+          const p = document.createElement("p");
+          p.innerHTML = json.message;
+          p.style.color = "red";
+          parent.querySelector("table").after(p);
+        }
+        
+
       }
     )
   }
@@ -599,6 +623,7 @@ function logIn() {
         for (let i = 0; i < json.length; i++) {
           let parent = document.createElement("div");
           parent.classList = "row-padding extra";
+          parent.id = `${json[i].question.split(" ").join("-")}`
           parent.style.margin = "0 -16px";
           let poll = new Poll(json[i].question, json[i].options, json[i].votes, json[i].period, json[i].expiration_date, json[i].vote_requirement);
           let diagramDiv = createNewDiagramFromPoll(poll);

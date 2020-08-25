@@ -56,8 +56,10 @@ class PollsController < ApplicationController
             else
                 jsonHash["message"] = "You have successfully voted on this poll!"
             end
+            jsonHash["voted"] = true
         else 
             jsonHash["message"] = "You have already voted on this poll."
+            jsonHash["voted"] = false
         end
 
         
