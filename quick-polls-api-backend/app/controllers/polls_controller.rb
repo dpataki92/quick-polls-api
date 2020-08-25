@@ -2,7 +2,6 @@ class PollsController < ApplicationController
     before_action :accept_all_params
 
     def index
-        username = "user one"
         polls = User.find_by(id: params[:user_id]).pending_polls.recent
         render json: PollSerializer.new(polls).to_serialized_json 
     end
@@ -39,7 +38,7 @@ class PollsController < ApplicationController
 
     def vote
         poll = Poll.find_by(question: params[:question])
-        user = User.find_by(id: params[:user_id])
+        user = User.find_by(id: params[:id])
         option = Option.find_by(description: params[:option])
         vote = Vote.new(poll_id: poll.id, user_id: user.id, option_id: option.id)
         
@@ -63,6 +62,29 @@ class PollsController < ApplicationController
         end
 
         
+        render json: jsonHash
+    end
+
+    def unvote
+        user = User.find_by(id: params[:id])
+        poll = Poll.find_by(question: params[:question])
+        vote = user.votes.find {|v| v.poll_id === poll.id}
+        
+        jsonHash = {}
+
+        if vote
+            vote.destroy
+            calc_new_percentage(poll).each do |o_data|
+                jsonHash[o_data[0]] = o_data[1]
+            end
+
+            jsonHash["message"] = "You have removed your vote."
+            jsonHash["unvoted"] = true
+        else
+            jsonHash["message"] = "You have not voted on this poll yet"
+            jsonHash["unvoted"] = false
+        end
+
         render json: jsonHash
     end
 

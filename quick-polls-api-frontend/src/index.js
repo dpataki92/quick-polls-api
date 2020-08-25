@@ -497,7 +497,7 @@ function logIn() {
   }
 
   // adds a vote to an option
-  function vote(option, question, user_id) {
+  function vote(option, question, id) {
     let configObj = {
       method: "POST",
       headers: {
@@ -507,10 +507,10 @@ function logIn() {
       body: JSON.stringify({
           option: option,
           question: question,
-          user_id: user_id
+          id: id
       })
     }
-    fetch(`${USER_URL}/${user_id}/polls/vote`, configObj)
+    fetch(`${USER_URL}/${id}/polls/vote`, configObj)
     .then(resp => resp.json())
     .then(
       function(json) {
@@ -537,20 +537,66 @@ function logIn() {
           p.style.color = "red";
           parent.querySelector("table").after(p);
         }
-        
-
       }
     )
+  }
+
+  // removes user's vote from poll's votes
+  function unvote(id, question) {
+    let configObj = {
+      method: "POST",
+      headers: {
+          "Content-Type": 'application/json',
+          "Accept": "application/json",
+      },
+      body: JSON.stringify({
+          id: id,
+          question: question
+      })
+    }
+    fetch(`${USER_URL}/${id}/polls/unvote`, configObj)
+    .then(resp => resp.json())
+    .then(
+      function(json) {
+        if (json.unvoted === true) {
+          let parent = document.getElementById(`${question.split(" ").join("-")}`)
+          const p = document.createElement("p");
+          p.innerHTML = json.message;
+          p.style.color = "red";
+          parent.querySelector("table").after(p);
+
+          parent.querySelector(".third").querySelectorAll(".container").forEach(n => {
+            for (let prop in json) {
+              if (n.parentNode.previousSibling.innerText === prop) {
+                n.style.width = json[prop];
+                n.innerText = json[prop];
+              }
+            } 
+          })
+        } else {
+          let parent = document.getElementById(`${question.split(" ").join("-")}`)
+          const p = document.createElement("p");
+          p.innerHTML = json.message;
+          p.style.color = "red";
+          parent.querySelector("table").after(p);
+        }
+    })
   }
   
   // makes poll options clickable and change styles based on user interaction
   function createClickableOption(opt) {
+
     opt.addEventListener("click", (e) => {
+      let id = document.querySelector("b").id;
+      let question = e.target.parentNode.parentNode.parentNode.parentNode.querySelector("h5").innerText;
+
       if (e.target.style.color === "green" || e.target.style.color === "grey") {
       e.target.style.color = "black";
       e.target.parentNode.parentNode.querySelectorAll("td").forEach(td => {
         td.style.color = "black";
       })
+
+      unvote(id, question)
       
     } else {
       e.target.style.color = "green";
@@ -560,7 +606,7 @@ function logIn() {
         }
       })
       
-      vote(e.target.innerText, e.target.parentNode.parentNode.parentNode.parentNode.querySelector("h5").innerText, document.querySelector("b").id)
+      vote(e.target.innerText, question, id)
     }
     })
   }
@@ -611,7 +657,8 @@ function logIn() {
 
   // displays diagram and voting form for all pending polls of user
   function listPendingForms() {
-    const PENDING_POLLS_URL = `${BASE_URL}/users/${document.getElementById("welcome").querySelector("b").id}/polls`;
+    let id = document.getElementById("welcome").querySelector("b").id;
+    const PENDING_POLLS_URL = `${BASE_URL}/users/${id}/polls`;
     let container = document.createElement("div");
     container.classList = "panel extra";
 
