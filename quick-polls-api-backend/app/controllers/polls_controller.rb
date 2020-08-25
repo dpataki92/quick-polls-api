@@ -88,9 +88,9 @@ class PollsController < ApplicationController
 
     def destroy
         user = User.find_by(id: params[:id])
-        poll = user.polls.find {|p| p.question === params[:question]}
+        poll = user.polls.find {|p| p.question === params[:name]}
 
-        if poll && poll.create === user.username
+        if poll && poll.creator === user.username
             poll.destroy
             render json: {message: "You have successfully deleted this poll."}
         else

@@ -426,13 +426,14 @@ function logIn() {
   }
 
   class Poll {
-    constructor(question, options, votes, period, expiration_date, vote_requirement) {
+    constructor(question, options, votes, period, expiration_date, vote_requirement, creator) {
       this.question = question;
       this.options = options;
       this.votes = votes;
       this.period = period;
       this.expiration_date = expiration_date;
       this.vote_requirement = vote_requirement;
+      this.creator = creator;
     }
   
     calculatePercentage() {
@@ -600,7 +601,7 @@ function logIn() {
   function deletePoll(question) {
     let id = document.querySelector("b").id;
     let configObj = {
-      method: "POST",
+      method: "DELETE",
       headers: {
           "Content-Type": 'application/json',
           "Accept": "application/json",
@@ -615,19 +616,47 @@ function logIn() {
     .then(
       function(json) {
         let poll = document.getElementById(`${question.split(" ").join("-")}`);
-        poll.innerHTML = ""
-        let p = document.createElement("p");
-        p.innerHTML = json["message"]
-        poll.style.textAlign = "center";
-        poll.style.color = "red";
+        poll.innerHTML ="";
+        alert(`${json["message"]}`)
     })
   }
 
   // closes poll if user is creator
+  function closePoll() {
+
+  }
 
   // renders edit poll form is user is creator
+  function editPoll() {
+
+  }
 
   // renders links to functions for deleting, closing, and editing poll if user is creator
+  function displayCreatorLinks(question) {
+    let tr = document.createElement("tr");
+    let td = document.createElement("td");
+    for (let i = 0; i < 3; i++) {
+      let link = document.createElement("a");
+      if (i === 0) {
+        link.innerHTML = "Edit poll  ";
+        link.setAttribute('onclick','return function() {editPoll(question);}');
+      } else if (i === 1) {
+        link.innerHTML = "Close poll  ";
+        link.setAttribute('onclick',"return function() {alert('Are you sure?'); closePoll(question);}");
+      } else if (i === 2) {
+        link.innerHTML = "Delete poll  ";
+        link.addEventListener("click", ()=> {
+          alert("Are your sure?");
+          deletePoll(question)
+        })
+      }
+      link.style.color = "blue";
+      td.appendChild(link);
+      console.log(td)
+    }
+    tr.appendChild(td);
+    return tr;
+  }
   
   // creates a voting form for a particular pending poll
   function createNewVotingFormFromPoll(poll) {
@@ -670,6 +699,10 @@ function logIn() {
       tr.appendChild(td)
       tbody.appendChild(tr)
     }
+    if (poll.creator === document.querySelector("#welcome").innerText.slice(9)) {
+      let creatorTr = displayCreatorLinks(poll.question);
+      tbody.appendChild(creatorTr);
+    }
     return div;
   }
 
@@ -686,11 +719,13 @@ function logIn() {
         
         console.log(json)
         for (let i = 0; i < json.length; i++) {
+          console.log(json[i])
           let parent = document.createElement("div");
           parent.classList = "row-padding extra";
           parent.id = `${json[i].question.split(" ").join("-")}`
           parent.style.margin = "0 -16px";
-          let poll = new Poll(json[i].question, json[i].options, json[i].votes, json[i].period, json[i].expiration_date, json[i].vote_requirement);
+          let poll = new Poll(json[i].question, json[i].options, json[i].votes, json[i].period, json[i].expiration_date, json[i].vote_requirement, json[i].creator);
+          
           let diagramDiv = createNewDiagramFromPoll(poll);
           parent.appendChild(diagramDiv);
           let votingFormDiv = createNewVotingFormFromPoll(poll);
