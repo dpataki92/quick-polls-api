@@ -496,6 +496,26 @@ function logIn() {
     return div;
   }
 
+  // informs user about vote and changes percentage data on poll if necessary
+  function printVoteMessage(json, question, color, percentageChange = false) {
+    let parent = document.getElementById(`${question.split(" ").join("-")}`)
+    const p = document.createElement("p");
+    p.innerHTML = json["message"];
+    p.style.color = color;
+    parent.querySelector("table").after(p);
+
+    if (percentageChange) {
+      parent.querySelector(".third").querySelectorAll(".container").forEach(n => {
+        for (let prop in json) {
+          if (n.parentNode.previousSibling.innerText === prop) {
+            n.style.width = json[prop];
+            n.innerText = json[prop];
+          }
+        } 
+      })
+    } 
+  }
+
   // adds a vote to an option
   function vote(option, question, id) {
     let configObj = {
@@ -514,28 +534,10 @@ function logIn() {
     .then(resp => resp.json())
     .then(
       function(json) {
-        console.log(json)
         if (json.voted === true) {
-          let parent = document.getElementById(`${question.split(" ").join("-")}`)
-          const p = document.createElement("p");
-          p.innerHTML = json.message;
-          p.style.color = "green";
-          parent.querySelector("table").after(p);
-
-          parent.querySelector(".third").querySelectorAll(".container").forEach(n => {
-            for (let prop in json) {
-              if (n.parentNode.previousSibling.innerText === prop) {
-                n.style.width = json[prop];
-                n.innerText = json[prop];
-              }
-            } 
-          }) 
+          printVoteMessage(json, question, "green", true)
         } else {
-          let parent = document.getElementById(`${question.split(" ").join("-")}`)
-          const p = document.createElement("p");
-          p.innerHTML = json.message;
-          p.style.color = "red";
-          parent.querySelector("table").after(p);
+          printVoteMessage(json, question, "red")
         }
       }
     )
@@ -559,26 +561,9 @@ function logIn() {
     .then(
       function(json) {
         if (json.unvoted === true) {
-          let parent = document.getElementById(`${question.split(" ").join("-")}`)
-          const p = document.createElement("p");
-          p.innerHTML = json.message;
-          p.style.color = "red";
-          parent.querySelector("table").after(p);
-
-          parent.querySelector(".third").querySelectorAll(".container").forEach(n => {
-            for (let prop in json) {
-              if (n.parentNode.previousSibling.innerText === prop) {
-                n.style.width = json[prop];
-                n.innerText = json[prop];
-              }
-            } 
-          })
+          printVoteMessage(json, question, "red", true)
         } else {
-          let parent = document.getElementById(`${question.split(" ").join("-")}`)
-          const p = document.createElement("p");
-          p.innerHTML = json.message;
-          p.style.color = "red";
-          parent.querySelector("table").after(p);
+          printVoteMessage(json, question, "red")
         }
     })
   }
