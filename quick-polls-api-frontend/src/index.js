@@ -661,7 +661,7 @@ function logIn() {
     form.querySelector("h3").innerText = "Edit Your Poll's Data Here";
     form.querySelector("form").querySelector("#question").placeholder = dataHash.question;
     for (let i = 0; i < dataHash.options.length; i++) {
-      if (i+1 >= document.querySelectorAll("input[name='options[]']").length) {
+      if (i >= form.querySelectorAll("input[name='options[]']").length) {
         let option = document.createElement("input");
         option.type = "text";
         option.name = "options[]";
@@ -674,7 +674,11 @@ function logIn() {
         option.placeholder = dataHash.options[i].description;
       }
     }
-    let label = form.querySelectorAll("label");
+
+    if (dataHash.vote_requirement) {form.querySelector("#vote_requirement").placeholder = dataHash.vote_requirement;}
+    if (dataHash.period) {form.querySelector("#period").placeholder = dataHash.period;}
+
+    let label = form.querySelector("label[for='allFriends']");
     label.innerText = "Remove or add new friends:"
     form.querySelector("button[name='allFriends']").innerText = "Add all missing friends";
     let addFriendsList = form.querySelector("select[name='friends[]']");
@@ -695,7 +699,7 @@ function logIn() {
     removeAllExistingFriendsButton.innerHTML = "Remove all existing friends";
     removeAllExistingFriendsButton.addEventListener("click", (e)=> {
       e.preventDefault();
-      removeAllExistingFriendsButton.innerHTML = "All previously added friends are removed"
+      removeAllExistingFriendsButton.innerHTML = "All previously added friends are removed!"
     })
     form.querySelector("select").after(removeAllExistingFriendsButton);
     let existingFriends = document.createElement("select");
@@ -710,7 +714,14 @@ function logIn() {
       existingFriends.appendChild(option);
     }
     form.querySelector("button[name='removeAllExistingFriends']").after(existingFriends);
-    
+
+    let submit = form.querySelector("input[type='submit']");
+    submit.removeEventListener("click", createAPoll);
+    submit.addEventListener("click", (e)=> {
+      e.preventDefault();
+      updatePoll();
+    })
+
     return form;
   }
 
@@ -734,9 +745,68 @@ function logIn() {
         console.log(json)
         document.querySelector(".extra").remove();
         let div = createEditFormForPoll(json);
-        console.log(json);
         document.querySelector(".main").insertBefore(div, document.querySelector(".panel"));
       })
+  }
+
+  // sends poll data to udpate existing poll
+  function updatePoll() {
+    const PENDING_POLLS_URL = `${BASE_URL}/users/${document.querySelector("b").id}/polls`;
+
+    let question = e.target.parentNode.querySelector("#question").value;
+    let options = []
+    Array.prototype.slice.call(e.target.parentNode.querySelectorAll('input[name="options[]"]')).forEach(n => {
+      options.push(n.value)
+    });
+    let period = e.target.parentNode.querySelector("#period").value;
+    let voteRequirement = e.target.parentNode.querySelector("#vote_requirement").value;
+    let friends;
+    if (document.querySelector("button[name='allFriends']").innerHTML === "All friends are added to poll!") {
+      friends = "all"
+    } else {
+      let select = document.querySelector("select");
+      friends = getSelectValues(select);
+    }
+
+    let removedFriends;
+    if (document.querySelector("button[name='removeAllExistingFriends']").innerHTML === "All previously added friends are removed!") {
+      removedFriends = "all"
+    } else {
+      let select = document.querySelector("select");
+      removedFriends = getSelectValues(select);
+    }
+    
+    let id = document.querySelector("b").id;
+
+    let configObj = {
+      method: "PATCH",
+      headers: {
+          "Content-Type": 'application/json',
+          "Accept": "application/json",
+      },
+      body: JSON.stringify({
+          question: question,
+          options: options,
+          period: period,
+          vote_requirement: voteRequirement,
+          friends: friends,
+          removed_friends: removedFriends,
+          id: id
+      })
+    }
+    fetch(PENDING_POLLS_URL, configObj)
+    .then(resp => resp.json())
+    .then(
+        function(json) {
+          let p = document.createElement("p");
+          p.innerHTML = json.message;
+          if (json.created === true) {
+            p.style.color = "green";
+          } else {
+            p.style.color = "red";
+          }
+          document.getElementById("pollFormTitle").after(p);
+    })
   }
 
   // renders links to functions for deleting, closing, and editing poll if user is creator
@@ -830,9 +900,7 @@ function logIn() {
       .then(resp => resp.json())
       .then(function (json) {
         
-        console.log(json)
         for (let i = 0; i < json.length; i++) {
-          console.log(json[i])
           let parent = document.createElement("div");
           parent.classList = "row-padding extra";
           parent.id = `${json[i].question.split(" ").join("-")}`

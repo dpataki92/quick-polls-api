@@ -16,7 +16,8 @@ class PollsController < ApplicationController
 
         if poll.valid?
             poll.users << user
-            if params[:friends] = "all"
+            binding.pry
+            if params[:friends] === "all"
                 user.friends.each do |f|
                     poll.users << f
                 end
