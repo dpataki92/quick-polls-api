@@ -998,6 +998,48 @@ function logIn() {
     return container;
   }
 
+  // creates search bar for finding and adding new friends
+  function addFriendsTable(json) {
+    const div = document.createElement("div");
+    div.classList = "container";
+
+    const header = document.createElement("h5");
+    header.innerHTML = "Add new friends";
+    header.style.fontWeight = "bold";
+
+    const table = document.createElement("table");
+    table.classList = "table striped white bordered border";
+
+    const tr = document.createElement("tr"); 
+    let inputTd = document.createElement("td");
+    let buttonTd = document.createElement("td");
+
+    let label = document.createElement("label");
+    label.setAttribute("for", "friendname");
+    label.innerText = "Friend's username:";
+
+    let input = document.createElement("inout");
+    input.setAttribute("name", "friendname");
+    input.type = "text";
+    
+    inputTd.appendChild(label);
+    inputTd.appendChild(input);
+
+    let searchButton = document.createElement("button");
+    searchButton.setAttribute("value", "Search");
+    searchButton.addEventListener("click", (e)=> {
+      e.preventDefault();
+      friendSearch(json)
+    })
+
+    buttonTd.appendChild(searchButton);
+
+    tr.appendChild(inputTd);
+    tr.appendChild(buttonTd);
+    table.appendChild(tr);
+
+  }
+
   // renders dashboard after successful login
   function renderDashBoard(json, dataHash) {
     if (document.querySelector("#loginForm")) {
