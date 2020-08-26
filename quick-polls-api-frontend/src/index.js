@@ -115,14 +115,6 @@ function logIn() {
     i.classList = `fa fa-${icon} xxxlarge`;
     leftDiv.appendChild(i);
 
-    const rightDiv = document.createElement("div");
-    rightDiv.classList = "right";
-    const number = document.createElement("h3");
-    if (userNum != null) {
-      number.innerText = `${userNum}`;
-    }
-    rightDiv.appendChild(number);
-
 
     const clearDiv = document.createElement("div");
     clearDiv.classList ="clear";
@@ -131,7 +123,6 @@ function logIn() {
     title.innerHTML = name;
     
     containerDiv.appendChild(leftDiv);
-    containerDiv.appendChild(rightDiv);
     containerDiv.appendChild(clearDiv);
     containerDiv.appendChild(title);
     quarterDiv.appendChild(containerDiv);
@@ -1283,7 +1274,7 @@ function logIn() {
     for (let i = 0; i < containers.length; i++) {
       const container = createContainerForMenu(containers[i]["name"], containers[i]["icon"], containers[i]["color"], containers[i]["userNum"])
       mainDiv.insertBefore(container, mainDiv.querySelector(".panel"));
-      container.addEventListener("click", ()=> {
+      container.addEventListener("click", (e)=> {
         if (document.querySelector(".row-padding.normal").innerHTML != "") {
 
           document.getElementById(containers[i]["name"]).querySelector("h4").innerHTML = "Back to Dashboard";
@@ -1291,9 +1282,25 @@ function logIn() {
           document.querySelector(".row-padding.normal").innerHTML = "";          
           mainDiv.insertBefore(el, document.querySelector(".panel"));
         } else {
-          document.querySelector(".extra").remove();
-          document.getElementById(containers[i]["name"]).querySelector("h4").innerHTML = containers[i]["name"];
-          renderDashBoard(json, dataHash);
+          let openContainer;
+          Array.from(document.querySelectorAll(".quarter")).forEach(element => {
+            if (element.innerText === "Back to Dashboard" && container.innerText != "Back to Dashboard") {
+              openContainer = element;
+            }
+          });
+          console.log(openContainer)
+          if (openContainer) {
+            document.querySelector(".extra").remove();
+            document.getElementById(containers[i]["name"]).querySelector("h4").innerHTML = "Back to Dashboard";
+            openContainer.querySelector("h4").innerHTML = openContainer.firstChild.id;
+            let el = containers[i].listener(dataHash);
+            mainDiv.insertBefore(el, document.querySelector(".panel"));
+          } else {
+            document.querySelector(".extra").remove();
+            document.getElementById(containers[i]["name"]).querySelector("h4").innerHTML = containers[i]["name"];
+            renderDashBoard(json, dataHash);
+          }
+          
         }
       })
   }
