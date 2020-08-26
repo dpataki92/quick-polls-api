@@ -1101,9 +1101,10 @@ function logIn() {
           messageTd.innerText = json["message"];
           messageTd.style.color = "red";
           tr.appendChild(messageTd);
+          const buttonTd = document.createElement("td");
 
           if (json["found"] === true) {
-            const buttonTd = document.createElement("td");
+            
             let addButton = document.createElement("button");
             addButton.setAttribute("value", "Add to friends");
             addButton.innerText = "Add to friends";
@@ -1112,10 +1113,10 @@ function logIn() {
               addToFriends(friend);
             })
             buttonTd.appendChild(addButton);
-            tr.appendChild(buttonTd);
             messageTd.style.color = "green";
           }
 
+          tr.appendChild(buttonTd);
           table.appendChild(tr)
         })
   }
