@@ -1224,7 +1224,7 @@ function logIn() {
       const h4 = document.createElement("h4");
       const b = document.createElement("b");
       b.id = dataHash.id;
-      b.innerHTML = `Welcome, ${dataHash.username}`
+      b.innerHTML = `Welcome, ${dataHash.username}!`
       h4.id = "welcome"
       h4.appendChild(b);
 
@@ -1238,7 +1238,7 @@ function logIn() {
         {
             name: "Create a Poll",
             icon: "share-alt",
-            color: "teal",
+            color: "blue",
             userNum: null,
             listener: pollForm
         },
@@ -1254,7 +1254,7 @@ function logIn() {
         {
             name: "Closed Polls",
             icon: "eye",
-            color: "blue",
+            color: "green",
             userNum: dataHash.polls.filter(p => p.status === "closed").length,
             listener: listClosedPolls
         },
