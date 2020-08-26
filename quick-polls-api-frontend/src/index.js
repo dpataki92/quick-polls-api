@@ -326,7 +326,7 @@ function logIn() {
       option.type = "text";
       option.name = "options[]";
       option.placeholder = "Option...";
-      option.style.display = "block";
+      option.style.display = "inline-block";
       option.style.width = "100%";
       option.required = true;
       return option;
@@ -670,7 +670,7 @@ function logIn() {
         option.type = "text";
         option.name = "options[]";
         option.value = dataHash.options[i].description;
-        option.style.display = "block";
+        option.style.display = "inline-block";
         option.style.width = "100%";
         form.querySelector("input[name='options[]']").after(option);
       } else {
@@ -939,6 +939,46 @@ function logIn() {
     return container;
   }
 
+  // creates voting form for closed polls without functionality for voting or editing
+  function createNewVotingFormFromPoll(poll) {
+    let div = document.createElement("div");
+    div.classList ="twothird extra";
+    let table = document.createElement("table");
+    table.classList = "table striped white";
+    let tbody = document.createElement("tbody");
+    table.appendChild(tbody);
+    div.appendChild(table);
+  
+    let question = document.createElement("h5");
+    question.innerHTML = poll.question;
+    question.style.fontWeight = 'bold';
+    div.insertBefore(question, div.querySelector("table"));
+    question.after(document.createElement("br"))
+  
+    for (let i = 0; i < poll.options.length; i++) {
+      let tr = document.createElement("tr");
+      let td = document.createElement("td");
+      td.innerHTML = poll.options[i].description;
+      td.innerHTML.style.color = "grey";
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+    }
+  
+    let infoTr = document.createElement("tr");
+    let infoTd = document.createElement("td");
+    infoTd.innerHTML = "This poll was closed on:" + poll.updated_at;
+    infoTd.style.fontStyle = "italic";
+    infoTr.appendChild(infoTd);
+    tbody.appendChild(infoTr);
+  
+    return div;
+  }
+
+  // displays diagrams and forms for closed polls
+  function listClosedPolls() {
+
+  }
+
   // renders dashboard after successful login
   function renderDashBoard(json, dataHash) {
     if (document.querySelector("#loginForm")) {
@@ -984,7 +1024,8 @@ function logIn() {
             name: "Closed Polls",
             icon: "eye",
             color: "blue",
-            userNum: dataHash.polls.filter(p => p.status === "closed").length
+            userNum: dataHash.polls.filter(p => p.status === "closed").length,
+            listClosedPolls
         },
 
         {

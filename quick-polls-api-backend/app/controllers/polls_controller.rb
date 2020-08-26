@@ -124,7 +124,6 @@ class PollsController < ApplicationController
     end
 
     def update
-        binding.pry
         poll = Poll.find_by(id: params[:poll_id])
 
         poll.update(question: params[:new_question], vote_requirement: params[:vote_requirement], period: params[:period])
