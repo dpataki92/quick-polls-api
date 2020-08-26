@@ -1040,6 +1040,15 @@ function logIn() {
 
   }
 
+  function renderFriends() {
+
+    fetch(PENDING_POLLS_URL)
+      .then(resp => resp.json())
+      .then(function (json) {
+
+    })
+  }
+
   // renders dashboard after successful login
   function renderDashBoard(json, dataHash) {
     if (document.querySelector("#loginForm")) {
