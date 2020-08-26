@@ -1048,8 +1048,10 @@ function logIn() {
     return div
   }
 
-  function friendSearch() {
-    let friend = document.querySelector("#friendSearchBar").querySelector("input[name='friendname']").value
+  function addToFriends() {
+    let friend = document.querySelector("#friendSearchBar").querySelector("input[name='friendname']").value;
+    let id = document.querySelector("b").id;
+
     let configObj = {
       method: "POST",
       headers: {
@@ -1057,14 +1059,64 @@ function logIn() {
           "Accept": "application/json",
       },
       body: JSON.stringify({
-          friend: friend
+          friend: friend,
+          id: id
       })
     }
-    fetch(USER_URL, configObj)
+    fetch(`${USER_URL}/${id}/friends`, configObj)
     .then(resp => resp.json())
     .then(
         function(json) {
-          
+          document.querySelector("#searchFriendResponse").innerHTML = json["message"];
+          document.querySelector("#searchFriendResponse").style.color = "green";
+    })
+  }
+
+  function friendSearch() {
+    let friend = document.querySelector("#friendSearchBar").querySelector("input[name='friendname']").value;
+    let id = document.querySelector("b").id;
+
+    let configObj = {
+      method: "POST",
+      headers: {
+          "Content-Type": 'application/json',
+          "Accept": "application/json",
+      },
+      body: JSON.stringify({
+          friend: friend,
+          id: id
+      })
+    }
+    fetch( `${USER_URL}/${id}/friends/search`, configObj)
+    .then(resp => resp.json())
+    .then(
+        function(json) {
+          let table = document.querySelector("#friendSearchBar").querySelector("table");
+          if (table.querySelectorAll("tr").length > 1) {
+            table.lastChild.remove();
+          }
+          const tr = document.createElement("tr");
+          tr.id = "searchFriendResponse";
+          const messageTd = document.createElement("td");
+          messageTd.innerText = json["message"];
+          messageTd.style.color = "red";
+          tr.appendChild(messageTd);
+
+          if (json["found"] === true) {
+            const buttonTd = document.createElement("td");
+            let addButton = document.createElement("button");
+            addButton.setAttribute("value", "Add to friends");
+            addButton.innerText = "Add to friends";
+            addButton.addEventListener("click", (e)=> {
+              e.preventDefault();
+              addToFriends(friend);
+            })
+            buttonTd.appendChild(addButton);
+            tr.appendChild(buttonTd);
+            messageTd.style.color = "green";
+          }
+
+          table.appendChild(tr)
         })
   }
 

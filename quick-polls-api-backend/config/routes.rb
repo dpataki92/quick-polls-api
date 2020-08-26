@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   resources :users, only: [:create, :show] do
     get "/friends", to: "users#friends"
     post "/friends", to: "users#add_friends"
+    post "/friends/search", to: "users#search_friends"
     delete "/friends/:username", to: "users#remove_friend"
 
     resources :polls, only: [:index, :create]

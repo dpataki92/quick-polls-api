@@ -49,6 +49,31 @@ class UsersController < ApplicationController
         end
     end
 
+    def search_friends
+        user = User.find_by(id: params[:id])
+        friend = User.find_by(username: params[:friend])
+
+        if friend
+            if user.friends.include?(friend)
+                render json: {message: "You are already friends with this user."}
+            else
+                render json: {message: "Click on the button and add #{friend.username} to your friends.", found: true}
+            end
+        else
+            render json: {message: "We couldn't find a user with this username."}
+        end
+    end
+
+    def add_friends
+        user = User.find_by(id: params[:id])
+        friend = User.find_by(username: params[:friend])
+        binding.pry
+        user.friends << friend
+        friend.friends << user
+
+        render json: {message: "#{friend.username} has been added to our friends."}
+    end
+
     private
 
     def winner_polls(user)
