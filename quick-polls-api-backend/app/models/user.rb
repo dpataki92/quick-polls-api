@@ -10,7 +10,7 @@ class User < ApplicationRecord
                           :foreign_key => "user_id",
                           :association_foreign_key => "friend_id"
 
-    
+    has_many :friend_requests, through: :friends
     has_many :options, through: :polls
     has_many :votes
 

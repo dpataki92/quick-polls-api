@@ -105,7 +105,6 @@ class PollsController < ApplicationController
         if poll && poll.creator === user.username
             poll.status = "closed"
             poll.save
-            binding.pry
             render json: {message: "You have successfully closed this poll.", closed: true}
         else
             render json: {message: "You are not authorized to close this poll.", closed: false}
