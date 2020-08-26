@@ -1120,6 +1120,49 @@ function logIn() {
         })
   }
 
+ 
+
+  // renders current friends list with buttons to remove 
+  function currentFriends(json) {
+    const div = document.createElement("div");
+    div.classList = "container";
+    div.id = "friendList"
+
+    const header = document.createElement("h5");
+    header.innerHTML = "Current friends:";
+    header.style.fontWeight = "bold";
+    header.style.marginTop = "50px";
+
+    const table = document.createElement("table");
+    table.classList = "table striped white bordered border";
+
+    for (let i = 0; i < json.friends.length; i++) {
+      const tr = document.createElement("tr");
+      let iconTd = document.createElement("i");
+      iconTd.classList = "fa fa-male text-yellow large";
+      let friendTd = document.createElement("td");
+      friendTd.innerText = json.friend[i].username;
+      let buttonTd = document.createElement("td");
+      let removeButton = document.createElement("button");
+      removeButton.setAttribute("value", "Remove Friend");
+      removeButton.innerText = "Remove Friend";
+      removeButton.addEventListener("click", (e)=> {
+        e.preventDefault();
+        removeFriend(json.friend[i].username);
+      })
+      buttonTd.appendChild(removeButton);
+      tr.appendChild(iconTd);
+      tr.appendChild(friendTd);
+      tr.appendChild(buttonTd);
+      table.appendChild(tr);
+    }
+
+    div.appendChild(header);
+    div.appendChild(table);
+
+    return div;
+  }
+
   function renderFriends() {
     const FRIENDS_URL = `${USER_URL}/${document.querySelector("b").id}/friends`;
     let container = document.createElement("div");
@@ -1129,8 +1172,11 @@ function logIn() {
       .then(resp => resp.json())
       .then(function (json) {
         console.log(json)
-        let friendTable = addFriendsTable(json);
-        container.appendChild(friendTable)
+        let addFriendTable = addFriendsTable(json);
+        let currentFriendsTable = currentFriends(json);
+        container.appendChild(addFriendTable);
+        container.appendChild(currentFriendsTable);
+
     })
 
     return container;
