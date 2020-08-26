@@ -16,7 +16,6 @@ class PollsController < ApplicationController
 
         if poll.valid?
             poll.users << user
-            binding.pry
             if params[:friends] === "all"
                 user.friends.each do |f|
                     poll.users << f
@@ -31,6 +30,7 @@ class PollsController < ApplicationController
                 Option.create(description: o, poll_id: poll.id)
             end
             
+            binding.pry
             render json: {message: "You have successfully created a poll with question: #{poll.question}. Click on Pending Polls to check out its data.", created: true}
         else
             render json: {message: "Sorry, invalid data. Error: #{poll.errors.messages}", created: false}
@@ -117,9 +117,43 @@ class PollsController < ApplicationController
         poll = user.polls.find {|p| p.question === params[:question]}
 
         if poll && poll.creator === user.username
-            render json: {question: poll.question, options: poll.options, friends: user.existing_friends(poll), missing_friends: user.missing_friends(poll), period: poll.period, vote_requirement: poll.vote_requirement, edited: true}
+            render json: {poll_id: poll.id, question: poll.question, options: poll.options, friends: user.existing_friends(poll), missing_friends: user.missing_friends(poll), period: poll.period, vote_requirement: poll.vote_requirement, edited: true}
         else
             render json: {message: "You are not authorized to edit this poll.", edited: false}
+        end
+    end
+
+    def update
+        binding.pry
+        poll = Poll.find_by(id: params[:poll_id])
+
+        poll.update(question: params[:new_question], vote_requirement: params[:vote_requirement], period: params[:period])
+
+        if poll
+            poll.options.each {|o| o.destroy}
+            params[:options].each do |o|
+                Option.create(description: o, poll_id: poll.id)
+            end
+
+            if params[:removed_friends] === "all"
+                poll.users.each do |f|
+                    poll.users.delete(f) if poll.creator != f.username
+                end
+            else
+                params[:removed_friends].each do |f|
+                    poll.users.delete(User.find_by(username: f))
+                end
+            end
+                            
+            params[:friends].each do |f|
+                poll.users << User.find_by(username: f)
+            end
+
+            poll.save
+            binding.pry
+            render json: {message: "You have successfully updated this poll. Check out Pending Polls to see its new data.", updated: true}
+        else
+            render json: {message: "Sorry, update has failed.", updated: false}
         end
     end
 

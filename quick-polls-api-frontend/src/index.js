@@ -261,7 +261,7 @@ function logIn() {
       friends = getSelectValues(select);
     }
     
-    let username = e.target.parentNode.querySelector("#username").value;
+    let username = document.querySelector("#welcome").innerText.slice(9);
 
     let configObj = {
       method: "POST",
@@ -658,25 +658,30 @@ function logIn() {
   // creates form for editing poll data
   function createEditFormForPoll(dataHash) {
     let form = pollForm(dataHash);
+    form.setAttribute("action", `${BASE_URL}/users/${document.querySelector("b").id}/polls/${dataHash.question.split(" ").join("-")}`)
+    form.setAttribute("method", "PATCH");
     form.querySelector("h3").innerText = "Edit Your Poll's Data Here";
-    form.querySelector("form").querySelector("#question").placeholder = dataHash.question;
+    form.querySelector("form").querySelector("#question").value = dataHash.question;
     for (let i = 0; i < dataHash.options.length; i++) {
+      console.log(dataHash.options[i])
+      console.log(form.querySelectorAll("input[name='options[]']").length)
       if (i >= form.querySelectorAll("input[name='options[]']").length) {
         let option = document.createElement("input");
         option.type = "text";
         option.name = "options[]";
-        option.placeholder = dataHash.options[i].description;
+        option.value = dataHash.options[i].description;
         option.style.display = "block";
         option.style.width = "100%";
         form.querySelector("input[name='options[]']").after(option);
       } else {
         let option = form.querySelector("input[placeholder='Option...']");
         option.placeholder = dataHash.options[i].description;
+        option.value = dataHash.options[i].description;
       }
     }
 
-    if (dataHash.vote_requirement) {form.querySelector("#vote_requirement").placeholder = dataHash.vote_requirement;}
-    if (dataHash.period) {form.querySelector("#period").placeholder = dataHash.period;}
+    if (dataHash.vote_requirement) {form.querySelector("#vote_requirement").value = dataHash.vote_requirement;}
+    if (dataHash.period) {form.querySelector("#period").value = dataHash.period;}
 
     let label = form.querySelector("label[for='allFriends']");
     label.innerText = "Remove or add new friends:"
@@ -715,12 +720,24 @@ function logIn() {
     }
     form.querySelector("button[name='removeAllExistingFriends']").after(existingFriends);
 
-    let submit = form.querySelector("input[type='submit']");
-    submit.removeEventListener("click", createAPoll);
-    submit.addEventListener("click", (e)=> {
+    let hidden = form.querySelector("input[type='hidden']");
+    hidden.name = dataHash.poll_id;
+    hidden.value = dataHash.poll_id;
+    hidden.id = "pollId"
+
+    let formerSubmit = form.querySelector("input[type='submit']");
+    formerSubmit.remove();
+    let inputSubmit = document.createElement("input");
+    inputSubmit.type = "submit";
+    inputSubmit.value = "Submit";
+    inputSubmit.style.width ="100%";
+    inputSubmit.style.backgroundColor ="#009688";
+    inputSubmit.addEventListener("click", (e)=> {
       e.preventDefault();
-      updatePoll();
+      updatePoll(e, dataHash.question);
     })
+    form.appendChild(inputSubmit);
+    
 
     return form;
   }
@@ -742,7 +759,6 @@ function logIn() {
       fetch(`${USER_URL}/${id}/polls/${question}/edit`, configObj)
       .then(resp => resp.json())
       .then(function(json) {
-        console.log(json)
         document.querySelector(".extra").remove();
         let div = createEditFormForPoll(json);
         document.querySelector(".main").insertBefore(div, document.querySelector(".panel"));
@@ -750,30 +766,34 @@ function logIn() {
   }
 
   // sends poll data to udpate existing poll
-  function updatePoll() {
-    const PENDING_POLLS_URL = `${BASE_URL}/users/${document.querySelector("b").id}/polls`;
+  function updatePoll(e, originalQuestion) {
+    const PENDING_POLLS_URL = `${BASE_URL}/users/${document.querySelector("b").id}/polls/${originalQuestion.split(" ").join("-")}`;
 
-    let question = e.target.parentNode.querySelector("#question").value;
+    let newQuestion = e.target.parentNode.querySelector("#question").value;
     let options = []
     Array.prototype.slice.call(e.target.parentNode.querySelectorAll('input[name="options[]"]')).forEach(n => {
       options.push(n.value)
     });
     let period = e.target.parentNode.querySelector("#period").value;
     let voteRequirement = e.target.parentNode.querySelector("#vote_requirement").value;
-    let friends;
+    let select = document.querySelector("select[name='friends[]']");
+    let friends = [];
     if (document.querySelector("button[name='allFriends']").innerHTML === "All friends are added to poll!") {
-      friends = "all"
+      document.querySelector("select[name='friends[]']").querySelectorAll("option").forEach(o => {
+        friends.push(o.value);
+      })
     } else {
-      let select = document.querySelector("select");
       friends = getSelectValues(select);
     }
+    
+    let pollId = document.getElementById('pollId').value;
 
     let removedFriends;
     if (document.querySelector("button[name='removeAllExistingFriends']").innerHTML === "All previously added friends are removed!") {
       removedFriends = "all"
     } else {
-      let select = document.querySelector("select");
-      removedFriends = getSelectValues(select);
+      let removedSelect = document.querySelector("select[name='removed_friends[]']");
+      removedFriends = getSelectValues(removedSelect);
     }
     
     let id = document.querySelector("b").id;
@@ -785,13 +805,14 @@ function logIn() {
           "Accept": "application/json",
       },
       body: JSON.stringify({
-          question: question,
+          new_question: newQuestion,
           options: options,
           period: period,
           vote_requirement: voteRequirement,
           friends: friends,
           removed_friends: removedFriends,
-          id: id
+          id: id,
+          poll_id: pollId
       })
     }
     fetch(PENDING_POLLS_URL, configObj)
@@ -800,7 +821,7 @@ function logIn() {
         function(json) {
           let p = document.createElement("p");
           p.innerHTML = json.message;
-          if (json.created === true) {
+          if (json.updated === true) {
             p.style.color = "green";
           } else {
             p.style.color = "red";
@@ -835,7 +856,6 @@ function logIn() {
       }
       link.style.color = "blue";
       td.appendChild(link);
-      console.log(td)
     }
     tr.appendChild(td);
     return tr;
