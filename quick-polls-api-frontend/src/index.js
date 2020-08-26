@@ -1040,6 +1040,7 @@ function logIn() {
     return div
   }
 
+  // adds a friend to user's friend list
   function addToFriends() {
     let friend = document.querySelector("#friendSearchBar").querySelector("input[name='friendname']").value;
     let id = document.querySelector("b").id;
@@ -1064,6 +1065,7 @@ function logIn() {
     })
   }
 
+  // looks for a particular user in the user database by username and returns if there is a match
   function friendSearch() {
     let friend = document.querySelector("#friendSearchBar").querySelector("input[name='friendname']").value;
     let id = document.querySelector("b").id;
@@ -1269,7 +1271,7 @@ function logIn() {
     // renders list of additional aggregated user data
     renderAggregatedUserData(json, dataHash);
 
-    // displaying the 4 container for menu items
+    // displaying the 4 container for menu items and allowing users to going from one item's content directly to another's
     if (!document.querySelector(".quarter")) {
     for (let i = 0; i < containers.length; i++) {
       const container = createContainerForMenu(containers[i]["name"], containers[i]["icon"], containers[i]["color"], containers[i]["userNum"])
@@ -1282,13 +1284,14 @@ function logIn() {
           document.querySelector(".row-padding.normal").innerHTML = "";          
           mainDiv.insertBefore(el, document.querySelector(".panel"));
         } else {
+
           let openContainer;
           Array.from(document.querySelectorAll(".quarter")).forEach(element => {
             if (element.innerText === "Back to Dashboard" && container.innerText != "Back to Dashboard") {
               openContainer = element;
             }
           });
-          console.log(openContainer)
+
           if (openContainer) {
             document.querySelector(".extra").remove();
             document.getElementById(containers[i]["name"]).querySelector("h4").innerHTML = "Back to Dashboard";
