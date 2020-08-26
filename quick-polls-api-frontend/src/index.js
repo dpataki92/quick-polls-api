@@ -1002,10 +1002,12 @@ function logIn() {
   function addFriendsTable(json) {
     const div = document.createElement("div");
     div.classList = "container";
+    div.id = "friendSearchBar"
 
     const header = document.createElement("h5");
-    header.innerHTML = "Add new friends";
+    header.innerHTML = "Add new friends:";
     header.style.fontWeight = "bold";
+    header.style.marginTop = "50px";
 
     const table = document.createElement("table");
     table.classList = "table striped white bordered border";
@@ -1017,8 +1019,9 @@ function logIn() {
     let label = document.createElement("label");
     label.setAttribute("for", "friendname");
     label.innerText = "Friend's username:";
+    label.style.padding = "5px";
 
-    let input = document.createElement("inout");
+    let input = document.createElement("input");
     input.setAttribute("name", "friendname");
     input.type = "text";
     
@@ -1027,6 +1030,7 @@ function logIn() {
 
     let searchButton = document.createElement("button");
     searchButton.setAttribute("value", "Search");
+    searchButton.innerText = "Search";
     searchButton.addEventListener("click", (e)=> {
       e.preventDefault();
       friendSearch(json)
@@ -1038,15 +1042,46 @@ function logIn() {
     tr.appendChild(buttonTd);
     table.appendChild(tr);
 
+    div.appendChild(header);
+    div.appendChild(table);
+    
+    return div
+  }
+
+  function friendSearch() {
+    let friend = document.querySelector("#friendSearchBar").querySelector("input[name='friendname']").value
+    let configObj = {
+      method: "POST",
+      headers: {
+          "Content-Type": 'application/json',
+          "Accept": "application/json",
+      },
+      body: JSON.stringify({
+          friend: friend
+      })
+    }
+    fetch(USER_URL, configObj)
+    .then(resp => resp.json())
+    .then(
+        function(json) {
+          
+        })
   }
 
   function renderFriends() {
+    const FRIENDS_URL = `${USER_URL}/${document.querySelector("b").id}/friends`;
+    let container = document.createElement("div");
+    container.classList = "panel extra";
 
-    fetch(PENDING_POLLS_URL)
+    fetch(FRIENDS_URL)
       .then(resp => resp.json())
       .then(function (json) {
-
+        console.log(json)
+        let friendTable = addFriendsTable(json);
+        container.appendChild(friendTable)
     })
+
+    return container;
   }
 
   // renders dashboard after successful login
@@ -1102,7 +1137,8 @@ function logIn() {
             name: "Friends",
             icon: "users",
             color: "orange",
-            userNum: dataHash.friends.length
+            userNum: dataHash.friends.length,
+            listener: renderFriends
         }
 
     ]

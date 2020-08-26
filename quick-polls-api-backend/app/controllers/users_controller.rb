@@ -39,6 +39,16 @@ class UsersController < ApplicationController
         end
     end
 
+    def friends
+        user = User.find_by(id: params[:user_id])
+
+        if user && user.friends.size > 0
+            render json: {friends: user.friends}
+        else
+            render json: {message: "No friends added yet."}
+        end
+    end
+
     private
 
     def winner_polls(user)
