@@ -881,6 +881,7 @@ function logIn() {
       let tr = document.createElement("tr");
       let td = document.createElement("td");
       td.innerHTML = poll.options[i].description;
+      td.classList = "option";
       createClickableOption(td);
       tr.appendChild(td);
       tbody.appendChild(tr);
@@ -1166,7 +1167,9 @@ function logIn() {
       let iconTd = document.createElement("i");
       iconTd.classList = "fa fa-male text-yellow large";
       iconTd.style.verticalAlign = "middle";
-      iconTd.style.marginTop = "8px";
+      iconTd.style.marginTop = "10px";
+      iconTd.style.marginLeft = "10px";
+      iconTd.style.marginRight = "-10px";
       let friendTd = document.createElement("td");
       friendTd.innerText = json.friends[i].username;
       friendTd.classList = "username";
@@ -1237,7 +1240,7 @@ function logIn() {
     const containers = [
         {
             name: "Create a Poll",
-            icon: "share-alt",
+            icon: "edit",
             color: "blue",
             userNum: null,
             listener: pollForm
@@ -1245,7 +1248,7 @@ function logIn() {
 
         {
             name: "Pending Polls",
-            icon: "comment",
+            icon: "bar-chart-o",
             color: "red",
             userNum: dataHash.polls.filter(p => p.status === "pending").length,
             listener: listPendingForms
@@ -1253,7 +1256,7 @@ function logIn() {
 
         {
             name: "Closed Polls",
-            icon: "eye",
+            icon: "check-square-o",
             color: "green",
             userNum: dataHash.polls.filter(p => p.status === "closed").length,
             listener: listClosedPolls
