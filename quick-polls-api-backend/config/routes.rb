@@ -3,7 +3,7 @@ Rails.application.routes.draw do
     get "/friends", to: "users#friends"
     post "/friends", to: "users#add_friends"
     post "/friends/search", to: "users#search_friends"
-    delete "/friends/:username", to: "users#remove_friend"
+    delete "/friends", to: "users#remove_friends"
 
     resources :polls, only: [:index, :create]
     post "/polls/:question/edit", to: "polls#edit"

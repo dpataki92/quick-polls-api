@@ -1120,7 +1120,31 @@ function logIn() {
         })
   }
 
- 
+  // removes friends from user's friends
+  function removeFriend(friend, e) {
+    let id = document.querySelector("b").id;
+
+    let configObj = {
+      method: "DELETE",
+      headers: {
+          "Content-Type": 'application/json',
+          "Accept": "application/json",
+      },
+      body: JSON.stringify({
+          friend: friend,
+          id: id
+      })
+    }
+    fetch( `${USER_URL}/${id}/friends`, configObj)
+    .then(resp => resp.json())
+    .then(
+        function(json) {
+          let tr = e.target.parentNode.parentNode;
+          tr.lastChild.innerHTML = "";
+          tr.firstChild.nextSibling.innerHTML = json["message"];
+          tr.firstChild.nextSibling.style.color = "red";
+    })
+  }
 
   // renders current friends list with buttons to remove 
   function currentFriends(json) {
@@ -1140,15 +1164,18 @@ function logIn() {
       const tr = document.createElement("tr");
       let iconTd = document.createElement("i");
       iconTd.classList = "fa fa-male text-yellow large";
+      iconTd.style.verticalAlign = "middle";
+      iconTd.style.marginTop = "8px";
       let friendTd = document.createElement("td");
-      friendTd.innerText = json.friend[i].username;
+      friendTd.innerText = json.friends[i].username;
+      friendTd.classList = "username";
       let buttonTd = document.createElement("td");
       let removeButton = document.createElement("button");
       removeButton.setAttribute("value", "Remove Friend");
       removeButton.innerText = "Remove Friend";
       removeButton.addEventListener("click", (e)=> {
         e.preventDefault();
-        removeFriend(json.friend[i].username);
+        removeFriend(json.friends[i].username, e);
       })
       buttonTd.appendChild(removeButton);
       tr.appendChild(iconTd);

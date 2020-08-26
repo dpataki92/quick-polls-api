@@ -67,11 +67,19 @@ class UsersController < ApplicationController
     def add_friends
         user = User.find_by(id: params[:id])
         friend = User.find_by(username: params[:friend])
-        binding.pry
         user.friends << friend
         friend.friends << user
 
         render json: {message: "#{friend.username} has been added to our friends."}
+    end
+
+    def remove_friends
+        user = User.find_by(id: params[:id])
+        friend = User.find_by(username: params[:friend])
+
+        user.friends.delete(friend)
+
+        render json: {message: "#{friend.username} has been removed from your friends."}
     end
 
     private
