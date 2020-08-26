@@ -940,7 +940,7 @@ function logIn() {
   }
 
   // creates voting form for closed polls without functionality for voting or editing
-  function createNewVotingFormFromPoll(poll) {
+  function createNewVotingFormFromClosedPoll(poll) {
     let div = document.createElement("div");
     div.classList ="twothird extra";
     let table = document.createElement("table");
@@ -959,24 +959,43 @@ function logIn() {
       let tr = document.createElement("tr");
       let td = document.createElement("td");
       td.innerHTML = poll.options[i].description;
-      td.innerHTML.style.color = "grey";
+      td.style.color = "grey";
       tr.appendChild(td);
       tbody.appendChild(tr);
     }
-  
-    let infoTr = document.createElement("tr");
-    let infoTd = document.createElement("td");
-    infoTd.innerHTML = "This poll was closed on:" + poll.updated_at;
-    infoTd.style.fontStyle = "italic";
-    infoTr.appendChild(infoTd);
-    tbody.appendChild(infoTr);
   
     return div;
   }
 
   // displays diagrams and forms for closed polls
   function listClosedPolls() {
+    let id = document.getElementById("welcome").querySelector("b").id;
+    const PENDING_POLLS_URL = `${BASE_URL}/users/${id}/polls/closed`;
+    let container = document.createElement("div");
+    container.classList = "panel extra";
 
+      fetch(PENDING_POLLS_URL)
+      .then(resp => resp.json())
+      .then(function (json) {
+        
+        for (let i = 0; i < json.length; i++) {
+          let parent = document.createElement("div");
+          parent.classList = "row-padding extra";
+          parent.id = `${json[i].question.split(" ").join("-")}`
+          parent.style.margin = "0 -16px";
+          let poll = new Poll(json[i].question, json[i].options, json[i].votes, json[i].period, json[i].expiration_date, json[i].vote_requirement, json[i].creator);
+          
+          let diagramDiv = createNewDiagramFromPoll(poll);
+          diagramDiv.querySelector("h5").innerText = "Final results";
+          parent.appendChild(diagramDiv);
+          let votingFormDiv = createNewVotingFormFromClosedPoll(poll);
+          parent.appendChild(votingFormDiv);
+          parent.style.marginBottom = "50px";
+          container.appendChild(parent);
+        }
+      })
+    
+    return container;
   }
 
   // renders dashboard after successful login
@@ -1025,7 +1044,7 @@ function logIn() {
             icon: "eye",
             color: "blue",
             userNum: dataHash.polls.filter(p => p.status === "closed").length,
-            listClosedPolls
+            listener: listClosedPolls
         },
 
         {

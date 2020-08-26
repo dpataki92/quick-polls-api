@@ -21,15 +21,17 @@ class User < ApplicationRecord
             if p.period
                 if p.expiration_date <= DateTime.now
                     p.status = "closed"
+                    p.save
                 end
             elsif p.vote_requirement
                 if p.votes.size >= p.vote_requirement
                     p.status = "closed"
+                    p.save
                 end
             end
 
         end
-        self.polls.pending
+        self.polls
     end
 
     def existing_friends(poll)

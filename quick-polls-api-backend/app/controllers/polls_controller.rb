@@ -2,7 +2,7 @@ class PollsController < ApplicationController
     before_action :accept_all_params
 
     def index
-        polls = User.find_by(id: params[:user_id]).pending_polls.recent
+        polls = User.find_by(id: params[:user_id]).pending_polls.pending.recent
         render json: PollSerializer.new(polls).to_serialized_json 
     end
 
@@ -30,7 +30,6 @@ class PollsController < ApplicationController
                 Option.create(description: o, poll_id: poll.id)
             end
             
-            binding.pry
             render json: {message: "You have successfully created a poll with question: #{poll.question}. Click on Pending Polls to check out its data.", created: true}
         else
             render json: {message: "Sorry, invalid data. Error: #{poll.errors.messages}", created: false}
@@ -40,11 +39,11 @@ class PollsController < ApplicationController
     def vote
         poll = Poll.find_by(question: params[:question])
         user = User.find_by(id: params[:id])
-        option = Option.find_by(description: params[:option])
+        option = poll.options.find{|o| o.description === params[:option]}
         vote = Vote.new(poll_id: poll.id, user_id: user.id, option_id: option.id)
         
         jsonHash = {}
-
+        
         if !user.votes.find {|v| v.poll_id === poll.id}
             vote.save
             calc_new_percentage(poll).each do |o_data|
@@ -106,6 +105,7 @@ class PollsController < ApplicationController
         if poll && poll.creator === user.username
             poll.status = "closed"
             poll.save
+            binding.pry
             render json: {message: "You have successfully closed this poll.", closed: true}
         else
             render json: {message: "You are not authorized to close this poll.", closed: false}
@@ -149,11 +149,18 @@ class PollsController < ApplicationController
             end
 
             poll.save
-            binding.pry
             render json: {message: "You have successfully updated this poll. Check out Pending Polls to see its new data.", updated: true}
         else
             render json: {message: "Sorry, update has failed.", updated: false}
         end
+    end
+
+    def closed
+        user = User.find_by(id: params[:user_id])
+        user.pending_polls
+        closed = user.polls.recent.select {|p| p.status === "closed"}
+
+        render json: PollSerializer.new(closed).to_serialized_json 
     end
 
     private
