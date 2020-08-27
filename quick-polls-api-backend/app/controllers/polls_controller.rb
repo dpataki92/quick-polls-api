@@ -27,7 +27,8 @@ class PollsController < ApplicationController
             end
 
             params[:options].each do |o|
-                Option.create(description: o, poll_id: poll.id)
+                option = Option.create(description: o, poll_id: poll.id)
+                poll.options << option
             end
             
             render json: {message: "You have successfully created a poll with question: #{poll.question}. Click on Pending Polls to check out its data.", created: true}
@@ -40,6 +41,7 @@ class PollsController < ApplicationController
         poll = Poll.find_by(question: params[:question])
         user = User.find_by(id: params[:id])
         option = poll.options.find{|o| o.description === params[:option]}
+
         vote = Vote.new(poll_id: poll.id, user_id: user.id, option_id: option.id)
         
         jsonHash = {}
@@ -91,6 +93,7 @@ class PollsController < ApplicationController
         poll = user.polls.find {|p| p.question === params[:question]}
 
         if poll && poll.creator === user.username
+            poll.votes.destroy_all
             poll.destroy
             render json: {message: "You have successfully deleted this poll.", deleted: true}
         else
