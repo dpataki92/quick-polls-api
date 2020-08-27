@@ -252,7 +252,7 @@ function logIn() {
       friends = getSelectValues(select);
     }
     
-    let username = document.querySelector("#welcome").innerText.slice(9);
+    let username = document.querySelector("#welcome").innerText.slice(9, 17);
 
     let configObj = {
       method: "POST",
@@ -394,8 +394,8 @@ function logIn() {
 
     let username = document.createElement("input");
     username.setAttribute("type", "hidden");
-    username.setAttribute("name", document.querySelector("#welcome").innerText.slice(9));
-    username.setAttribute("value", document.querySelector("#welcome").innerText.slice(9));
+    username.setAttribute("name", document.querySelector("#welcome").innerText.slice(9,17));
+    username.setAttribute("value", document.querySelector("#welcome").innerText.slice(9,17));
     username.id = "username";
 
 
@@ -894,7 +894,7 @@ function logIn() {
       tr.appendChild(td)
       tbody.appendChild(tr)
     }
-    if (poll.creator === document.querySelector("#welcome").innerText.slice(9)) {
+    if (poll.creator === document.querySelector("#welcome").innerText.slice(9,17)) {
       let creatorTr = displayCreatorLinks(poll.question);
       tbody.appendChild(creatorTr);
     }
