@@ -11,17 +11,14 @@ function createLoginForm() {
   
     let div = document.createElement("div");
     div.id = "loginForm";
-    div.style.textAlign ="center";
-    div.style.marginTop = "100px"
   
     let title = document.createElement("h2");
     title.innerText = "Quick polls";
-    title.style.display = "inline-block";
-    title.style.marginLeft = "5px";
+    title.id = "loginTitle"
+    
     let img = document.createElement("img");
     img.src = "assets/pollicon.svg";
-    img.width = "40";
-    img.style.paddingBottom = "10px";
+    img.id = "loginImg";
   
     div.appendChild(img);
     div.appendChild(title);
@@ -97,7 +94,6 @@ function logIn() {
         }
     )
     })
-    
   }
 
   // creates container for dashboard item

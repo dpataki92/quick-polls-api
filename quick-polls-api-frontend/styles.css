@@ -1,3 +1,4 @@
+/* CSS template */
 html{box-sizing:border-box}*,*:before,*:after{box-sizing:inherit}
 /* Extract from normalize.css by Nicolas Gallagher and Jonathan Neal git.io/normalize */
 html{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}
@@ -230,6 +231,22 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
 .border-pale-red,.hover-border-pale-red:hover{border-color:#ffe7e7!important}.border-pale-green,.hover-border-pale-green:hover{border-color:#e7ffe7!important}
 .border-pale-yellow,.hover-border-pale-yellow:hover{border-color:#ffffcc!important}.border-pale-blue,.hover-border-pale-blue:hover{border-color:#e7ffff!important}
 
+/* additional CSS */
 button, a, .quarter, .option {
     cursor: pointer;
+}
+
+#loginForm {
+    margin-top: 100px;
+    text-align: center;
+}
+
+#loginTitle {
+    display: inline-block;
+    margin-left: 5px;
+}
+
+#loginImg {
+    width: 40px;
+    padding-bottom: 10px;
 }
