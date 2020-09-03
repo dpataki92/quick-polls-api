@@ -84,15 +84,12 @@ function logIn() {
                 p.innerHTML = json["message"];
                 p.style.color = "red";
                 document.querySelector("h2").after(p);
+                setTimeout(function() {document.querySelector("p").remove()}, 3500);
           } else if (json.logged_in === true) {
             let dataHash = JSON.parse(json.data);
-              console.log(json)
-              console.log(dataHash)
-                renderDashBoard(json, dataHash)
+                renderDashBoard(json, dataHash);
           }
-          
-        }
-    )
+        })
     })
   }
 
