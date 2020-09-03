@@ -250,3 +250,37 @@ button, a, .quarter, .option {
     width: 40px;
     padding-bottom: 10px;
 }
+
+#createAPollForm {
+    text-align: center;
+    margin: auto;
+    width: 50%;
+}
+
+#pollFormTitle {
+    font-weight: bold;
+    display: inline-block;
+    margin-left: 5px;
+}
+
+form #question {
+    display: block;
+    width: 100%;
+}
+
+input[name="options[]"] {
+    display: inline-block;
+    width: 100%;
+}
+
+#optionButton {
+    width: 100%;
+    color: #009688;
+    background-color: white;
+}
+
+#vote_requirement, #period, #allFriends {
+    display: block;
+    width: 100%;
+    background-color: white;
+}

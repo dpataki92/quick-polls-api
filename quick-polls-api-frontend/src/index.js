@@ -108,7 +108,6 @@ function logIn() {
     i.classList = `fa fa-${icon} xxxlarge`;
     leftDiv.appendChild(i);
 
-
     const clearDiv = document.createElement("div");
     clearDiv.classList ="clear";
 
@@ -190,7 +189,7 @@ function logIn() {
           else if (i === 2) {contentTd.innerHTML = `You have ${json.pending_polls} pending polls and ${json.closed_polls} closed polls.`; tr.style.backgroundColor = "#F0F0F0";}
       } else if (i === 3) {
           icon.classList = "fa fa-bookmark text-blue large";
-          contentTd.innerHTML = `You have voted on ${dataHash.votes.length} polls.`
+          contentTd.innerHTML = `You have voted on ${dataHash.votes.length} polls.`;
       } else if (i === 4) {
           icon.classList = "fa fa-users text-yellow large";
           contentTd.innerHTML = `You have ${dataHash.friends.length} friends to share polls with.`;
@@ -282,15 +281,10 @@ function logIn() {
     let div = document.createElement("div");
     div.id = "createAPollForm";
     div.classList = "extra";
-    div.style.textAlign ="center";
-    div.style.margin = "auto";
-    div.style.width = "50%";
   
-    let title = document.createElement("h3");
+    let title = document.createElement("h5");
     title.innerText = "Set Your Poll's Data Here";
     title.id = "pollFormTitle"
-    title.style.display = "inline-block";
-    title.style.marginLeft = "5px";
   
     div.appendChild(title);
   
@@ -302,16 +296,12 @@ function logIn() {
     inputQuestion.name = "question";
     inputQuestion.id = "question";
     inputQuestion.placeholder = "Question..";
-    inputQuestion.style.display = "block";
-    inputQuestion.style.width = "100%";
 
     function optionCreator() {
       let option = document.createElement("input");
       option.type = "text";
       option.name = "options[]";
       option.placeholder = "Option...";
-      option.style.display = "inline-block";
-      option.style.width = "100%";
       option.required = true;
       return option;
     }
@@ -319,9 +309,7 @@ function logIn() {
     let inputOption2 = optionCreator();
 
     let optionButton = document.createElement("button");
-    optionButton.style.width ="100%";
-    optionButton.style.color ="#009688";
-    optionButton.style.backgroundColor = "white";
+    optionButton.id = "optionButton";
     optionButton.innerHTML = "+ add another option";
 
     form.appendChild(inputQuestion);
@@ -340,9 +328,6 @@ function logIn() {
     inputVoteRequirement.name = "vote_requirement";
     inputVoteRequirement.id = "vote_requirement";
     inputVoteRequirement.classList = "padding-16";
-    inputVoteRequirement.style.display ="block";
-    inputVoteRequirement.style.width ="100%";
-    inputVoteRequirement.style.backgroundColor ="white";
     inputVoteRequirement.placeholder = "Number of votes to close the poll..";
     form.appendChild(inputVoteRequirement);
 
@@ -351,9 +336,6 @@ function logIn() {
     inputPeriod.name = "period";
     inputPeriod.id = "period";
     inputPeriod.classList = "padding-16";
-    inputPeriod.style.display ="block";
-    inputPeriod.style.width ="100%";
-    inputPeriod.style.backgroundColor ="white";
     inputPeriod.placeholder = "Voting period in days..";
     form.appendChild(inputPeriod);
 
@@ -361,10 +343,9 @@ function logIn() {
     labelForFriendsList.setAttribute("for", "allFriends");
     labelForFriendsList.innerHTML = "Add all friends or share the poll with only a few friends:"
     let addAllFriendsButton = document.createElement("button");
-    addAllFriendsButton.name = "allFriends"
-    addAllFriendsButton.style.width ="100%";
+    addAllFriendsButton.name = "allFriends";
+    addAllFriendsButton.id = "allFriends";
     addAllFriendsButton.style.color ="#009688";
-    addAllFriendsButton.style.backgroundColor = "white";
     addAllFriendsButton.innerHTML = "Add all friends";
     addAllFriendsButton.addEventListener("click", (e)=> {
       e.preventDefault();
