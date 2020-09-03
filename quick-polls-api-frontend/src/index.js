@@ -664,10 +664,8 @@ function logIn() {
     }
     
     let removeAllExistingFriendsButton = document.createElement("button");
-    removeAllExistingFriendsButton.name = "removeAllExistingFriends"
-    removeAllExistingFriendsButton.style.width ="100%";
-    removeAllExistingFriendsButton.style.color ="#009688";
-    removeAllExistingFriendsButton.style.backgroundColor = "white";
+    removeAllExistingFriendsButton.name = "removeAllExistingFriends";
+    removeAllExistingFriendsButton.id = "removeAllExistingFriends";
     removeAllExistingFriendsButton.innerHTML = "Remove all existing friends";
     removeAllExistingFriendsButton.addEventListener("click", (e)=> {
       e.preventDefault();
@@ -1133,16 +1131,16 @@ function logIn() {
 
     for (let i = 0; i < json.friends.length; i++) {
       const tr = document.createElement("tr");
+
       let iconTd = document.createElement("i");
       iconTd.classList = "fa fa-male text-yellow large";
-      iconTd.style.verticalAlign = "middle";
-      iconTd.style.marginTop = "10px";
-      iconTd.style.marginLeft = "10px";
-      iconTd.style.marginRight = "-10px";
+    
       let friendTd = document.createElement("td");
       friendTd.innerText = json.friends[i].username;
       friendTd.classList = "username";
+
       let buttonTd = document.createElement("td");
+      
       let removeButton = document.createElement("button");
       removeButton.setAttribute("value", "Remove Friend");
       removeButton.innerText = "Remove Friend";

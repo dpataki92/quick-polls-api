@@ -284,3 +284,16 @@ input[name="options[]"] {
     width: 100%;
     background-color: white;
 }
+
+#removeAllExistingFriends {
+    width: 100%;
+    color: #009688;
+    background-color: white;
+}
+
+.fa-male {
+    vertical-align: middle;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
