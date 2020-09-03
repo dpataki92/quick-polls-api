@@ -391,6 +391,7 @@ function logIn() {
     return div;
   }
 
+  // class for creating poll instances to be used in poll listing functions
   class Poll {
     constructor(question, options, votes, period, expiration_date, vote_requirement, creator) {
       this.question = question;
@@ -431,6 +432,7 @@ function logIn() {
     }
   }
   
+  // creates diagram with the current results for individual poll
   function createNewDiagramFromPoll(poll) {
     let div = document.createElement("div");
     div.classList = "third";
@@ -1161,6 +1163,7 @@ function logIn() {
     return div;
   }
 
+  // displays list of existing friends
   function renderFriends() {
     const FRIENDS_URL = `${USER_URL}/${document.querySelector("b").id}/friends`;
     let container = document.createElement("div");
