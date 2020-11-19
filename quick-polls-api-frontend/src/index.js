@@ -252,6 +252,7 @@ function logIn() {
       headers: {
           "Content-Type": 'application/json',
           "Accept": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem('jwt_token')}`
       },
       body: JSON.stringify({
           question: question,
@@ -493,6 +494,7 @@ function logIn() {
       headers: {
           "Content-Type": 'application/json',
           "Accept": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem('jwt_token')}`
       },
       body: JSON.stringify({
           option: option,
@@ -520,6 +522,7 @@ function logIn() {
       headers: {
           "Content-Type": 'application/json',
           "Accept": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem('jwt_token')}`
       },
       body: JSON.stringify({
           id: id,
@@ -574,6 +577,7 @@ function logIn() {
       headers: {
           "Content-Type": 'application/json',
           "Accept": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem('jwt_token')}`
       },
       body: JSON.stringify({
           id: id,
@@ -602,6 +606,7 @@ function logIn() {
         headers: {
             "Content-Type": 'application/json',
             "Accept": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem('jwt_token')}`
         },
         body: JSON.stringify({
             id: id,
@@ -716,6 +721,7 @@ function logIn() {
         headers: {
             "Content-Type": 'application/json',
             "Accept": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem('jwt_token')}`
         },
         body: JSON.stringify({
             id: id,
@@ -769,6 +775,7 @@ function logIn() {
       headers: {
           "Content-Type": 'application/json',
           "Accept": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem('jwt_token')}`
       },
       body: JSON.stringify({
           new_question: newQuestion,
@@ -883,7 +890,13 @@ function logIn() {
     let container = document.createElement("div");
     container.classList = "panel extra";
 
-      fetch(PENDING_POLLS_URL)
+    fetch(PENDING_POLLS_URL,{ 
+      method: "GET",
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem('jwt_token')}`
+      }
+    })
       .then(resp => resp.json())
       .then(function (json) {
         
@@ -937,11 +950,17 @@ function logIn() {
   // displays diagrams and forms for closed polls
   function listClosedPolls() {
     let id = document.getElementById("welcome").querySelector("b").id;
-    const PENDING_POLLS_URL = `${BASE_URL}/users/${id}/polls/closed`;
+    const CLOSED_POLLS_URL = `${BASE_URL}/users/${id}/polls/closed`;
     let container = document.createElement("div");
     container.classList = "panel extra";
 
-      fetch(PENDING_POLLS_URL)
+    fetch(CLOSED_POLLS_URL, { 
+      method: "GET",
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem('jwt_token')}`
+      }
+    })
       .then(resp => resp.json())
       .then(function (json) {
         
@@ -1025,6 +1044,7 @@ function logIn() {
       headers: {
           "Content-Type": 'application/json',
           "Accept": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem('jwt_token')}`
       },
       body: JSON.stringify({
           friend: friend,
@@ -1050,6 +1070,7 @@ function logIn() {
       headers: {
           "Content-Type": 'application/json',
           "Accept": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem('jwt_token')}`
       },
       body: JSON.stringify({
           friend: friend,
@@ -1099,6 +1120,7 @@ function logIn() {
       headers: {
           "Content-Type": 'application/json',
           "Accept": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem('jwt_token')}`
       },
       body: JSON.stringify({
           friend: friend,
@@ -1167,7 +1189,13 @@ function logIn() {
     let container = document.createElement("div");
     container.classList = "panel extra";
 
-    fetch(FRIENDS_URL)
+    fetch(FRIENDS_URL, {
+      method: "GET",
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem('jwt_token')}`
+      }
+    })
       .then(resp => resp.json())
       .then(function (json) {
         console.log(json)
