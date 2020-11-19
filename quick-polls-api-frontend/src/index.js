@@ -80,14 +80,15 @@ function logIn() {
     .then(
         function(json) {
           if (json.logged_in === false) {
-                let p = document.createElement("p");
-                p.innerHTML = json["message"];
-                p.style.color = "red";
-                document.querySelector("h2").after(p);
-                setTimeout(function() {document.querySelector("p").remove()}, 3500);
+              let p = document.createElement("p");
+              p.innerHTML = json["message"];
+              p.style.color = "red";
+              document.querySelector("h2").after(p);
+              setTimeout(function() {document.querySelector("p").remove()}, 3500);
           } else if (json.logged_in === true) {
-            let dataHash = JSON.parse(json.data);
-                renderDashBoard(json, dataHash);
+              localStorage.setItem('jwt_token', json.token);
+              let dataHash = JSON.parse(json.data);
+              renderDashBoard(json, dataHash);
           }
         })
     })
@@ -1140,7 +1141,6 @@ function logIn() {
       friendTd.classList = "username";
 
       let buttonTd = document.createElement("td");
-      
       let removeButton = document.createElement("button");
       removeButton.setAttribute("value", "Remove Friend");
       removeButton.innerText = "Remove Friend";
