@@ -1,16 +1,22 @@
 class UsersController < ApplicationController
+    skip_before_action :authorized, only: [:create]
+
     def create
         user = User.find_by(username: params[:username])
 
         if user 
             if user.authenticate(params[:password])
-                render json: user.user_data
+                user_data = user.user_data
+                user_data['token'] = encode_token(user_id: user.id)
+                render json: user_data
             else
                 render json: { message: "Sorry, this username is taken or you used a wrong password :(", logged_in: false }
             end
         else            
             if user = User.create(username: params[:username], password: params[:password])
-                render json: user.user_data
+                user_data = user.user_data
+                user_data['token'] = encode_token(user_id: user.id)
+                render json: user_data
             else
                 render json: { message: "Sorry, data validation failed :(", logged_in: false }
             end
