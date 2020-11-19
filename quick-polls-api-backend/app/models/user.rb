@@ -15,7 +15,7 @@ class User < ApplicationRecord
 
     validates :username, presence: true
 
-    def pending_polls
+    def pending_polls_array
         self.polls.each do |p|
             if p.period
                 if p.expiration_date <= DateTime.now
