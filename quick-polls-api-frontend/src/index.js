@@ -141,7 +141,7 @@ function logIn() {
       containerDiv.classList ="grey";
 
       if (i === 0) {
-        title.innerHTML = "Polls that you participated in";
+        title.innerHTML = "Participation";
         percentageDiv.classList = "container center padding blue";
         percentageDiv.style.width = `${json.polls_voted_on}%`;
         percentageDiv.innerHTML = `${json.polls_voted_on}%`
@@ -184,11 +184,11 @@ function logIn() {
       let contentTd = document.createElement("td");
 
       if (i === 0) {
-          icon.classList = "fa fa-user-plus text-orange large";
+          icon.classList = "fa fa-user-plus text-brown large";
           contentTd.innerHTML = `You have been added to ${json.added_polls} polls.`; 
           tr.style.backgroundColor = "#F0F0F0";
       } else if (i === 1)  {
-          icon.classList = "fa fa-plus-square text-brown large";
+          icon.classList = "fa fa-plus-square text-orange large";
           contentTd.innerHTML = `You have created ${json.created_polls} polls.`
       } else if (i === 2) {
           icon.classList = "fas fa-chart-pie text-green large";

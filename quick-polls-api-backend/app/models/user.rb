@@ -89,7 +89,7 @@ class User < ApplicationRecord
                 end
             end
 
-            (win_count.to_f / self.polls.size.to_f * 100).round
+            (win_count.to_f / self.polls.size.to_f * 100).round(1)
         end
     end
 
@@ -105,7 +105,7 @@ class User < ApplicationRecord
         if self.polls.size == 0
             0
         else
-            ((self.votes.size.to_f / self.polls.size.to_f) * 100).round
+            ((self.votes.size.to_f / self.polls.size.to_f) * 100).round(1)
         end
     end
 
