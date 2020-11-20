@@ -103,7 +103,7 @@ class PollsController < ApplicationController
 
     def close
         user = User.find_by(id: params[:id])
-        poll = user.polls.find {|p| p.question === params[:question]}
+        poll = user.polls.find {|p| p.question === params[:question].split("-").join(" ")}
 
         if poll && poll.creator === user.username
             poll.status = "closed"
@@ -116,8 +116,8 @@ class PollsController < ApplicationController
 
     def edit
         user = User.find_by(id: params[:id])
-        poll = user.polls.find {|p| p.question === params[:question]}
-
+        poll = user.polls.find {|p| p.question === params[:question].split("-").join(" ")}
+        
         if poll && poll.creator === user.username
             render json: {poll_id: poll.id, question: poll.question, options: poll.options, friends: user.existing_friends(poll), missing_friends: user.missing_friends(poll), period: poll.period, vote_requirement: poll.vote_requirement, edited: true}
         else

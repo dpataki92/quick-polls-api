@@ -286,11 +286,12 @@ function logIn() {
 
   // displays create a poll form
   function pollForm(dataHash) {
+    console.log(dataHash)
     let div = document.createElement("div");
     div.id = "createAPollForm";
     div.classList = "extra";
   
-    let title = document.createElement("h5");
+    let title = document.createElement("h3");
     title.innerText = "Set Your Poll's Data Here";
     title.id = "pollFormTitle"
   
@@ -734,7 +735,7 @@ function logIn() {
             question: question
         })
       }
-      fetch(`${USER_URL}/${id}/polls/${question}/edit`, configObj)
+      fetch(`${USER_URL}/${id}/polls/${question.split(" ").join("-")}/edit`, configObj)
       .then(resp => resp.json())
       .then(function(json) {
         document.querySelector(".extra").remove();
