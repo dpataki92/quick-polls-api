@@ -2,7 +2,7 @@ class PollsController < ApplicationController
     before_action :accept_all_params
 
     def index
-        polls = User.find_by(id: params[:user_id]).pending_polls_array.recent
+        polls = User.find_by(id: params[:user_id]).updated_polls.pending.recent
         render json: PollSerializer.new(polls).to_serialized_json 
     end
 
@@ -159,7 +159,7 @@ class PollsController < ApplicationController
 
     def closed
         user = User.find_by(id: params[:user_id])
-        user.pending_polls
+        user.updated_polls
         closed = user.polls.recent.select {|p| p.status === "closed"}
 
         render json: PollSerializer.new(closed).to_serialized_json 

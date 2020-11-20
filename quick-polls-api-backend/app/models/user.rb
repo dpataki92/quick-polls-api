@@ -15,7 +15,7 @@ class User < ApplicationRecord
 
     validates :username, presence: true
 
-    def pending_polls_array
+    def updated_polls
         self.polls.each do |p|
             if p.period
                 if p.expiration_date <= DateTime.now
@@ -49,7 +49,7 @@ class User < ApplicationRecord
         self.friends.each do |f|
             missing_friends << f if !f.polls.include?(poll)
         end
-        
+
         missing_friends
     end
 
