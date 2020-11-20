@@ -179,7 +179,7 @@ class PollsController < ApplicationController
             if o.votes.size === 0
                 poll_data[1] = "0%"
             else
-                poll_data[1] = "#{(o.votes.size.to_f / poll.votes.size.to_f * 100).floor}%"
+                poll_data[1] = "#{(o.votes.size.to_f / poll.votes.size.to_f * 100).round(1)}%"
             end
             options_with_new_percentage <<  poll_data
         end

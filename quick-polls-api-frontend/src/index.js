@@ -435,7 +435,7 @@ function logIn() {
               }
             })
             optionData.push(this.options[i].description)
-            optionData.push(Math.floor(voteCount / total * 100))
+            optionData.push((voteCount / total * 100).toFixed(1))
             result.push(optionData)
           }
       }
