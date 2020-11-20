@@ -297,3 +297,27 @@ input[name="options[]"] {
     margin-left: 10px;
     margin-right: 10px;
 }
+
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: lightgrey;
+    height: 30px;
+    padding:8px 8px;
+    height: 45px;
+}
+
+#footer-link {
+    text-decoration: none;
+}
+
+footer p {
+    margin-left: 10px;
+    line-height: 1.5;
+}
+
+#footer-link:hover {
+    color: "blue";
+}

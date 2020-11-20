@@ -1216,6 +1216,26 @@ function logIn() {
     return container;
   }
 
+  // creates footer with link to github repository
+  function createFooter() {
+    let footer = document.createElement("footer");
+    let p = document.createElement("p");
+    let i = document.createElement("i");
+    let a = document.createElement("a");
+
+    i.classList = "fab fa-github";
+    a.href = "https://github.com/dpataki92/quick-polls-api";
+    a.target = "_blank";
+    a.innerText = " GitHub";
+    a.id = "footer-link";
+    p.appendChild(i);
+    p.appendChild(a);
+
+    footer.appendChild(p);
+    
+    document.querySelector(".main").appendChild(footer);
+  }
+
   // renders dashboard after successful login
   function renderDashBoard(json, dataHash) {
     if (document.querySelector("#loginForm")) {
@@ -1280,6 +1300,8 @@ function logIn() {
 
     // renders list of additional aggregated user data
     renderAggregatedUserData(json, dataHash);
+
+    createFooter();
 
     // displaying the 4 container for menu items and allowing users to going from one item's content directly to another's
     if (!document.querySelector(".quarter")) {
