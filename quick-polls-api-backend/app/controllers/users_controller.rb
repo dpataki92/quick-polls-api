@@ -54,7 +54,7 @@ class UsersController < ApplicationController
         user.friends << friend
         friend.friends << user
 
-        render json: {message: "#{friend.username} has been added to our friends."}
+        render json: {message: "#{friend.username} has been added to our friends.", friend: friend.username}
     end
 
     def remove_friends

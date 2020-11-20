@@ -1063,8 +1063,34 @@ function logIn() {
     .then(resp => resp.json())
     .then(
         function(json) {
-          document.querySelector("#searchFriendResponse").innerHTML = json["message"];
-          document.querySelector("#searchFriendResponse").style.color = "green";
+          let responseRow = document.querySelector("#searchFriendResponse");
+          responseRow.firstChild.innerHTML = json["message"];
+          responseRow.lastChild.innerHTML = "";
+          responseRow.style.color = "green";
+
+          let table = document.querySelector(".current-friends");
+          const tr = document.createElement("tr");
+          let iconTd = document.createElement("i");
+          iconTd.classList = "fa fa-male text-yellow large";
+        
+          let friendTd = document.createElement("td");
+          friendTd.innerText = json["friend"];
+          friendTd.classList = "username";
+    
+          let buttonTd = document.createElement("td");
+          let removeButton = document.createElement("button");
+          removeButton.setAttribute("value", "Remove Friend");
+          removeButton.innerText = "Remove Friend";
+          removeButton.addEventListener("click", (e)=> {
+            e.preventDefault();
+            removeFriend(json.friends[i].username, e);
+          })
+          buttonTd.appendChild(removeButton);
+          tr.appendChild(iconTd);
+          tr.appendChild(friendTd);
+          tr.appendChild(buttonTd);
+          if (table.lastChild.innerText.includes("removed")) {table.lastChild.remove()};
+          table.appendChild(tr);
     })
   }
 
@@ -1158,7 +1184,7 @@ function logIn() {
     header.style.marginTop = "50px";
 
     const table = document.createElement("table");
-    table.classList = "table striped white bordered border";
+    table.classList = "table striped white bordered border current-friends";
 
     for (let i = 0; i < json.friends.length; i++) {
       const tr = document.createElement("tr");
