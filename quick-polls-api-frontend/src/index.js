@@ -130,7 +130,7 @@ function logIn() {
 
     const header = document.createElement("h5");
     header.style.fontWeight = "bold";
-    header.innerHTML = "General Stats";
+    header.innerHTML = "General Chart";
 
     thirdDiv.appendChild(header);
 
@@ -183,16 +183,22 @@ function logIn() {
       let iconTd = document.createElement("td");
       let contentTd = document.createElement("td");
 
-      if (i === 0 || i === 1 || i === 2) {
-          icon.classList = "fa fa-share-alt text-green large";
-          if (i === 0) {contentTd.innerHTML = `You have been added to ${json.added_polls} polls.`; tr.style.backgroundColor = "#F0F0F0";}
-          else if (i === 1) {contentTd.innerHTML = `You have created ${json.created_polls} polls.`}
-          else if (i === 2) {contentTd.innerHTML = `You have ${json.pending_polls} pending polls and ${json.closed_polls} closed polls.`; tr.style.backgroundColor = "#F0F0F0";}
+      if (i === 0) {
+          icon.classList = "fa fa-user-plus text-orange large";
+          contentTd.innerHTML = `You have been added to ${json.added_polls} polls.`; 
+          tr.style.backgroundColor = "#F0F0F0";
+      } else if (i === 1)  {
+          icon.classList = "fa fa-plus-square text-brown large";
+          contentTd.innerHTML = `You have created ${json.created_polls} polls.`
+      } else if (i === 2) {
+          icon.classList = "fas fa-chart-pie text-green large";
+          contentTd.innerHTML = `You have ${json.pending_polls} pending polls and ${json.closed_polls} closed polls.`; 
+          tr.style.backgroundColor = "#F0F0F0";
       } else if (i === 3) {
-          icon.classList = "fa fa-bookmark text-blue large";
+          icon.classList = "fas fa-vote-yea text-red large";
           contentTd.innerHTML = `You have voted on ${dataHash.votes.length} polls.`;
       } else if (i === 4) {
-          icon.classList = "fa fa-users text-yellow large";
+          icon.classList = "fa fa-users text-blue large";
           contentTd.innerHTML = `You have ${dataHash.friends.length} friends to share polls with.`;
           tr.style.backgroundColor = "#F0F0F0";
       }
@@ -1236,8 +1242,8 @@ function logIn() {
     const containers = [
         {
             name: "Create a Poll",
-            icon: "edit",
-            color: "blue",
+            icon: "plus",
+            color: "orange",
             userNum: null,
             listener: pollForm
         },
@@ -1245,15 +1251,15 @@ function logIn() {
         {
             name: "Pending Polls",
             icon: "bar-chart-o",
-            color: "red",
+            color: "green",
             userNum: dataHash.polls.filter(p => p.status === "pending").length,
             listener: listPendingForms
         },
 
         {
             name: "Closed Polls",
-            icon: "check-square-o",
-            color: "green",
+            icon: "hourglass-end",
+            color: "red",
             userNum: dataHash.polls.filter(p => p.status === "closed").length,
             listener: listClosedPolls
         },
@@ -1261,7 +1267,7 @@ function logIn() {
         {
             name: "Friends",
             icon: "users",
-            color: "orange",
+            color: "blue",
             userNum: dataHash.friends.length,
             listener: renderFriends
         }
