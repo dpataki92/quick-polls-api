@@ -825,13 +825,13 @@ function logIn() {
       } else if (i === 1) {
         link.innerHTML = "Close poll  ";
         link.addEventListener("click", ()=> {
-          alert("Are your sure?");
+          window.confirm("Are you sure?");
           closePoll(question)
         })
       } else if (i === 2) {
         link.innerHTML = "Delete poll  ";
         link.addEventListener("click", ()=> {
-          alert("Are your sure?");
+          window.confirm("Are you sure?");
           deletePoll(question)
         })
       }
