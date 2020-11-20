@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // creates login form
 function createLoginForm() {
     document.querySelector(".main").style.display = "none";
-  
+    document.querySelector(".bar").style.display = "none";
     let div = document.createElement("div");
     div.id = "loginForm";
   
@@ -88,6 +88,7 @@ function logIn() {
           } else if (json.logged_in === true) {
               localStorage.setItem('jwt_token', json.token);
               let dataHash = JSON.parse(json.data);
+              document.querySelector(".bar").style.display = "block";
               renderDashBoard(json, dataHash);
           }
         })
