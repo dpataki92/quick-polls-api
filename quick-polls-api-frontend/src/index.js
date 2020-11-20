@@ -89,6 +89,7 @@ function logIn() {
               localStorage.setItem('jwt_token', json.token);
               let dataHash = JSON.parse(json.data);
               document.querySelector(".bar").style.display = "block";
+              document.querySelector(".fa-sign-out-alt").addEventListener("click", logout);
               renderDashBoard(json, dataHash);
           }
         })
@@ -1261,6 +1262,13 @@ function logIn() {
     footer.appendChild(p);
     
     document.querySelector(".main").appendChild(footer);
+  }
+
+  // logs out user
+  function logout() {
+    window.confirm("Are you sure?");
+    localStorage.clear();
+    location.reload();
   }
 
   // renders dashboard after successful login
