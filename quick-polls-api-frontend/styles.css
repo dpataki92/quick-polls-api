@@ -318,6 +318,11 @@ footer p {
     line-height: 1.5;
 }
 
+#logout:hover {
+    cursor: pointer;
+    color: red;
+}
+
 #footer-link:hover {
     color: "blue";
 }
