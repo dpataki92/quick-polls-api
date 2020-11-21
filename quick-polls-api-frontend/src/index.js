@@ -164,10 +164,18 @@ function logIn() {
       data: {
         labels: ["Participation", "Winner polls", "Loser polls"],
         datasets: [{
-          label: "Aggregated poll data (%)",
           data: [json.polls_voted_on, json.winner_polls, json.loser_polls],
           backgroundColor: ["#2196F3", "#4CAF50", "#f44336"]
         }]
+      },
+      options: {
+        title: {
+          display: true,
+          text: "Aggregated poll data (%)"
+        },
+        legend: {
+          display: false
+        }
       }
     })
 
@@ -493,10 +501,18 @@ function logIn() {
       data: {
         labels: optionLabels,
         datasets: [{
-          label: "Current results (%)",
           data: chartData,
           backgroundColor: chartColors
         }]
+      },
+      options: {
+        title: {
+          display: true,
+          text: "Current results (%)"
+        },
+        legend: {
+          display: false
+        }
       }
     })
 
@@ -509,10 +525,18 @@ function logIn() {
           data: {
             labels: optionLabels,
             datasets: [{
-              label: "Current results (%)",
               data: chartData,
               backgroundColor: chartColors
             }]
+          },
+          options: {
+            title: {
+              display: true,
+              text: "Current results (%)"
+            },
+            legend: {
+              display: false
+            }
           }
         })    
       })
