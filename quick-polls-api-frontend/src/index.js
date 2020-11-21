@@ -480,7 +480,6 @@ function logIn() {
   
   // creates diagram with the current results for individual poll
   function createNewDiagramFromPoll(poll) {
-    console.log(poll)
     let div = document.createElement("div");
     div.classList = "third";
 
@@ -658,6 +657,7 @@ function logIn() {
 
   // deletes poll if user is creator
   function deletePoll(question) {
+    let slug = question.split(" ").join("-").replace("?", "");
     let id = document.querySelector("b").id;
     let configObj = {
       method: "DELETE",
@@ -668,10 +668,10 @@ function logIn() {
       },
       body: JSON.stringify({
           id: id,
-          question: question
+          originalQuestion: question
       })
     }
-    fetch(`${USER_URL}/${id}/polls/${question}`, configObj)
+    fetch(`${USER_URL}/${id}/polls/${slug}`, configObj)
     .then(resp => resp.json())
     .then(
       function(json) {
@@ -687,6 +687,7 @@ function logIn() {
 
   // closes poll if user is creator
   function closePoll(question) {
+      let slug = question.split(" ").join("-").replace("?", "");
       let id = document.querySelector("b").id;
       let configObj = {
         method: "POST",
@@ -697,10 +698,10 @@ function logIn() {
         },
         body: JSON.stringify({
             id: id,
-            question: question
+            originalQuestion: question
         })
       }
-      fetch(`${USER_URL}/${id}/polls/${question}/close`, configObj)
+      fetch(`${USER_URL}/${id}/polls/${slug}/close`, configObj)
       .then(resp => resp.json())
       .then(function(json) {
         if (json.closed === true) {
@@ -717,8 +718,9 @@ function logIn() {
 
   // creates form for editing poll data
   function createEditFormForPoll(dataHash) {
+    let slug = dataHash.question.split(" ").join("-").replace("?", "");
     let form = pollForm(dataHash);
-    form.setAttribute("action", `${BASE_URL}/users/${document.querySelector("b").id}/polls/${dataHash.question.split(" ").join("-")}`)
+    form.setAttribute("action", `${BASE_URL}/users/${document.querySelector("b").id}/polls/${slug}`)
     form.setAttribute("method", "PATCH");
     form.querySelector("h3").innerText = "Edit Your Poll's Data Here";
     form.querySelector("form").querySelector("#question").value = dataHash.question;
@@ -802,31 +804,34 @@ function logIn() {
 
   // renders edit poll form is user is creator
   function editPoll(question) {
+    let slug = question.split(" ").join("-").replace("?", "");
     let id = document.querySelector("b").id;
-      let configObj = {
-        method: "POST",
-        headers: {
-            "Content-Type": 'application/json',
-            "Accept": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem('jwt_token')}`
-        },
-        body: JSON.stringify({
-            id: id,
-            question: question
-        })
-      }
-      fetch(`${USER_URL}/${id}/polls/${question.split(" ").join("-")}/edit`, configObj)
-      .then(resp => resp.json())
-      .then(function(json) {
-        document.querySelector(".extra").remove();
-        let div = createEditFormForPoll(json);
-        document.querySelector(".main").insertBefore(div, document.querySelector(".panel"));
-      })
+
+    let configObj = {
+      method: "POST",
+      headers: {
+          "Content-Type": 'application/json',
+          "Accept": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem('jwt_token')}`
+      },
+      body: JSON.stringify({
+        originalQuestion: question
+    })
+    }
+    fetch(`${USER_URL}/${id}/polls/${slug}/edit`, configObj)
+    .then(resp => resp.json())
+    .then(function(json) {
+      console.log(json)
+      document.querySelector(".extra").remove();
+      let div = createEditFormForPoll(json);
+      document.querySelector(".main").insertBefore(div, document.querySelector(".panel"));
+    })
   }
 
   // sends poll data to udpate existing poll
-  function updatePoll(e, originalQuestion) {
-    const PENDING_POLLS_URL = `${BASE_URL}/users/${document.querySelector("b").id}/polls/${originalQuestion.split(" ").join("-")}`;
+  function updatePoll(e, question) {
+    let slug = question.split(" ").join("-").replace("?", "");
+    const PENDING_POLLS_URL = `${BASE_URL}/users/${document.querySelector("b").id}/polls/${slug}`;
 
     let newQuestion = e.target.parentNode.querySelector("#question").value;
     let options = []
@@ -892,6 +897,7 @@ function logIn() {
 
   // renders links to functions for deleting, closing, and editing poll if user is creator
   function displayCreatorLinks(question) {
+    console.log(question)
     let tr = document.createElement("tr");
     let td = document.createElement("td");
     for (let i = 0; i < 3; i++) {
@@ -1050,7 +1056,6 @@ function logIn() {
     })
       .then(resp => resp.json())
       .then(function (json) {
-        
         for (let i = 0; i < json.length; i++) {
           let parent = document.createElement("div");
           parent.classList = "row-padding extra";
@@ -1059,7 +1064,6 @@ function logIn() {
           let poll = new Poll(json[i].question, json[i].options, json[i].votes, json[i].period, json[i].expiration_date, json[i].vote_requirement, json[i].creator);
           
           let diagramDiv = createNewDiagramFromPoll(poll);
-          diagramDiv.querySelector("h5").innerText = "Final results";
           parent.appendChild(diagramDiv);
           let votingFormDiv = createNewVotingFormFromClosedPoll(poll);
           parent.appendChild(votingFormDiv);
