@@ -929,6 +929,7 @@ function logIn() {
   
   // creates a voting form for a particular pending poll
   function createNewVotingFormFromPoll(poll) {
+    console.log(poll)
     let div = document.createElement("div");
     div.classList ="twothird extra";
     let table = document.createElement("table");
@@ -948,6 +949,7 @@ function logIn() {
       let td = document.createElement("td");
       td.innerHTML = poll.options[i].description;
       td.classList = "option";
+      if (poll.votes.find(v => v.user_id === parseInt(document.querySelector("b").id))) {td.style.color = "grey"}
       createClickableOption(td);
       tr.appendChild(td);
       tbody.appendChild(tr);
