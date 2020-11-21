@@ -125,6 +125,24 @@ function logIn() {
     return quarterDiv;
   }
 
+  //creates div with 4 links to change chart type
+  function createDivWithLinksForChartTypes () {
+    const div = document.createElement("div");
+    div.id = "chart-links";
+
+    for (let i = 0; i < 4 ; i++) {
+      let a = document.createElement("a");
+      a.classList="chart-link"
+      if (i === 0) {a.innerHTML = "Bar"; a.id="bar";}
+      else if (i === 1) {a.innerHTML = "Horizontal bar"; a.id="horizontalBar";}
+      else if (i === 2) {a.innerHTML = "Pie"; a.id="pie";}
+      else if (i === 3) {a.innerHTML = "Doughnut"; a.id="doughnut";}
+      div.appendChild(a);
+    }
+
+    return div;
+  }
+
   // renders diagram on aggregated data of user's polls
   function renderAggregatedPollDiagram (json) {
     const thirdDiv = document.createElement("div");
@@ -150,30 +168,27 @@ function logIn() {
           data: [json.polls_voted_on, json.winner_polls, json.loser_polls],
           backgroundColor: ["#2196F3", "#4CAF50", "#f44336"]
         }]
-      },
-      options: {
-
       }
     })
 
-    let tryLink = document.createElement("a");
-    tryLink.innerHTML = "I am a link";
-    tryLink.addEventListener("click", () => {
-      massPopChart.destroy();
-      let newMassPopChart = new Chart(myChart, {
-        type: "pie", // pie, bar, horizontalBar, doughnut
-        data: {
-          labels: ["Participation", "Winner polls", "Loser polls"],
-          datasets: [{
-            label: "Aggregated poll data (%)",
-            data: [json.polls_voted_on, json.winner_polls, json.loser_polls],
-            backgroundColor: ["#2196F3", "#4CAF50", "#f44336"]
-          }]
-        },
-        options: {}
-      })      
+    let linksDiv = createDivWithLinksForChartTypes();
+    linksDiv.querySelectorAll(".chart-link").forEach(a => {
+      a.addEventListener("click", (e) => {
+        massPopChart.destroy();
+        massPopChart = new Chart(myChart, {
+          type: a.id, // pie, bar, horizontalBar, doughnut
+          data: {
+            labels: ["Participation", "Winner polls", "Loser polls"],
+            datasets: [{
+              label: "Aggregated poll data (%)",
+              data: [json.polls_voted_on, json.winner_polls, json.loser_polls],
+              backgroundColor: ["#2196F3", "#4CAF50", "#f44336"]
+            }]
+          }
+        })    
+      })
     })
-    thirdDiv.appendChild(tryLink)
+    thirdDiv.appendChild(linksDiv);
 
    document.querySelector(".row-padding").appendChild(thirdDiv)
 

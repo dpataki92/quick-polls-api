@@ -326,3 +326,19 @@ footer p {
 #footer-link:hover {
     color: "blue";
 }
+
+#chart-links {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 5%;
+}
+
+#chart-links a {
+    color: gray;
+    opacity: 0.7;
+    text-decoration: none;
+}
+
+#chart-links a:hover {
+    color: black
+}
