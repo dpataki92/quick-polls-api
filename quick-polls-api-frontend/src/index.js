@@ -960,8 +960,7 @@ function logIn() {
     if (poll.vote_requirement != null) {
       let tr = document.createElement("tr");
       let td = document.createElement("td");
-      td.innerHTML = "Voting requirement:" + poll.vote_requirement;
-      td.style.fontStyle = "italic";
+      td.innerHTML = "Vote requirement: " + poll.vote_requirement + " votes";
       tr.appendChild(td);
       tbody.appendChild(tr);
     }
@@ -969,8 +968,7 @@ function logIn() {
     if (poll.expiration_date != null) {
       let tr = document.createElement("tr");
       let td = document.createElement("td");
-      td.innerHTML = "Closing date for poll: " + poll.expiration_date;
-      td.style.fontStyle = "italic";
+      td.innerHTML = "Closing date: " + poll.expiration_date;
       tr.appendChild(td)
       tbody.appendChild(tr)
     }

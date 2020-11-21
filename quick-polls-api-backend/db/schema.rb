@@ -10,13 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_26_153625) do
-
-  create_table "friend_requests", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "friend_id"
-    t.string "status"
-  end
+ActiveRecord::Schema.define(version: 2020_08_21_163647) do
 
   create_table "options", force: :cascade do |t|
     t.string "description"
@@ -29,7 +23,7 @@ ActiveRecord::Schema.define(version: 2020_08_26_153625) do
     t.string "question"
     t.string "creator"
     t.integer "period"
-    t.datetime "expiration_date"
+    t.string "expiration_date"
     t.integer "vote_requirement"
     t.string "status"
     t.datetime "created_at", precision: 6, null: false

@@ -4,7 +4,7 @@ class CreatePolls < ActiveRecord::Migration[6.0]
       t.string :question
       t.string :creator
       t.integer :period
-      t.datetime :expiration_date
+      t.string :expiration_date
       t.integer :vote_requirement
       t.string :status
 

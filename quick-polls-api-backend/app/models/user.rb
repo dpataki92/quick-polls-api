@@ -19,7 +19,7 @@ class User < ApplicationRecord
     def updated_polls
         self.polls.each do |p|
             if p.period
-                if p.expiration_date <= DateTime.now
+                if DateTime.strptime(p.expiration_date, "%B %d, %Y") >= DateTime.now
                     p.status = "closed"
                     p.save
                 end

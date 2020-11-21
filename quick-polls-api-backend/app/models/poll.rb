@@ -16,6 +16,6 @@ class Poll < ApplicationRecord
     scope :closed, -> {where(status: "closed") }
 
     def calc_expiration_date
-        self.created_at + 86400 * self.period
+        (self.created_at + 86400 * self.period).strftime("%B %d, %Y")
     end
 end
