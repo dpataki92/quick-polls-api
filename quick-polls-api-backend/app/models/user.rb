@@ -14,6 +14,7 @@ class User < ApplicationRecord
     has_many :votes
 
     validates :username, presence: true
+    validates :username, uniqueness: true
 
     def updated_polls
         self.polls.each do |p|

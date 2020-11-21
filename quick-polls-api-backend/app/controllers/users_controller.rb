@@ -18,7 +18,7 @@ class UsersController < ApplicationController
                 user_data['token'] = encode_token(user_id: user.id)
                 render json: user_data
             else
-                render json: { message: "Sorry, data validation failed :(", logged_in: false }
+                render json: { message: "Something went wrong. Please try again.", logged_in: false }
             end
         end
     end

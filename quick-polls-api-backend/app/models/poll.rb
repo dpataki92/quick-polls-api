@@ -6,6 +6,7 @@ class Poll < ApplicationRecord
     has_many :votes
     
     validates :question, presence: true, allow_blank: false
+    validates :question, uniqueness: true
     validates :status, inclusion: { in: %w(pending closed)}
     validates :period, numericality: { only_integer: true, allow_blank: true }
     validates :vote_requirement, numericality: { only_integer: true, allow_blank: true}

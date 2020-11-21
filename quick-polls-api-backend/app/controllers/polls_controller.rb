@@ -9,6 +9,7 @@ class PollsController < ApplicationController
     def create
         user = User.find_by(username: params[:username])
         poll = Poll.create_or_find_by(question: params[:question], period: params[:period], vote_requirement: params[:vote_requirement], creator: params[:username], status: "pending");
+        
         if poll.period
             poll.expiration_date = poll.calc_expiration_date
             poll.save
