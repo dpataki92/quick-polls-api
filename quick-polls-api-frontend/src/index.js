@@ -493,8 +493,16 @@ function logIn() {
     poll.options.forEach(e => optionLabels.push(e.description));
     let chartData = [];
     poll.calculatePercentage().forEach(e => chartData.push(e[1]));
+    let backgroundColors = ["#2196F3", "#4CAF50", "#f44336", "#17a2b8", "#ffc107",  "#6c757d", "#343a40", "#f8f9fa"]
     let chartColors = [];
-    for (let i = 0; i < optionLabels.length; i++) {chartColors.push(["#2196F3", "#4CAF50", "#f44336"][Math.floor(Math.random()*["#2196F3", "#4CAF50", "#f44336"].length)])}
+    for (let i = 0; i < optionLabels.length; i++) {
+      if (i < backgroundColors.length) {
+        chartColors.push(backgroundColors[i])
+      } else {
+        chartColors.push(backgroundColors[Math.floor(Math.random()*backgroundColors.length)])
+      }
+      
+    }
 
     let massPopChart = new Chart(myChart, {
       type: "bar",
