@@ -559,7 +559,9 @@ function logIn() {
     const p = document.createElement("p");
     p.innerHTML = json["message"];
     p.style.color = color;
+    const removeP = () => {p.remove()};
     parent.querySelector("table").after(p);
+    setTimeout(removeP, 3000);
 
     if (percentageChange) {
       parent.querySelector(".third").querySelectorAll(".container").forEach(n => {
