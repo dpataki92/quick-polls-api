@@ -133,37 +133,30 @@ function logIn() {
     const header = document.createElement("h5");
     header.style.fontWeight = "bold";
     header.innerHTML = "General Chart";
-
     thirdDiv.appendChild(header);
 
-    for (let i = 0; i < 3; i++) {
-      let title = document.createElement("p");
-      let containerDiv = document.createElement("div");
-      let percentageDiv = document.createElement("div");
-      containerDiv.classList ="grey";
+    const canvas = document.createElement("canvas");
+    canvas.id = "myChart";
+    thirdDiv.appendChild(canvas);
+    
+    let myChart = canvas.getContext("2d");
 
-      if (i === 0) {
-        title.innerHTML = "Participation";
-        percentageDiv.classList = "container center padding blue";
-        percentageDiv.style.width = `${json.polls_voted_on}%`;
-        percentageDiv.innerHTML = `${json.polls_voted_on}%`
-      } else if (i === 1) {
-        title.innerHTML = "Winner polls";
-        percentageDiv.classList = "container center padding green";
-        percentageDiv.style.width = `${json.winner_polls}%`;
-        percentageDiv.innerHTML = `${json.winner_polls}%`;
-      } else if (i === 2) {
-        title.innerHTML = "Loser polls";
-        percentageDiv.classList = "container center padding red";
-        percentageDiv.style.width = `${json.loser_polls}%`;
-        percentageDiv.innerHTML = `${json.loser_polls}%`;
+    let massPopChart = new Chart(myChart, {
+      type: "bar",
+      data: {
+        labels: ["Participation", "Winner polls", "Loser polls"],
+        datasets: [{
+          label: "Aggregated poll data (%)",
+          data: [json.polls_voted_on, json.winner_polls, json.loser_polls],
+          backgroundColor: ["#2196F3", "#4CAF50", "#f44336"]
+        }]
+      },
+      options: {
+
       }
+    })
 
-      containerDiv.appendChild(percentageDiv);
-      thirdDiv.appendChild(title);
-      thirdDiv.appendChild(containerDiv);
-    }
-    document.querySelector(".row-padding").appendChild(thirdDiv)
+   document.querySelector(".row-padding").appendChild(thirdDiv)
 
   }
 
