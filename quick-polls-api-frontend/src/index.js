@@ -142,7 +142,7 @@ function logIn() {
     let myChart = canvas.getContext("2d");
 
     let massPopChart = new Chart(myChart, {
-      type: "bar",
+      type: "bar", // pie, bar, horizontalBar, doughnut
       data: {
         labels: ["Participation", "Winner polls", "Loser polls"],
         datasets: [{
@@ -155,6 +155,25 @@ function logIn() {
 
       }
     })
+
+    let tryLink = document.createElement("a");
+    tryLink.innerHTML = "I am a link";
+    tryLink.addEventListener("click", () => {
+      massPopChart.destroy();
+      let newMassPopChart = new Chart(myChart, {
+        type: "pie", // pie, bar, horizontalBar, doughnut
+        data: {
+          labels: ["Participation", "Winner polls", "Loser polls"],
+          datasets: [{
+            label: "Aggregated poll data (%)",
+            data: [json.polls_voted_on, json.winner_polls, json.loser_polls],
+            backgroundColor: ["#2196F3", "#4CAF50", "#f44336"]
+          }]
+        },
+        options: {}
+      })      
+    })
+    thirdDiv.appendChild(tryLink)
 
    document.querySelector(".row-padding").appendChild(thirdDiv)
 
