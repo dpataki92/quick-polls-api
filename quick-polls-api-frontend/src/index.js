@@ -462,7 +462,7 @@ function logIn() {
               }
             })
             optionData.push(this.options[i].description)
-            optionData.push((voteCount / total * 100).toFixed(1))
+            optionData.push(parseFloat((voteCount / total * 100).toFixed(1)))
             result.push(optionData)
           }
       }
@@ -472,34 +472,53 @@ function logIn() {
   
   // creates diagram with the current results for individual poll
   function createNewDiagramFromPoll(poll) {
+    console.log(poll)
     let div = document.createElement("div");
     div.classList = "third";
-  
-    let title = document.createElement("h5");
-    title.innerText = "Current results";
-    title.style.fontWeight = "bold";
-  
-    for (let opt of poll.options) {
-  
-      let description = document.createElement("p");
-      description.innerHTML = opt.description;
-  
-      let pollDiv = document.createElement("div");
-      pollDiv.classList = "grey";
-  
-      let percentageDiv = document.createElement("div");
-      let randomColor = ["red", "green", "orange", "blue", "yellow", "purple"][Math.floor((Math.random() * ["red", "green", "orange", "blue", "yellow", "purple"].length))]
-      percentageDiv.classList = "container center padding " + randomColor;
-      let percentageValue = poll.calculatePercentage().find(option => option[0] === opt.description)[1];
-      percentageDiv.style.width = `${percentageValue}%`;
-      percentageDiv.innerHTML = `${percentageValue}%`;
-      
-      pollDiv.appendChild(percentageDiv);
-      div.appendChild(description);
-      div.appendChild(pollDiv)
-      
-    }
-    div.insertBefore(title, div.querySelector("p"));
+
+    const canvas = document.createElement("canvas");
+    canvas.id = `myChart-${poll.question}`;
+    div.appendChild(canvas);
+    
+    let myChart = canvas.getContext("2d");
+    let optionLabels = [];
+    poll.options.forEach(e => optionLabels.push(e.description));
+    let chartData = [];
+    poll.calculatePercentage().forEach(e => chartData.push(e[1]));
+    let chartColors = [];
+    for (let i = 0; i < optionLabels.length; i++) {chartColors.push(["#2196F3", "#4CAF50", "#f44336"][Math.floor(Math.random()*["#2196F3", "#4CAF50", "#f44336"].length)])}
+
+    let massPopChart = new Chart(myChart, {
+      type: "bar",
+      data: {
+        labels: optionLabels,
+        datasets: [{
+          label: "Current results (%)",
+          data: chartData,
+          backgroundColor: chartColors
+        }]
+      }
+    })
+
+    let linksDiv = createDivWithLinksForChartTypes();
+    linksDiv.querySelectorAll(".chart-link").forEach(a => {
+      a.addEventListener("click", (e) => {
+        massPopChart.destroy();
+        massPopChart = new Chart(myChart, {
+          type: a.id,
+          data: {
+            labels: optionLabels,
+            datasets: [{
+              label: "Current results (%)",
+              data: chartData,
+              backgroundColor: chartColors
+            }]
+          }
+        })    
+      })
+    })
+    div.appendChild(linksDiv);
+
     return div;
   }
 
