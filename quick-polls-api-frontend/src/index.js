@@ -904,6 +904,7 @@ function logIn() {
     let td = document.createElement("td");
     for (let i = 0; i < 3; i++) {
       let link = document.createElement("a");
+      link.classList = "creator-links";
       if (i === 0) {
         link.innerHTML = "Edit poll  ";
         link.addEventListener("click", ()=> {

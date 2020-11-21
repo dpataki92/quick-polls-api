@@ -333,7 +333,7 @@ footer p {
     margin-top: 5%;
 }
 
-#chart-links a {
+#chart-links a, .creator-links {
     color: gray;
     opacity: 0.7;
     text-decoration: none;
@@ -341,4 +341,13 @@ footer p {
 
 #chart-links a:hover {
     color: black
+}
+
+.creator-links {
+    margin-right: 2%;
+}
+
+.creator-links:hover {
+    opacity: 1;
+    text-decoration: none;
 }
