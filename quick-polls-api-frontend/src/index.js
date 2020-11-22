@@ -323,14 +323,13 @@ function logIn() {
 
   // displays create a poll form
   function pollForm(dataHash) {
-    console.log(dataHash)
     let div = document.createElement("div");
     div.id = "createAPollForm";
     div.classList = "extra";
   
     let title = document.createElement("h3");
-    title.innerText = "Set Your Poll's Data Here";
-    title.id = "pollFormTitle"
+    title.innerText = "Create a Poll";
+    title.id = "pollFormTitle";
   
     div.appendChild(title);
   
@@ -341,6 +340,7 @@ function logIn() {
     inputQuestion.type = "text";
     inputQuestion.name = "question";
     inputQuestion.id = "question";
+    inputQuestion.classList = "txt";
     inputQuestion.placeholder = "Question..";
 
     function optionCreator() {
@@ -349,6 +349,7 @@ function logIn() {
       option.name = "options[]";
       option.placeholder = "Option...";
       option.required = true;
+      option.classList = "txt";
       return option;
     }
     let inputOption1 = optionCreator();
@@ -356,7 +357,7 @@ function logIn() {
 
     let optionButton = document.createElement("button");
     optionButton.id = "optionButton";
-    optionButton.innerHTML = "+ add another option";
+    optionButton.innerHTML = "+ Add option";
 
     form.appendChild(inputQuestion);
     form.appendChild(inputOption1);
@@ -371,41 +372,43 @@ function logIn() {
 
     let inputVoteRequirement = document.createElement("input");
     inputVoteRequirement.type = "number";
+    inputVoteRequirement.setAttribute("min", 0);
     inputVoteRequirement.name = "vote_requirement";
     inputVoteRequirement.id = "vote_requirement";
-    inputVoteRequirement.classList = "padding-16";
+    inputVoteRequirement.classList = "txt";
     inputVoteRequirement.placeholder = "Number of votes to close the poll..";
     form.appendChild(inputVoteRequirement);
 
     let inputPeriod = document.createElement("input");
     inputPeriod.type = "number";
+    inputPeriod.setAttribute("min", 0);
     inputPeriod.name = "period";
     inputPeriod.id = "period";
-    inputPeriod.classList = "padding-16";
+    inputPeriod.classList = "txt";
     inputPeriod.placeholder = "Voting period in days..";
     form.appendChild(inputPeriod);
 
     let labelForFriendsList = document.createElement("label");
     labelForFriendsList.setAttribute("for", "allFriends");
-    labelForFriendsList.innerHTML = "Add all friends or share the poll with only a few friends:"
+    labelForFriendsList.innerHTML = "Add your friends to the poll:"
     let addAllFriendsButton = document.createElement("button");
     addAllFriendsButton.name = "allFriends";
     addAllFriendsButton.id = "allFriends";
     addAllFriendsButton.style.color ="#009688";
-    addAllFriendsButton.innerHTML = "Add all friends";
+    addAllFriendsButton.innerHTML = "+ Add all friends";
     addAllFriendsButton.addEventListener("click", (e)=> {
       e.preventDefault();
-      addAllFriendsButton.innerHTML = "All friends are added to poll!"
+      addAllFriendsButton.innerHTML = "Added all friends!"
     })
     let friendSelectList = document.createElement("select");
     friendSelectList.multiple = true;
-    friendSelectList.style.width = "100%";
+    friendSelectList.classList = "txt";
     friendSelectList.name = "friends[]";
     for (let i = 0; i < dataHash.friends.length; i++) {
       let option = document.createElement("option");
       option.value = dataHash.friends[i].username;
       option.innerText = dataHash.friends[i].username;
-      option.style.width = "100%";
+      option.classList = "text";
       friendSelectList.appendChild(option);
     }
     form.appendChild(labelForFriendsList);
@@ -418,12 +421,12 @@ function logIn() {
     username.setAttribute("value", document.querySelector("#welcome").innerText.slice(9,17));
     username.id = "username";
 
-
     form.appendChild(username)
   
     let inputSubmit = document.createElement("input");
     inputSubmit.type = "submit";
     inputSubmit.value = "Submit";
+    inputSubmit.id = "createPollSubmit";
     inputSubmit.style.width ="100%";
     inputSubmit.style.backgroundColor ="#009688";
     inputSubmit.addEventListener("click", (e)=> {

@@ -273,22 +273,18 @@ input[name="options[]"] {
     width: 100%;
 }
 
-#optionButton {
+#optionButton, #allFriends, #removeAllExistingFriends {
     width: 100%;
     color: #009688;
     background-color: white;
+    border: 3px solid #ccc;
 }
 
-#vote_requirement, #period, #allFriends {
-    display: block;
+#createPollSubmit {
+    background-color: #009688;
+    color: white;
     width: 100%;
-    background-color: white;
-}
-
-#removeAllExistingFriends {
-    width: 100%;
-    color: #009688;
-    background-color: white;
+    border: 3px solid #ccc;
 }
 
 .fa-male {
@@ -350,4 +346,11 @@ footer p {
 .creator-links:hover {
     opacity: 1;
     text-decoration: none;
+}
+
+.txt {
+    border: 1px solid #ccc;
+    margin: 5px 0;
+    padding: 10px 0 10px 5px;
+    width: 100%;
 }
