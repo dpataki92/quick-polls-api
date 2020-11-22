@@ -562,20 +562,51 @@ function logIn() {
     const p = document.createElement("p");
     p.innerHTML = json["message"];
     p.style.color = color;
+    
     const removeP = () => {p.remove()};
     parent.querySelector("table").after(p);
     setTimeout(removeP, 3000);
 
     if (percentageChange) {
-      parent.querySelector(".third").querySelectorAll(".container").forEach(n => {
-        for (let prop in json) {
-          if (n.parentNode.previousSibling.innerText === prop) {
-            n.style.width = json[prop];
-            n.innerText = json[prop];
+      const canvas = parent.querySelector('canvas')
+      canvas.remove();
+
+      const newCanvas = document.createElement("canvas");
+      newCanvas.id = `myChart-${question}`;
+      parent.querySelector(".third").insertBefore(newCanvas, parent.querySelector("#chart-links"));
+      let myChart = newCanvas.getContext("2d");
+      
+      let backgroundColors = ["#2196F3", "#4CAF50", "#f44336", "#17a2b8", "#ffc107",  "#6c757d", "#343a40", "#f8f9fa"]
+      let chartColors = [];
+      for (let i = 0; i < json.options.length; i++) {
+        if (i < backgroundColors.length) {
+          chartColors.push(backgroundColors[i])
+        } else {
+          chartColors.push(backgroundColors[Math.floor(Math.random()*backgroundColors.length)])
+        }
+      }
+
+      let updatedMassPopChart = new Chart(myChart, {
+        type: "bar",
+        data: {
+          labels: json.options,
+          datasets: [{
+            data: json.new_percentage,
+            backgroundColor: chartColors
+          }]
+        },
+        options: {
+          title: {
+            display: true,
+            text: "Current results (%)"
+          },
+          legend: {
+            display: false
           }
-        } 
+        }
+        
       })
-    } 
+    }
   }
 
   // adds a vote to an option
@@ -640,22 +671,22 @@ function logIn() {
       let question = e.target.parentNode.parentNode.parentNode.parentNode.querySelector("h5").innerText;
 
       if (e.target.style.color === "green" || e.target.style.color === "grey") {
-      e.target.style.color = "black";
-      e.target.parentNode.parentNode.querySelectorAll("td").forEach(td => {
-        td.style.color = "black";
-      })
+        e.target.style.color = "black";
+        e.target.parentNode.parentNode.querySelectorAll("td").forEach(td => {
+          td.style.color = "black";
+        })
 
-      unvote(id, question)
+        unvote(id, question)
       
     } else {
-      e.target.style.color = "green";
-      e.target.parentNode.parentNode.querySelectorAll("td").forEach(td => {
-        if (td.style.color != "green") {
-        td.style.color = "grey"
-        }
-      })
-      
-      vote(e.target.innerText, question, id)
+        e.target.style.color = "green";
+        e.target.parentNode.parentNode.querySelectorAll("td").forEach(td => {
+          if (td.style.color != "green") {
+          td.style.color = "grey"
+          }
+        })
+        
+        vote(e.target.innerText, question, id)
     }
     })
   }
@@ -933,7 +964,7 @@ function logIn() {
   
   // creates a voting form for a particular pending poll
   function createNewVotingFormFromPoll(poll) {
-    console.log(poll)
+    
     let div = document.createElement("div");
     div.classList ="twothird extra";
     let table = document.createElement("table");

@@ -49,9 +49,7 @@ class PollsController < ApplicationController
         
         if !user.votes.find {|v| v.poll_id === poll.id}
             vote.save
-            poll.calc_new_percentage.each do |o_data|
-                jsonHash[o_data[0]] = o_data[1]
-            end
+            jsonHash['new_percentage'] = poll.calc_new_percentage
 
             if poll.vote_requirement
                 jsonHash["message"] = "You have successfully voted on this poll! #{poll.vote_requirement - poll.votes.size} more vote(s) to close the poll."
@@ -59,6 +57,7 @@ class PollsController < ApplicationController
                 jsonHash["message"] = "You have successfully voted on this poll!"
             end
             jsonHash["voted"] = true
+            jsonHash["options"] = poll.options.collect {|o| o.description}
         else 
             jsonHash["message"] = "You have already voted on this poll."
             jsonHash["voted"] = false
@@ -73,15 +72,13 @@ class PollsController < ApplicationController
         poll = Poll.find_by(question: params[:question])
         vote = user.votes.find {|v| v.poll_id === poll.id}
         jsonHash = {}
-
+        
         if vote
             vote.destroy
-            calc_new_percentage(poll).each do |o_data|
-                jsonHash[o_data[0]] = o_data[1]
-            end
-
+            jsonHash["new_percentage"] = poll.calc_new_percentage
             jsonHash["message"] = "You have removed your vote."
             jsonHash["unvoted"] = true
+            jsonHash["options"] = poll.options.collect {|o| o.description}
         else
             jsonHash["message"] = "You have not voted on this poll yet"
             jsonHash["unvoted"] = false
