@@ -899,7 +899,6 @@ function logIn() {
 
   // renders links to functions for deleting, closing, and editing poll if user is creator
   function displayCreatorLinks(question) {
-    console.log(question)
     let tr = document.createElement("tr");
     let td = document.createElement("td");
     for (let i = 0; i < 3; i++) {
@@ -960,6 +959,8 @@ function logIn() {
     if (poll.vote_requirement != null) {
       let tr = document.createElement("tr");
       let td = document.createElement("td");
+      td.style.color = "red";
+      td.style.opacity = 0.5;
       td.innerHTML = "Vote requirement: " + poll.vote_requirement + " votes";
       tr.appendChild(td);
       tbody.appendChild(tr);
@@ -969,6 +970,8 @@ function logIn() {
       let tr = document.createElement("tr");
       let td = document.createElement("td");
       td.innerHTML = "Closing date: " + poll.expiration_date;
+      td.style.color = "red";
+      td.style.opacity = 0.5;
       tr.appendChild(td)
       tbody.appendChild(tr)
     }
