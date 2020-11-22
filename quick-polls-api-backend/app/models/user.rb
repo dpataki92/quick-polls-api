@@ -19,13 +19,19 @@ class User < ApplicationRecord
     def updated_polls
         self.polls.each do |p|
             if p.period
-                if DateTime.strptime(p.expiration_date, "%B %d, %Y") >= DateTime.now
+                if DateTime.strptime(p.expiration_date, "%B %d, %Y") <= DateTime.now
                     p.status = "closed"
+                    p.save
+                else
+                    p.status = "pending"
                     p.save
                 end
             elsif p.vote_requirement
                 if p.votes.size >= p.vote_requirement
                     p.status = "closed"
+                    p.save
+                else
+                    p.status = "pending"
                     p.save
                 end
             end
