@@ -22,7 +22,7 @@ class User < ApplicationRecord
                 if DateTime.strptime(p.expiration_date, "%B %d, %Y") <= DateTime.now
                     p.status = "closed"
                     p.save
-                else
+                elsif p.status != "closed"
                     p.status = "pending"
                     p.save
                 end
@@ -30,7 +30,7 @@ class User < ApplicationRecord
                 if p.votes.size >= p.vote_requirement
                     p.status = "closed"
                     p.save
-                else
+                elsif p.status != "closed"
                     p.status = "pending"
                     p.save
                 end

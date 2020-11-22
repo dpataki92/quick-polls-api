@@ -159,7 +159,7 @@ class PollsController < ApplicationController
         user = User.find_by(id: params[:user_id])
         user.updated_polls
         closed = user.polls.recent.select {|p| p.status === "closed"}
-
+        
         render json: PollSerializer.new(closed).to_serialized_json 
     end
 
