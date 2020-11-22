@@ -2,7 +2,7 @@
 function addFriendsTable(json) {
     const div = document.createElement("div");
     div.classList = "container";
-    div.id = "friendSearchBar"
+    div.id = "friendSearchBar";
 
     const header = document.createElement("h5");
     header.innerHTML = "Add new friends:";
@@ -33,7 +33,7 @@ function addFriendsTable(json) {
     searchButton.innerText = "Search";
     searchButton.addEventListener("click", (e)=> {
       e.preventDefault();
-      friendSearch(json)
+      friendSearch(json);
     })
 
     buttonTd.appendChild(searchButton);
@@ -45,7 +45,7 @@ function addFriendsTable(json) {
     div.appendChild(header);
     div.appendChild(table);
     
-    return div
+    return div;
   }
 
   // adds a friend to user's friend list
@@ -69,6 +69,7 @@ function addFriendsTable(json) {
     .then(resp => resp.json())
     .then(
         function(json) {
+            
           let responseRow = document.querySelector("#searchFriendResponse");
           responseRow.firstChild.innerHTML = json["message"];
           responseRow.lastChild.innerHTML = "";
@@ -121,10 +122,13 @@ function addFriendsTable(json) {
     .then(resp => resp.json())
     .then(
         function(json) {
+
           let table = document.querySelector("#friendSearchBar").querySelector("table");
+
           if (table.querySelectorAll("tr").length > 1) {
             table.lastChild.remove();
           }
+
           const tr = document.createElement("tr");
           tr.id = "searchFriendResponse";
           const messageTd = document.createElement("td");
@@ -171,6 +175,7 @@ function addFriendsTable(json) {
     .then(resp => resp.json())
     .then(
         function(json) {
+
           let tr = e.target.parentNode.parentNode;
           tr.lastChild.innerHTML = "";
           tr.firstChild.nextSibling.innerHTML = json["message"];
@@ -238,7 +243,7 @@ function addFriendsTable(json) {
     })
       .then(resp => resp.json())
       .then(function (json) {
-        console.log(json)
+
         let addFriendTable = addFriendsTable(json);
         let currentFriendsTable = currentFriends(json);
         container.appendChild(addFriendTable);
