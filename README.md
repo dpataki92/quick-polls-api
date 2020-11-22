@@ -1,15 +1,39 @@
-# README
+# QUICK POLLS
 
-Quick polls is a basic voting SPA where users can create polls, vote on polls that they are authorized to see, and visualize the results of the polls. Users also have the ability to add other users to their friend list so that they can share polls with them.
+Voting SPA built with vanilla JavaScript and Ruby on Rails. 
 
-The app uses Rails as an API.
+The application allows users to:
 
-# Installation and Usage
+- create and vote on polls
+- visualize poll results with different chart types
+- share polls with other users
+- track and visualize aggregated data related to their pending and closed polls
 
-    - Fork and git clone repo.
-    - Cd into quick-polls-api-backend.
-    - Run server with "rails s".
-    - Copy path of "index.html" from quick-polls-api-frontend folder.
+# Technologies
+
+- Ruby 2.6.1
+- Ruby on Rails 6.0.3
+- JavaScript 1.8.5
+- Chart.js 2.0
+- SQLite3 1.4.2
+- Puma 4.3.6
+- Bcrypt 3.1.16
+- Dotenv-rails 2.7.6
+- Pry 0.13.1
+
+# Installation
+
+- Fork and git clone repo. 
+
+# Usage
+
+- Cd into quick-polls-api-backend folder
+
+- Run 'rails db:migrate' & 'rails db:seed'
+
+- Run server with 'rails s'
+
+- Copy & paste index.html path into browser
 
 # Contributing
 
