@@ -727,7 +727,7 @@ function logIn() {
     let form = pollForm(dataHash);
     form.setAttribute("action", `${BASE_URL}/users/${document.querySelector("b").id}/polls/${slug}`)
     form.setAttribute("method", "PATCH");
-    form.querySelector("h3").innerText = "Edit Your Poll's Data Here";
+    form.querySelector("h3").innerText = "Edit Poll";
     form.querySelector("form").querySelector("#question").value = dataHash.question;
     for (let i = 0; i < dataHash.options.length; i++) {
       console.log(dataHash.options[i])
@@ -752,7 +752,7 @@ function logIn() {
 
     let label = form.querySelector("label[for='allFriends']");
     label.innerText = "Remove or add new friends:"
-    form.querySelector("button[name='allFriends']").innerText = "Add all missing friends";
+    form.querySelector("button[name='allFriends']").innerText = "+ Add all missing friends";
     let addFriendsList = form.querySelector("select[name='friends[]']");
     addFriendsList.querySelectorAll("option").forEach(o=>{o.remove()})
     for (let i = 0; i < dataHash.missing_friends.length; i++) {
@@ -766,7 +766,7 @@ function logIn() {
     let removeAllExistingFriendsButton = document.createElement("button");
     removeAllExistingFriendsButton.name = "removeAllExistingFriends";
     removeAllExistingFriendsButton.id = "removeAllExistingFriends";
-    removeAllExistingFriendsButton.innerHTML = "Remove all existing friends";
+    removeAllExistingFriendsButton.innerHTML = "- Remove all existing friends";
     removeAllExistingFriendsButton.addEventListener("click", (e)=> {
       e.preventDefault();
       removeAllExistingFriendsButton.innerHTML = "All previously added friends are removed!"
@@ -795,8 +795,7 @@ function logIn() {
     let inputSubmit = document.createElement("input");
     inputSubmit.type = "submit";
     inputSubmit.value = "Submit";
-    inputSubmit.style.width ="100%";
-    inputSubmit.style.backgroundColor ="#009688";
+    inputSubmit.id = "editPollSubmit";
     inputSubmit.addEventListener("click", (e)=> {
       e.preventDefault();
       updatePoll(e, dataHash.question);
