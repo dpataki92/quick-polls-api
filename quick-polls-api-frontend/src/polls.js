@@ -1,37 +1,35 @@
-
-
 //creates div with 4 links to change chart type
 function createDivWithLinksForChartTypes () {
-const div = document.createElement("div");
-div.id = "chart-links";
+    const div = document.createElement("div");
+    div.id = "chart-links";
 
-for (let i = 0; i < 4 ; i++) {
-    let a = document.createElement("a");
-    a.classList="chart-link"
-    if (i === 0) {a.innerHTML = "Bar"; a.id="bar";}
-    else if (i === 1) {a.innerHTML = "Horizontal bar"; a.id="horizontalBar";}
-    else if (i === 2) {a.innerHTML = "Pie"; a.id="pie";}
-    else if (i === 3) {a.innerHTML = "Doughnut"; a.id="doughnut";}
-    div.appendChild(a);
-}
+    for (let i = 0; i < 4 ; i++) {
 
-return div;
+        let a = document.createElement("a");
+        a.classList="chart-link"
+        if (i === 0) {a.innerHTML = "Bar"; a.id="bar";}
+        else if (i === 1) {a.innerHTML = "Horizontal bar"; a.id="horizontalBar";}
+        else if (i === 2) {a.innerHTML = "Pie"; a.id="pie";}
+        else if (i === 3) {a.innerHTML = "Doughnut"; a.id="doughnut";}
+        div.appendChild(a);
+    }
+    return div;
 }
 
 // returns the values of the selected options of a multiple selection list
 function getSelectValues(select) {
-let result = [];
-let options = select && select.options;
-let opt;
+    let result = [];
+    let options = select && select.options;
+    let opt;
 
-for (let i=0, iLen=options.length; i<iLen; i++) {
-    opt = options[i];
+    for (let i=0, iLen=options.length; i<iLen; i++) {
+        opt = options[i];
 
-    if (opt.selected) {
-    result.push(opt.value || opt.text);
+        if (opt.selected) {
+        result.push(opt.value || opt.text);
+        }
     }
-}
-return result;
+    return result;
 }
 
 // grabs and sends poll data to create poll action
@@ -39,13 +37,16 @@ function createAPoll(e) {
     const PENDING_POLLS_URL = `${BASE_URL}/users/${document.getElementById("welcome").querySelector("b").id}/polls`;
 
     let question = e.target.parentNode.querySelector("#question").value;
-    let options = []
+    let options = [];
+
     Array.prototype.slice.call(e.target.parentNode.querySelectorAll('input[name="options[]"]')).forEach(n => {
       options.push(n.value)
     });
+
     let period = e.target.parentNode.querySelector("#period").value;
     let voteRequirement = e.target.parentNode.querySelector("#vote_requirement").value;
     let friends;
+
     if (document.querySelector("button[name='allFriends']").innerHTML === "All friends are added to poll!") {
       friends = "all"
     } else {
@@ -75,6 +76,7 @@ function createAPoll(e) {
     .then(resp => resp.json())
     .then(
         function(json) {
+
           let p = document.createElement("p");
           p.innerHTML = json.message;
           if (json.created === true) {
@@ -164,7 +166,8 @@ function createAPoll(e) {
     addAllFriendsButton.addEventListener("click", (e)=> {
       e.preventDefault();
       addAllFriendsButton.innerHTML = "Added all friends!"
-    })
+    });
+
     let friendSelectList = document.createElement("select");
     friendSelectList.multiple = true;
     friendSelectList.classList = "txt";
@@ -175,7 +178,8 @@ function createAPoll(e) {
       option.innerText = dataHash.friends[i].username;
       option.classList = "text";
       friendSelectList.appendChild(option);
-    }
+    };
+
     form.appendChild(labelForFriendsList);
     form.appendChild(addAllFriendsButton);
     form.appendChild(friendSelectList);
@@ -197,9 +201,9 @@ function createAPoll(e) {
     inputSubmit.addEventListener("click", (e)=> {
       e.preventDefault();
       createAPoll(e);
-    })
-    form.appendChild(inputSubmit);
+    });
 
+    form.appendChild(inputSubmit);
     div.appendChild(form);
 
     return div;
@@ -262,6 +266,7 @@ function createAPoll(e) {
     poll.calculatePercentage().forEach(e => chartData.push(e[1]));
     let backgroundColors = ["#2196F3", "#4CAF50", "#f44336", "#17a2b8", "#ffc107",  "#6c757d", "#343a40", "#f8f9fa"]
     let chartColors = [];
+
     for (let i = 0; i < optionLabels.length; i++) {
       if (i < backgroundColors.length) {
         chartColors.push(backgroundColors[i])
@@ -317,7 +322,6 @@ function createAPoll(e) {
       })
     })
     div.appendChild(linksDiv);
-
     return div;
   }
 
@@ -343,6 +347,7 @@ function createAPoll(e) {
       
       let backgroundColors = ["#2196F3", "#4CAF50", "#f44336", "#17a2b8", "#ffc107",  "#6c757d", "#343a40", "#f8f9fa"]
       let chartColors = [];
+
       for (let i = 0; i < json.options.length; i++) {
         if (i < backgroundColors.length) {
           chartColors.push(backgroundColors[i])
@@ -393,10 +398,11 @@ function createAPoll(e) {
     .then(resp => resp.json())
     .then(
       function(json) {
+
         if (json.voted === true) {
-          printVoteMessage(json, question, "green", true)
+          printVoteMessage(json, question, "green", true);
         } else {
-          printVoteMessage(json, question, "red")
+          printVoteMessage(json, question, "red");
         }
       }
     )
@@ -420,10 +426,11 @@ function createAPoll(e) {
     .then(resp => resp.json())
     .then(
       function(json) {
+
         if (json.unvoted === true) {
-          printVoteMessage(json, question, "red", true)
+          printVoteMessage(json, question, "red", true);
         } else {
-          printVoteMessage(json, question, "red")
+          printVoteMessage(json, question, "red");
         }
     })
   }
@@ -440,7 +447,6 @@ function createAPoll(e) {
         e.target.parentNode.parentNode.querySelectorAll("td").forEach(td => {
           td.style.color = "black";
         })
-
         unvote(id, question)
       
     } else {
@@ -450,7 +456,6 @@ function createAPoll(e) {
           td.style.color = "grey"
           }
         })
-        
         vote(e.target.innerText, question, id)
     }
     })
@@ -476,10 +481,12 @@ function createAPoll(e) {
     .then(resp => resp.json())
     .then(
       function(json) {
+
         if (json.deleted === true) {
           let poll = document.getElementById(`${question.split(" ").join("-")}`);
           poll.innerHTML ="";
           alert(`${json["message"]}`)
+
         } else {
           alert(`${json["message"]}`)
         }
@@ -505,12 +512,13 @@ function createAPoll(e) {
       fetch(`${USER_URL}/${id}/polls/${slug}/close`, configObj)
       .then(resp => resp.json())
       .then(function(json) {
+
         if (json.closed === true) {
           let poll = document.getElementById(`${question.split(" ").join("-")}`);
           poll.innerHTML ="";
-          alert(`${json["message"]}`)
+          alert(`${json["message"]}`);
         } else {
-          alert(`${json["message"]}`)
+          alert(`${json["message"]}`);
         }
         
       }
@@ -521,13 +529,14 @@ function createAPoll(e) {
   function createEditFormForPoll(dataHash) {
     let slug = dataHash.question.split(" ").join("-").replace("?", "");
     let form = pollForm(dataHash);
+
     form.setAttribute("action", `${BASE_URL}/users/${document.querySelector("b").id}/polls/${slug}`)
     form.setAttribute("method", "PATCH");
     form.querySelector("h3").innerText = "Edit Poll";
     form.querySelector("form").querySelector("#question").value = dataHash.question;
+
     for (let i = 0; i < dataHash.options.length; i++) {
-      console.log(dataHash.options[i])
-      console.log(form.querySelectorAll("input[name='options[]']").length)
+   
       if (i >= form.querySelectorAll("input[name='options[]']").length) {
         let option = document.createElement("input");
         option.type = "text";
@@ -536,6 +545,7 @@ function createAPoll(e) {
         option.style.display = "inline-block";
         option.style.width = "100%";
         form.querySelector("input[name='options[]']").after(option);
+
       } else {
         let option = form.querySelector("input[placeholder='Option...']");
         option.placeholder = dataHash.options[i].description;
@@ -551,6 +561,7 @@ function createAPoll(e) {
     form.querySelector("button[name='allFriends']").innerText = "+ Add all missing friends";
     let addFriendsList = form.querySelector("select[name='friends[]']");
     addFriendsList.querySelectorAll("option").forEach(o=>{o.remove()})
+
     for (let i = 0; i < dataHash.missing_friends.length; i++) {
       let option = document.createElement("option");
       option.value = dataHash.missing_friends[i].username;
@@ -566,12 +577,14 @@ function createAPoll(e) {
     removeAllExistingFriendsButton.addEventListener("click", (e)=> {
       e.preventDefault();
       removeAllExistingFriendsButton.innerHTML = "All previously added friends are removed!"
-    })
+    });
+
     form.querySelector("select").after(removeAllExistingFriendsButton);
     let existingFriends = document.createElement("select");
     existingFriends.multiple = true;
     existingFriends.style.width = "100%";
     existingFriends.name = "removed_friends[]";
+
     for (let i = 0; i < dataHash.friends.length; i++) {
       let option = document.createElement("option");
       option.value = dataHash.friends[i].username;
@@ -584,7 +597,7 @@ function createAPoll(e) {
     let hidden = form.querySelector("input[type='hidden']");
     hidden.name = dataHash.poll_id;
     hidden.value = dataHash.poll_id;
-    hidden.id = "pollId"
+    hidden.id = "pollId";
 
     let formerSubmit = form.querySelector("input[type='submit']");
     formerSubmit.remove();
@@ -595,10 +608,9 @@ function createAPoll(e) {
     inputSubmit.addEventListener("click", (e)=> {
       e.preventDefault();
       updatePoll(e, dataHash.question);
-    })
-    form.appendChild(inputSubmit);
-    
+    });
 
+    form.appendChild(inputSubmit);
     return form;
   }
 
@@ -618,10 +630,11 @@ function createAPoll(e) {
         originalQuestion: question
     })
     }
+
     fetch(`${USER_URL}/${id}/polls/${slug}/edit`, configObj)
     .then(resp => resp.json())
     .then(function(json) {
-      console.log(json)
+      
       document.querySelector(".extra").remove();
       let div = createEditFormForPoll(json);
       document.querySelector(".main").insertBefore(div, document.querySelector(".panel"));
@@ -634,18 +647,21 @@ function createAPoll(e) {
     const PENDING_POLLS_URL = `${BASE_URL}/users/${document.querySelector("b").id}/polls/${slug}`;
 
     let newQuestion = e.target.parentNode.querySelector("#question").value;
-    let options = []
+    let options = [];
     Array.prototype.slice.call(e.target.parentNode.querySelectorAll('input[name="options[]"]')).forEach(n => {
       options.push(n.value)
     });
+
     let period = e.target.parentNode.querySelector("#period").value;
     let voteRequirement = e.target.parentNode.querySelector("#vote_requirement").value;
     let select = document.querySelector("select[name='friends[]']");
     let friends = [];
+
     if (document.querySelector("button[name='allFriends']").innerHTML === "All friends are added to poll!") {
       document.querySelector("select[name='friends[]']").querySelectorAll("option").forEach(o => {
         friends.push(o.value);
       })
+
     } else {
       friends = getSelectValues(select);
     }
@@ -653,8 +669,10 @@ function createAPoll(e) {
     let pollId = document.getElementById('pollId').value;
 
     let removedFriends;
+
     if (document.querySelector("button[name='removeAllExistingFriends']").innerHTML === "All previously added friends are removed!") {
-      removedFriends = "all"
+      removedFriends = "all";
+
     } else {
       let removedSelect = document.querySelector("select[name='removed_friends[]']");
       removedFriends = getSelectValues(removedSelect);
@@ -680,10 +698,12 @@ function createAPoll(e) {
           poll_id: pollId
       })
     }
+
     fetch(PENDING_POLLS_URL, configObj)
     .then(resp => resp.json())
     .then(
         function(json) {
+
           let p = document.createElement("p");
           p.innerHTML = json.message;
           if (json.updated === true) {
@@ -707,12 +727,14 @@ function createAPoll(e) {
         link.addEventListener("click", ()=> {
           editPoll(question)
         })
+
       } else if (i === 1) {
         link.innerHTML = "Close poll  ";
         link.addEventListener("click", ()=> {
           window.confirm("Are you sure?");
           closePoll(question)
         })
+
       } else if (i === 2) {
         link.innerHTML = "Delete poll  ";
         link.addEventListener("click", ()=> {
@@ -720,18 +742,20 @@ function createAPoll(e) {
           deletePoll(question)
         })
       }
+
       link.style.color = "blue";
       td.appendChild(link);
     }
+
     tr.appendChild(td);
     return tr;
   }
   
   // creates a voting form for a particular pending poll
   function createNewVotingFormFromPoll(poll) {
-    
     let div = document.createElement("div");
     div.classList ="twothird extra";
+    
     let table = document.createElement("table");
     table.classList = "table striped white";
     let tbody = document.createElement("tbody");
@@ -754,6 +778,7 @@ function createAPoll(e) {
       tr.appendChild(td);
       tbody.appendChild(tr);
     }
+
     if (poll.vote_requirement != null) {
       let tr = document.createElement("tr");
       let td = document.createElement("td");
@@ -770,9 +795,10 @@ function createAPoll(e) {
       td.innerHTML = "Closing date: " + poll.expiration_date;
       td.style.color = "red";
       td.style.opacity = 0.5;
-      tr.appendChild(td)
-      tbody.appendChild(tr)
+      tr.appendChild(td);
+      tbody.appendChild(tr);
     }
+
     if (poll.creator === document.querySelector("#welcome").innerText.slice(9,17)) {
       let creatorTr = displayCreatorLinks(poll.question);
       tbody.appendChild(creatorTr);
@@ -812,7 +838,6 @@ function createAPoll(e) {
           container.appendChild(parent);
         }
       })
-    
     return container;
   }
 
@@ -820,6 +845,7 @@ function createAPoll(e) {
   function createNewVotingFormFromClosedPoll(poll) {
     let div = document.createElement("div");
     div.classList ="twothird extra";
+    
     let table = document.createElement("table");
     table.classList = "table striped white";
     let tbody = document.createElement("tbody");
@@ -840,7 +866,6 @@ function createAPoll(e) {
       tr.appendChild(td);
       tbody.appendChild(tr);
     }
-  
     return div;
   }
 
@@ -860,6 +885,7 @@ function createAPoll(e) {
     })
       .then(resp => resp.json())
       .then(function (json) {
+
         for (let i = 0; i < json.length; i++) {
           let parent = document.createElement("div");
           parent.classList = "row-padding extra";
@@ -874,7 +900,6 @@ function createAPoll(e) {
           parent.style.marginBottom = "50px";
           container.appendChild(parent);
         }
-      })
-    
+      })    
     return container;
   }
