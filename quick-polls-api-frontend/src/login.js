@@ -44,12 +44,11 @@ function createLoginForm() {
     if (document.querySelectorAll("#loginForm").length > 1) {
       document.querySelector("#loginForm").remove();
     }
-  
     return inputSubmit;
   }
 
  // handles fetch request for login action 
-function logIn() {
+ function logIn() {
     let submit = createLoginForm();
     submit.addEventListener("click", (e) => {
     
@@ -72,12 +71,14 @@ function logIn() {
     .then(resp => resp.json())
     .then(
         function(json) {
+            
           if (json.logged_in === false) {
               let p = document.createElement("p");
               p.innerHTML = json["message"];
               p.style.color = "red";
               document.querySelector("h2").after(p);
               setTimeout(function() {document.querySelector("p").remove()}, 3500);
+
           } else if (json.logged_in === true) {
               localStorage.setItem('jwt_token', json.token);
               let dataHash = JSON.parse(json.data);
@@ -89,9 +90,9 @@ function logIn() {
     })
   }
   
-    // logs out user
-    function logout() {
-        window.confirm("Are you sure?");
-        localStorage.clear();
-        location.reload();
-      }
+// logs out user
+function logout() {
+    window.confirm("Are you sure?");
+    localStorage.clear();
+    location.reload();
+}
