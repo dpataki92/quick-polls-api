@@ -1,5 +1,5 @@
 // creates container for dashboard item
-function createContainerForMenu(name, icon, color, userNum) {
+function createContainerForMenu(name, icon, color) {
     const quarterDiv = document.createElement("div");
     quarterDiv.classList = "quarter";
 
@@ -81,8 +81,7 @@ function renderAggregatedPollDiagram (json) {
       })
     })
     thirdDiv.appendChild(linksDiv);
-
-   document.querySelector(".row-padding").appendChild(thirdDiv)
+    document.querySelector(".row-padding").appendChild(thirdDiv);
   }
 
 // renders aggregated user data in list form
@@ -126,14 +125,12 @@ function renderAggregatedUserData(json, dataHash) {
       iconTd.appendChild(icon);
       tr.appendChild(iconTd);
       tr.appendChild(contentTd);
-
       table.appendChild(tr);
     }
     twoThirdDiv.appendChild(header);
     header.after(document.createElement("br"))
     twoThirdDiv.appendChild(table);
     document.querySelector(".row-padding").appendChild(twoThirdDiv);
-
   }
 
   // creates footer with link to github repository
@@ -152,7 +149,6 @@ function renderAggregatedUserData(json, dataHash) {
     p.appendChild(a);
 
     footer.appendChild(p);
-    
     document.querySelector(".main").appendChild(footer);
   }
 
@@ -178,7 +174,6 @@ function renderAggregatedUserData(json, dataHash) {
       mainDiv.insertBefore(h4, mainDiv.querySelector(".panel"));
     }
     
-
     // array contaiing the individual attirubtes of all dashboard item container
     const containers = [
         {
@@ -224,18 +219,22 @@ function renderAggregatedUserData(json, dataHash) {
     // creates footer with github repo link
     createFooter();
 
-    // displaying the 4 container for menu items and allowing users to going from one item's content directly to another's
+    // displays the 4 container for menu items and allows users to directly go from one item to another
     if (!document.querySelector(".quarter")) {
-    for (let i = 0; i < containers.length; i++) {
-      const container = createContainerForMenu(containers[i]["name"], containers[i]["icon"], containers[i]["color"], containers[i]["userNum"])
-      mainDiv.insertBefore(container, mainDiv.querySelector(".panel"));
-      container.addEventListener("click", (e)=> {
+
+      for (let i = 0; i < containers.length; i++) {
+
+        const container = createContainerForMenu(containers[i]["name"], containers[i]["icon"], containers[i]["color"], containers[i]["userNum"])
+        mainDiv.insertBefore(container, mainDiv.querySelector(".panel"));
+        container.addEventListener("click", (e)=> {
+
         if (document.querySelector(".row-padding.normal").innerHTML != "") {
 
           document.getElementById(containers[i]["name"]).querySelector("h4").innerHTML = "Back to Dashboard";
           let el = containers[i].listener(dataHash);
           document.querySelector(".row-padding.normal").innerHTML = "";          
           mainDiv.insertBefore(el, document.querySelector(".panel"));
+          
         } else {
 
           let openContainer;
@@ -251,12 +250,12 @@ function renderAggregatedUserData(json, dataHash) {
             openContainer.querySelector("h4").innerHTML = openContainer.firstChild.id;
             let el = containers[i].listener(dataHash);
             mainDiv.insertBefore(el, document.querySelector(".panel"));
+
           } else {
             document.querySelector(".extra").remove();
             document.getElementById(containers[i]["name"]).querySelector("h4").innerHTML = containers[i]["name"];
             renderDashBoard(json, dataHash);
           }
-          
         }
       })
   }
