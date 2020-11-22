@@ -18,4 +18,19 @@ class Poll < ApplicationRecord
     def calc_expiration_date
         (self.created_at + 86400 * self.period).strftime("%B %d, %Y")
     end
+
+    def calc_new_percentage
+        options_with_new_percentage = []
+        self.options.each do |o|
+            poll_data = []
+            poll_data[0] = o.description
+            if o.votes.size === 0
+                poll_data[1] = "0%"
+            else
+                poll_data[1] = "#{(o.votes.size.to_f / self.votes.size.to_f * 100).round(1)}%"
+            end
+            options_with_new_percentage <<  poll_data
+        end
+        options_with_new_percentage
+    end
 end

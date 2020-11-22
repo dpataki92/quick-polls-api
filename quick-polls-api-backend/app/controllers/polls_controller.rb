@@ -49,7 +49,7 @@ class PollsController < ApplicationController
         
         if !user.votes.find {|v| v.poll_id === poll.id}
             vote.save
-            calc_new_percentage(poll).each do |o_data|
+            poll.calc_new_percentage.each do |o_data|
                 jsonHash[o_data[0]] = o_data[1]
             end
 
@@ -172,18 +172,4 @@ class PollsController < ApplicationController
         params.permit!
     end
 
-    def calc_new_percentage(poll)
-        options_with_new_percentage = []
-        poll.options.each do |o|
-            poll_data = []
-            poll_data[0] = o.description
-            if o.votes.size === 0
-                poll_data[1] = "0%"
-            else
-                poll_data[1] = "#{(o.votes.size.to_f / poll.votes.size.to_f * 100).round(1)}%"
-            end
-            options_with_new_percentage <<  poll_data
-        end
-        options_with_new_percentage
-    end
 end
