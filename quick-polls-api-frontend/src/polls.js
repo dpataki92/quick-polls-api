@@ -288,7 +288,7 @@ function createAPoll(e) {
       options: {
         title: {
           display: true,
-          text: "Current results (%)"
+          text: "Results (%)"
         },
         legend: {
           display: false
@@ -319,7 +319,7 @@ function createAPoll(e) {
           options: {
             title: {
               display: true,
-              text: "Current results (%)"
+              text: "Results (%)"
             },
             legend: {
               display: false
@@ -382,7 +382,7 @@ function createAPoll(e) {
         options: {
           title: {
             display: true,
-            text: "Current results (%)"
+            text: "Results (%)"
           },
           legend: {
             display: false
