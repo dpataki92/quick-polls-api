@@ -4,10 +4,10 @@ Voting SPA built with vanilla JavaScript and Ruby on Rails.
 
 The application allows users to:
 
-- create and vote on polls
+- create and vote in polls
 - visualize poll results with different chart types
 - share polls with other users
-- track and visualize aggregated data related to their pending and closed polls
+- track and visualize aggregate data related to their pending and closed polls
 
 # Technologies
 
