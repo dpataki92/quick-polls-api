@@ -59,7 +59,14 @@ function renderAggregatedPollDiagram (json) {
         },
         legend: {
           display: false
-        }
+        },
+        scales: {
+          yAxes: [{
+              ticks: {
+                  beginAtZero: true
+              }
+          }]
+      }
       }
     })
 
@@ -76,6 +83,22 @@ function renderAggregatedPollDiagram (json) {
               data: [json.polls_voted_on, json.winner_polls, json.loser_polls],
               backgroundColor: ["#2196F3", "#4CAF50", "#f44336"]
             }]
+          },
+          options: {
+            title: {
+              display: true,
+              text: "Aggregated poll data (%)"
+            },
+            legend: {
+              display: false
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
           }
         })    
       })

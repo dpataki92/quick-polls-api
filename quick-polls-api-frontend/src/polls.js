@@ -292,7 +292,14 @@ function createAPoll(e) {
         },
         legend: {
           display: false
-        }
+        },
+        scales: {
+          yAxes: [{
+              ticks: {
+                  beginAtZero: true
+              }
+          }]
+      }
       }
     })
 
@@ -316,7 +323,14 @@ function createAPoll(e) {
             },
             legend: {
               display: false
-            }
+            },
+            scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero: true
+                  }
+              }]
+          }
           }
         })    
       })
@@ -372,7 +386,14 @@ function createAPoll(e) {
           },
           legend: {
             display: false
-          }
+          },
+          scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
         }
         
       })
